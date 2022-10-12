@@ -67,13 +67,13 @@ fs.writeFileSync('rank_orange.png', canvasRank.toBuffer());
 
 ## Example Welcome/Leave
 
-<img src="https://i.imgur.com/HlCL6Eb.png"/>
+<img src="https://i.imgur.com/F7PVnke.png"/>
 
 ```ts
 let cv = new WelcomeBuilder({
     backgroundImgURL: 'default_background_blue.png',
     fontDefault: 'Inter',
-    nicknameText: { color: '#0CA7FF', content: 'ДобраяKnopKa | 雨 🌧#2575' },
+    nicknameText: { color: '#0CA7FF', content: 'ДобраяKnopKa#2575' },
     secondText: { color: '#0CA7FF', content: 'Raccoon Bot Discord' },
     avatarImgURL: 'Sad_KnopKa.gif',
 }).build();
@@ -83,11 +83,11 @@ fs.writeFileSync('welcome-1.png', canvas1.toBuffer());
 
 ---
 
-<img src="https://i.imgur.com/ICYNXk6.png"/>
+<img src="https://i.imgur.com/dLM4shk.png"/>
 
 ```ts
 let cv = new LeaveBuilder({
-    nicknameText: { content: 'ДобраяKnopKa | 雨 🌧#2575' },
+    nicknameText: { content: 'ДобраяKnopKa#2575' },
     avatarImgURL: 'Sad_KnopKa.gif',
 });
 cv.setBackgroundImgURL('default_background_red.png');
