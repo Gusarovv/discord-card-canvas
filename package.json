@@ -1,7 +1,7 @@
 {
-    "name": "discord-canvas-card",
+    "name": "discord-card-canvas",
     "version": "1.0.0",
-    "description": "Simple creating cards using canvas. Welcome, Rank, Info and so on.",
+    "description": "👾 Simple creating cards using canvas. Welcome, Rank, Info and so on.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
@@ -20,7 +20,7 @@
     "author": "Alex Gusarov",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Gusarovv/discord-canvas-card.git"
+		"url": "https://github.com/Gusarovv/discord-card-canvas.git"
 	},
     "license": "MIT",
     "devDependencies": {
