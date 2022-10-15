@@ -1,6 +1,9 @@
 import { registerFont } from 'canvas';
 import { resolve } from 'path';
 
+/**
+ * Registers fonts needed to create cards
+ */
 export function registerFonts() {
     const path = resolve(__dirname, '../../src/fonts');
 

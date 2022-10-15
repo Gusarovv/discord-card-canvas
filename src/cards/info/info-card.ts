@@ -2,8 +2,17 @@ import { createCanvas, loadImage } from 'canvas';
 import { Color, TextCard } from '../../interface/card.interface';
 
 export interface InfoCardParams {
+	/**
+	 * Background color (if no background image is selected)
+	 */
     backgroundColor?: Color;
+	/**
+	 * URL to the background image (1000x200 px)
+	 */
     backgroundImgURL?: string;
+	/**
+	 * The main text on the card
+	 */
     mainText?: TextCard;
 }
 
@@ -23,21 +32,38 @@ export class InfoCardBuilder {
         }
     }
 
+	/**
+	 * Sets the background color of this card (if no background image is selected)
+	 * @param backgroundColor Background color
+	 */
     setBackgroundColor(backgroundColor: Color): this {
         this.backgroundColor = backgroundColor;
         return this;
     }
 
+
+	/**
+	 * URL to the background image
+	 * @remark Image size 1000x200px
+	 * @param backgroundImgURL URL to the background image
+	 */
     setBackgroundImgURL(backgroundImgURL: string): this {
         this.backgroundImgURL = backgroundImgURL;
         return this;
     }
 
+	/**
+	 * Sets the main text (for example, "Info")
+	 * @param mainText The main text on the card
+	 */
     setMainText(mainText: TextCard): this {
         this.mainText = mainText;
         return this;
     }
 
+	/**
+	 * Builds a Canvas with the specified parameters
+	 */
     async build() {
         const canvas = createCanvas(1000, 200);
         const ctx = canvas.getContext('2d');

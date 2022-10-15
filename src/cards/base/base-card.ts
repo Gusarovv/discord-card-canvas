@@ -1,20 +1,53 @@
-import { createCanvas, loadImage } from 'canvas';
+import { Canvas, createCanvas, loadImage } from 'canvas';
 import { resolve } from 'path';
 import { Color, FontResolvable, TextCard } from '../../interface/card.interface';
 const path = resolve(__dirname, '../../src/img');
 
+/**
+ * Base Card Parameters
+ */
 export interface BaseCardParams {
+	/**
+	 * Text above the user's nickname
+	 */
 	mainText?: TextCard;
+	/**
+	 * User's nickname
+	 */
     nicknameText?: TextCard;
+	/**
+	 * Text under the user's nickname
+	 */
     secondText?: TextCard;
+	/**
+	 * Background color; Default: '#BBE8FF'
+	 */
     backgroundColor?: Color;
+	/**
+	 * URL to the background image (800x350 px)
+	 */
     backgroundImgURL?: string;
+	/**
+	 * URL to the avatar user image
+	 */
     avatarImgURL?: string;
+	/**
+	 * The outline color of the user's avatar; Default: '#0CA7FF'
+	 */
     avatarBorderColor?: Color;
+	/**
+	 * Default font (applies if a specific font is not selected in the TextCard object); Default: 'Nunito'
+	 */
     fontDefault?: FontResolvable;
+	/**
+	 * Default text color (applies if a specific text color is not selected in the Text Card object); Default: '#0CA7FF'
+	 */
     colorTextDefault?: Color;
 }
 
+/**
+ * Base Card Builder
+ */
 export class BaseCardBuilder {
 	public mainText?: TextCard;
     public nicknameText?: TextCard;
@@ -39,52 +72,92 @@ export class BaseCardBuilder {
         if (params.colorTextDefault) this.colorTextDefault = params.colorTextDefault;
     }
 
+	/**
+	 * Sets the background color of this card (if no background image is selected)
+	 * @param backgroundColor Background color
+	 */
     setBackgroundColor(backgroundColor: Color): this {
         this.backgroundColor = backgroundColor;
         return this;
     }
 
+	/**
+	 * Sets the background image of this card
+	 * @remark Image size 800x350px
+	 * @param backgroundImgURL URL to the background image
+	 */
     setBackgroundImgURL(backgroundImgURL: string): this {
         this.backgroundImgURL = backgroundImgURL;
         return this;
     }
 
+	/**
+	 * Sets the avatar image of this card
+	 * @param avatarImgURL URL to the avatar user image
+	 */
     setAvatarImgURL(avatarImgURL: string): this {
         this.avatarImgURL = avatarImgURL;
         return this;
     }
 
+	/**
+	 * Sets the border color of the avatar of this card
+	 * @param avatarBorderColor The outline color of the user's avatar
+	 */
     setAvatarBorderColor(avatarBorderColor: Color): this {
         this.avatarBorderColor = avatarBorderColor;
         return this;
     }
 
+	/**
+	 * Sets the default font
+	 * @param fontDefault Default font
+	 */
     setFontDefault(fontDefault: FontResolvable): this {
         this.fontDefault = fontDefault;
         return this;
     }
 
+	/**
+	 * Sets the default text color
+	 * @param colorTextDefault Default text color
+	 */
     setColorTextDefault(colorTextDefault: Color): this {
         this.colorTextDefault = colorTextDefault;
         return this;
     }
 
+	/**
+	 * Sets the main text (for example, "Welcome")
+	 * @param mainText Text above the user's nickname
+	 */
     setMainText(mainText: TextCard): this {
         this.mainText = mainText;
         return this;
     }
 
+	/**
+	 * Sets the user's nickname
+	 * @param nicknameText User's nickname
+	 */
     setNicknameText(nicknameText: TextCard): this {
         this.nicknameText = nicknameText;
         return this;
     }
 
+	/**
+	 * Sets the text under the nickname
+	 * @param secondText Text under the user's nickname
+	 */
     setSecondText(secondText: TextCard): this {
         this.secondText = secondText;
         return this;
     }
 
-    async build() {
+	/**
+	 * Builds a Canvas with the specified parameters
+	 */
+    async build(): Promise<Canvas> {
         const canvas = createCanvas(800, 350);
         const ctx = canvas.getContext('2d');
 
@@ -135,7 +208,7 @@ export class BaseCardBuilder {
             textRender(this.nicknameText, 'nickname', 60, 265);
         }
 
-        // Nickname
+        // Second text
         if (this.secondText) {
             textRender(this.secondText, 'second', 65, 310);
         }

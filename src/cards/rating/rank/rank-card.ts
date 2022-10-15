@@ -1,26 +1,80 @@
-import { createCanvas, loadImage } from 'canvas';
+import { Canvas, createCanvas, loadImage } from 'canvas';
 import { resolve } from 'path';
 import { Color, FontResolvable, TextCard, UserStatus } from '../../../interface/card.interface';
 const path = resolve(__dirname, '../../src/img');
 
 export interface RankCardParams {
+	/**
+	 * User's nickname
+	 */
     nicknameText: TextCard;
+	/**
+	 * The user's current level
+	 */
     currentLvl: number;
+	/**
+	 * The user's current rank
+	 */
     currentRank: number;
+	/**
+	 * The user's current experience
+	 */
     currentXP: number;
+	/**
+	 * Required experience to the next level
+	 */
     requiredXP: number;
+	/**
+	 * User status
+	 */
     userStatus: UserStatus;
+	/**
+	 * The color of the current experience number; Default: '#0CA7FF'
+	 */
     currentXPColor?: Color;
+	/**
+	 * The color of the required experience number; Default: '#7F8384'
+	 */
     requiredXPColor?: Color;
+	/**
+	 * URL to the background image (1000x250 px)
+	 */
     backgroundImgURL?: string;
+	/**
+	 * Background color; Default: '#BBE8FF'
+	 */
     backgroundColor?: Color;
+	/**
+	 * URL to the avatar user image
+	 */
     avatarImgURL?: string;
+	/**
+	 * The color of the circle behind the avatar; Default: '#0CA7FF'
+	 */
     avatarBackgroundColor?: Color;
+	/**
+	 * Whether the circle behind the avatar is enabled; Default: True
+	 */
     avatarBackgroundEnable?: boolean;
+	/**
+	 * The color of the progress bar
+	 */
     progressBarColor?: Color;
+	/**
+	 * Default font. Applies if a specific font is not selected in the TextCard object; Default: 'Nunito'
+	 */
     fontDefault?: FontResolvable;
+	/**
+	 * Default text color. Applies if a specific text color is not selected in the Text Card object; Default: '#0CA7FF'
+	 */
     colorTextDefault?: Color;
+	/**
+	 * Text before the level number; Default: 'LVL'
+	 */
     lvlPrefix?: TextCard;
+	/**
+	 * Text before the rank number; Default: 'RANK'
+	 */
     rankPrefix?: TextCard;
 }
 
@@ -65,74 +119,137 @@ export class RankCardBuilder {
         if (params.avatarBackgroundEnable === false) this.avatarBackgroundEnable = false;
     }
 
+	/**
+	 * Sets the background color of this card (if no background image is selected)
+	 * @param backgroundColor Background color
+	 */
     setBackgroundColor(backgroundColor: Color): this {
         this.backgroundColor = backgroundColor;
         return this;
     }
 
+	/**
+	 * URL to the background image
+	 * @remark Image size 1000x250px
+	 * @param backgroundImgURL URL to the background image
+	 */
     setBackgroundImgURL(backgroundImgURL: string): this {
         this.backgroundImgURL = backgroundImgURL;
         return this;
     }
 
+	/**
+	 * Sets the avatar image of this card
+	 * @param avatarImgURL URL to the avatar user image
+	 */
     setAvatarImgURL(avatarImgURL: string): this {
         this.avatarImgURL = avatarImgURL;
         return this;
     }
 
+	/**
+	 * Sets the color of the circle behind the avatar
+	 * @param avatarBackgroundColor The color of the circle behind the avatar
+	 */
     setAvatarBackgroundColor(avatarBackgroundColor: Color): this {
         this.avatarBackgroundColor = avatarBackgroundColor;
         return this;
     }
 
+	/**
+	 * Sets the circle behind the avatar
+	 * @param avatarBackgroundEnable Whether the circle behind the avatar is enabled
+	 */
     setAvatarBackgroundEnable(avatarBackgroundEnable: boolean): this {
         this.avatarBackgroundEnable = avatarBackgroundEnable;
         return this;
     }
 
+	/**
+	 * Sets the default font
+	 * @param fontDefault Default font
+	 */
     setFontDefault(fontDefault: FontResolvable): this {
         this.fontDefault = fontDefault;
         return this;
     }
 
+	/**
+	 * Sets the default text color
+	 * @param colorTextDefault Default text color
+	 */
     setColorTextDefault(colorTextDefault: Color): this {
         this.colorTextDefault = colorTextDefault;
         return this;
     }
 
+	/**
+	 * Sets the text before the level number
+	 * @param lvlPrefix Text before the level number
+	 */
     setLvlPrefix(lvlPrefix: TextCard): this {
         this.lvlPrefix = lvlPrefix;
         return this;
     }
 
+	/**
+	 * Sets the text before the rank number
+	 * @param rankPrefix Text before the rank number
+	 */
     setRankPrefix(rankPrefix: TextCard): this {
         this.rankPrefix = rankPrefix;
         return this;
     }
 
+	/**
+	 * Sets the user's nickname
+	 * @param nicknameText User's nickname
+	 */
     setNicknameText(nicknameText: TextCard): this {
         this.nicknameText = nicknameText;
         return this;
     }
 
+    /**
+     * Sets the user's current level
+     * @param currentLvl The user's current level
+     */
     setCurrentLvl(currentLvl: number): this {
         this.currentLvl = currentLvl;
         return this;
     }
+
+    /**
+     * Sets the user's current rank
+     * @param currentRank The user's current rank
+     */
     setCurrentRank(currentRank: number): this {
         this.currentRank = currentRank;
         return this;
     }
+
+	/**
+	 * Sets the user's current experience
+	 * @param currentXP The user's current experience
+	 */
     setCurrentXP(currentXP: number): this {
         this.currentXP = currentXP;
         return this;
     }
+
+	/**
+	 * Sets the required experience to the next level
+	 * @param requiredXP Required experience to the next level
+	 */
     setRequiredXP(requiredXP: number): this {
         this.requiredXP = requiredXP;
         return this;
     }
 
-    async build() {
+    /**
+     * Builds a Canvas with the specified parameters
+     */
+    async build(): Promise<Canvas> {
         const canvas = createCanvas(1000, 250);
         const ctx = canvas.getContext('2d');
 
