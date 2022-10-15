@@ -10,7 +10,7 @@
     },
     "keywords": [
         "discord",
-		"discord.js",
+        "discord.js",
         "card",
         "canvas",
         "welcome",
@@ -18,10 +18,11 @@
         "info"
     ],
     "author": "Alex Gusarov",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Gusarovv/discord-card-canvas.git"
-	},
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Gusarovv/discord-card-canvas.git"
+    },
+	"homepage": "https://github.com/Gusarovv/discord-card-canvas.git#readme",
     "license": "MIT",
     "devDependencies": {
         "@types/node": "^18.8.4",
