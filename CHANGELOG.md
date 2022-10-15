@@ -1,4 +1,4 @@
-## [1.0.1](https://github.com/Gusarovv/discord-card-canvas/compare/@discord-nestjs/v1.0.0...v1.0.1) (2022-10-15)
+## [1.0.1](https://github.com/Gusarovv/discord-card-canvas/compare/v1.0.0...v1.0.1) (2022-10-15)
 
 ### Documentation
 
