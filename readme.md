@@ -9,7 +9,7 @@
 ## 👨🏻‍💻 Installation <a name="Installation"></a>
 
 ```bash
-$ npm install discord-canvas-card
+$ npm install discord-card-canvas
 ```
 
 ## Features
