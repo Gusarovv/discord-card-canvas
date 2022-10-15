@@ -4,6 +4,8 @@
 
 <p align="center">You can create great welcome, goodbye, rank, info banner images fully customizable using the many easy-to-use features!</p>
 
+> <p align="center">TypeScript</p>
+
 ## 👨🏻‍💻 Installation <a name="Installation"></a>
 
 ```bash
@@ -29,13 +31,17 @@ const canvasRank = await new RankCardBuilder({
     currentRank: 563,
     currentXP: 71032,
     requiredXP: 95195,
-    backgroundImgURL: 'rank_blue.png',
+    backgroundImgURL: 'background_blue.png',
     avatarImgURL: 'avatar.jpg',
     nicknameText: { content: 'xNinja_Catx', font: 'Nunito', color: '#0CA7FF' },
     userStatus: 'idle',
 }).build();
 
+// Saving an image
 fs.writeFileSync('rank_blue.png', canvasRank.toBuffer());
+
+// Example of sending to a channel
+channel.send(files: [{ attachment: canvasRank.toBuffer(), name: 'rank.png' }])
 ```
 
 ---
