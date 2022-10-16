@@ -1,11 +1,13 @@
 {
     "name": "discord-card-canvas",
-    "version": "1.0.3",
+    "version": "1.1.0",
     "description": "👾 Simple creating cards using canvas. Welcome, Rank, Info and so on.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
-        "build": "tsc",
+        "clean": "rimraf dist/",
+        "copy-files": "copyfiles -u 1 ./src/fonts/**/*.ttf ./dist/",
+        "build": "npm run clean && tsc && npm run copy-files",
         "prepare": "npm run build"
     },
     "keywords": [
@@ -25,10 +27,13 @@
     "homepage": "https://github.com/Gusarovv/discord-card-canvas.git#readme",
     "license": "MIT",
     "devDependencies": {
-        "@types/node": "^18.8.4",
+        "@types/node": "^18.11.0",
+        "copyfiles": "^2.4.1",
+        "rimraf": "^3.0.2",
         "typescript": "^4.8.4"
     },
     "dependencies": {
+        "app-root-path": "^3.1.0",
         "canvas": "^2.10.1"
     }
 }
