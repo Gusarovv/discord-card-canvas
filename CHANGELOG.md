@@ -1,3 +1,14 @@
+## [1.1.0](https://github.com/Gusarovv/discord-card-canvas/compare/v1.0.3...v1.1.0) (2022-10-17)
+
+### New feature:
+
+- New fonts([`7771223`](https://github.com/Gusarovv/discord-canvas-card/commit/7771223f3aec3745d0871b7f4491620c57a8d701))
+- Draws the content on the created canvas([`33429cc`](https://github.com/Gusarovv/discord-canvas-card/commit/33429cc7b66c32cec1b0cd8bf09cd59bd371da0d))
+
+### Bugs fixed:
+
+- Registering fonts in the browser([`f5e30d1`](https://github.com/Gusarovv/discord-canvas-card/commit/f5e30d1f20dfbba7c31b25790db5ddf2b8554bf7))
+
 ## [1.0.3](https://github.com/Gusarovv/discord-card-canvas/compare/v1.0.1...v1.0.2) (2022-10-15)
 
 ### Documentation
