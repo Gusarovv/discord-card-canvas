@@ -10,7 +10,15 @@ export type Color = RGB | RGBA | HEX;
 /**
  * Resolvable font
  */
-export type FontResolvable = 'Inter' | 'Nunito' | 'Manrope';
+export type FontResolvable =
+    | 'Inter'
+    | 'Nunito'
+    | 'Manrope'
+    | 'Open Sans'
+    | 'Raleway'
+    | 'Roboto Slab'
+    | 'Spectral SC'
+    | 'Bellota';
 
 /**
  * User status in Discord
@@ -18,16 +26,16 @@ export type FontResolvable = 'Inter' | 'Nunito' | 'Manrope';
 export type UserStatus = 'online' | 'idle' | 'dnd' | 'offline' | 'streaming';
 
 export interface TextCard {
-	/**
-	 * Content (string)
-	 */
+    /**
+     * Content (string)
+     */
     content: string;
-	/**
-	 * Text color
-	 */
+    /**
+     * Text color
+     */
     color?: Color;
-	/**
-	 * Text font
-	 */
+    /**
+     * Text font
+     */
     font?: FontResolvable;
 }
