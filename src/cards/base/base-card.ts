@@ -1,47 +1,45 @@
 import { Canvas, createCanvas, loadImage } from 'canvas';
-import { resolve } from 'path';
 import { Color, FontResolvable, TextCard } from '../../interface/card.interface';
-const path = resolve(__dirname, '../../src/img');
 
 /**
  * Base Card Parameters
  */
 export interface BaseCardParams {
-	/**
-	 * Text above the user's nickname
-	 */
-	mainText?: TextCard;
-	/**
-	 * User's nickname
-	 */
+    /**
+     * Text above the user's nickname
+     */
+    mainText?: TextCard;
+    /**
+     * User's nickname
+     */
     nicknameText?: TextCard;
-	/**
-	 * Text under the user's nickname
-	 */
+    /**
+     * Text under the user's nickname
+     */
     secondText?: TextCard;
-	/**
-	 * Background color; Default: '#BBE8FF'
-	 */
+    /**
+     * Background color; Default: '#BBE8FF'
+     */
     backgroundColor?: Color;
-	/**
-	 * URL to the background image (800x350 px)
-	 */
+    /**
+     * URL to the background image (800x350 px)
+     */
     backgroundImgURL?: string;
-	/**
-	 * URL to the avatar user image
-	 */
+    /**
+     * URL to the avatar user image
+     */
     avatarImgURL?: string;
-	/**
-	 * The outline color of the user's avatar; Default: '#0CA7FF'
-	 */
+    /**
+     * The outline color of the user's avatar; Default: '#0CA7FF'
+     */
     avatarBorderColor?: Color;
-	/**
-	 * Default font (applies if a specific font is not selected in the TextCard object); Default: 'Nunito'
-	 */
+    /**
+     * Default font (applies if a specific font is not selected in the TextCard object); Default: 'Nunito'
+     */
     fontDefault?: FontResolvable;
-	/**
-	 * Default text color (applies if a specific text color is not selected in the Text Card object); Default: '#0CA7FF'
-	 */
+    /**
+     * Default text color (applies if a specific text color is not selected in the Text Card object); Default: '#0CA7FF'
+     */
     colorTextDefault?: Color;
 }
 
@@ -49,19 +47,19 @@ export interface BaseCardParams {
  * Base Card Builder
  */
 export class BaseCardBuilder {
-	public mainText?: TextCard;
+    public mainText?: TextCard;
     public nicknameText?: TextCard;
     public secondText?: TextCard;
     public backgroundImgURL?: string;
     public backgroundColor: Color = '#bbe8ff';
-    public avatarImgURL: string = `${path}/default-avatar.png`;
+    public avatarImgURL?: string;
     public avatarBorderColor: Color = '#0CA7FF';
     public fontDefault: FontResolvable = 'Nunito';
     public colorTextDefault: Color = '#0CA7FF';
 
     constructor(params?: BaseCardParams) {
         if (!params) return;
-		if (params.mainText) this.mainText = params.mainText;
+        if (params.mainText) this.mainText = params.mainText;
         if (params.nicknameText) this.nicknameText = params.nicknameText;
         if (params.secondText) this.secondText = params.secondText;
         if (params.backgroundImgURL) this.backgroundImgURL = params.backgroundImgURL;
@@ -72,106 +70,106 @@ export class BaseCardBuilder {
         if (params.colorTextDefault) this.colorTextDefault = params.colorTextDefault;
     }
 
-	/**
-	 * Sets the background color of this card (if no background image is selected)
-	 * @param backgroundColor Background color
-	 */
+    /**
+     * Sets the background color of this card (if no background image is selected)
+     * @param backgroundColor Background color
+     */
     setBackgroundColor(backgroundColor: Color): this {
         this.backgroundColor = backgroundColor;
         return this;
     }
 
-	/**
-	 * Sets the background image of this card
-	 * @remark Image size 800x350px
-	 * @param backgroundImgURL URL to the background image
-	 */
+    /**
+     * Sets the background image of this card
+     * @remark Image size 800x350px
+     * @param backgroundImgURL URL to the background image
+     */
     setBackgroundImgURL(backgroundImgURL: string): this {
         this.backgroundImgURL = backgroundImgURL;
         return this;
     }
 
-	/**
-	 * Sets the avatar image of this card
-	 * @param avatarImgURL URL to the avatar user image
-	 */
+    /**
+     * Sets the avatar image of this card
+     * @param avatarImgURL URL to the avatar user image
+     */
     setAvatarImgURL(avatarImgURL: string): this {
         this.avatarImgURL = avatarImgURL;
         return this;
     }
 
-	/**
-	 * Sets the border color of the avatar of this card
-	 * @param avatarBorderColor The outline color of the user's avatar
-	 */
+    /**
+     * Sets the border color of the avatar of this card
+     * @param avatarBorderColor The outline color of the user's avatar
+     */
     setAvatarBorderColor(avatarBorderColor: Color): this {
         this.avatarBorderColor = avatarBorderColor;
         return this;
     }
 
-	/**
-	 * Sets the default font
-	 * @param fontDefault Default font
-	 */
+    /**
+     * Sets the default font
+     * @param fontDefault Default font
+     */
     setFontDefault(fontDefault: FontResolvable): this {
         this.fontDefault = fontDefault;
         return this;
     }
 
-	/**
-	 * Sets the default text color
-	 * @param colorTextDefault Default text color
-	 */
+    /**
+     * Sets the default text color
+     * @param colorTextDefault Default text color
+     */
     setColorTextDefault(colorTextDefault: Color): this {
         this.colorTextDefault = colorTextDefault;
         return this;
     }
 
-	/**
-	 * Sets the main text (for example, "Welcome")
-	 * @param mainText Text above the user's nickname
-	 */
+    /**
+     * Sets the main text (for example, "Welcome")
+     * @param mainText Text above the user's nickname
+     */
     setMainText(mainText: TextCard): this {
         this.mainText = mainText;
         return this;
     }
 
-	/**
-	 * Sets the user's nickname
-	 * @param nicknameText User's nickname
-	 */
+    /**
+     * Sets the user's nickname
+     * @param nicknameText User's nickname
+     */
     setNicknameText(nicknameText: TextCard): this {
         this.nicknameText = nicknameText;
         return this;
     }
 
-	/**
-	 * Sets the text under the nickname
-	 * @param secondText Text under the user's nickname
-	 */
+    /**
+     * Sets the text under the nickname
+     * @param secondText Text under the user's nickname
+     */
     setSecondText(secondText: TextCard): this {
         this.secondText = secondText;
         return this;
     }
 
-	/**
-	 * Builds a Canvas with the specified parameters
-	 */
-    async build(): Promise<Canvas> {
-        const canvas = createCanvas(800, 350);
-        const ctx = canvas.getContext('2d');
-
+    /**
+     * Draws the content on the created canvas
+     * @param ctx The context of the created canvas
+     * @param canvasWidth Width of the created canvas
+     * @param canvasHeight Height of the created canvas
+     */
+    async draw(ctx: any, canvasWidth: number, canvasHeight: number): Promise<void> {
         // Background
         if (this.backgroundImgURL) {
             try {
                 const img = await loadImage(this.backgroundImgURL);
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
             } catch (err) {
                 throw new Error('Error loading the background image. The URL may be invalid.');
             }
         } else {
             ctx.fillStyle = this.backgroundColor;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
         }
 
         const textRender = (
@@ -181,11 +179,11 @@ export class BaseCardBuilder {
             cpy: number,
         ) => {
             const font = text.font ? text.font : this.fontDefault;
-            ctx.font = `33px '${font} ${type}'`;
+            ctx.font = `600 33px '${font}'`;
             if (type === 'nickname') {
-                ctx.font = `35px '${font} ${type}'`;
+                ctx.font = `700 35px '${font}'`;
             } else if (type === 'main') {
-                ctx.font = `48px '${font} ${type}'`;
+                ctx.font = `800 48px '${font}'`;
                 text.content = text.content.toUpperCase();
             }
             if (text.content.length > maxLength) {
@@ -220,18 +218,28 @@ export class BaseCardBuilder {
         ctx.fill();
         ctx.closePath();
 
-        // Avatar
-        ctx.beginPath();
-        ctx.arc(400, 100, 75, 0, Math.PI * 2, true);
-        ctx.clip();
-        try {
-            const img = await loadImage(this.avatarImgURL);
-            ctx.drawImage(img, 325, 25, 150, 150);
-        } catch (err) {
-            throw new Error('Error loading the avatar image. The URL may be invalid.');
+        if (this.avatarImgURL) {
+            // Avatar
+            ctx.beginPath();
+            ctx.arc(400, 100, 75, 0, Math.PI * 2, true);
+            ctx.clip();
+            try {
+                const img = await loadImage(this.avatarImgURL);
+                ctx.drawImage(img, 325, 25, 150, 150);
+            } catch (err) {
+                throw new Error('Error loading the avatar image. The URL may be invalid.');
+            }
+            ctx.closePath();
         }
-        ctx.closePath();
+    }
 
+    /**
+     * Builds a Canvas with the specified parameters
+     */
+    async build(): Promise<Canvas> {
+        const canvas = createCanvas(800, 350);
+        const ctx = canvas.getContext('2d');
+        await this.draw(ctx, canvas.width, canvas.height);
         return canvas;
     }
 }

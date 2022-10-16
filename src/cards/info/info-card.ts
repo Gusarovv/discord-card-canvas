@@ -1,18 +1,18 @@
-import { createCanvas, loadImage } from 'canvas';
+import { Canvas, createCanvas, loadImage } from 'canvas';
 import { Color, TextCard } from '../../interface/card.interface';
 
 export interface InfoCardParams {
-	/**
-	 * Background color (if no background image is selected)
-	 */
+    /**
+     * Background color (if no background image is selected)
+     */
     backgroundColor?: Color;
-	/**
-	 * URL to the background image (1000x200 px)
-	 */
+    /**
+     * URL to the background image (1000x200 px)
+     */
     backgroundImgURL?: string;
-	/**
-	 * The main text on the card
-	 */
+    /**
+     * The main text on the card
+     */
     mainText?: TextCard;
 }
 
@@ -32,58 +32,57 @@ export class InfoCardBuilder {
         }
     }
 
-	/**
-	 * Sets the background color of this card (if no background image is selected)
-	 * @param backgroundColor Background color
-	 */
+    /**
+     * Sets the background color of this card (if no background image is selected)
+     * @param backgroundColor Background color
+     */
     setBackgroundColor(backgroundColor: Color): this {
         this.backgroundColor = backgroundColor;
         return this;
     }
 
-
-	/**
-	 * URL to the background image
-	 * @remark Image size 1000x200px
-	 * @param backgroundImgURL URL to the background image
-	 */
+    /**
+     * URL to the background image
+     * @remark Image size 1000x200px
+     * @param backgroundImgURL URL to the background image
+     */
     setBackgroundImgURL(backgroundImgURL: string): this {
         this.backgroundImgURL = backgroundImgURL;
         return this;
     }
 
-	/**
-	 * Sets the main text (for example, "Info")
-	 * @param mainText The main text on the card
-	 */
+    /**
+     * Sets the main text (for example, "Info")
+     * @param mainText The main text on the card
+     */
     setMainText(mainText: TextCard): this {
         this.mainText = mainText;
         return this;
     }
 
-	/**
-	 * Builds a Canvas with the specified parameters
-	 */
-    async build() {
-        const canvas = createCanvas(1000, 200);
-        const ctx = canvas.getContext('2d');
-
+    /**
+     * Draws the content on the created canvas
+     * @param ctx The context of the created canvas
+     * @param canvasWidth Width of the created canvas
+     * @param canvasHeight Height of the created canvas
+     */
+    async draw(ctx: any, canvasWidth: number, canvasHeight: number): Promise<void> {
         // Background
         if (this.backgroundImgURL) {
             try {
                 const img = await loadImage(this.backgroundImgURL);
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
             } catch (err) {
                 throw new Error('Error loading the background image. The URL may be invalid.');
             }
         } else {
             ctx.fillStyle = this.backgroundColor;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
         }
 
         // Main TextCard
         if (this.mainText && this.mainText.color) {
-            ctx.font = `76px '${this.mainText.font} main'`;
+            ctx.font = `800 76px '${this.mainText.font}'`;
             if (this.mainText.content.length > 80) {
                 this.mainText.content = this.mainText.content.slice(0, 77) + '...';
             }
@@ -92,7 +91,15 @@ export class InfoCardBuilder {
             ctx.textBaseline = 'middle';
             ctx.fillText(this.mainText.content, 500, 100, 900);
         }
+    }
 
+    /**
+     * Builds a Canvas with the specified parameters
+     */
+    async build(): Promise<Canvas> {
+        const canvas = createCanvas(1000, 200);
+        const ctx = canvas.getContext('2d');
+        await this.draw(ctx, canvas.width, canvas.height);
         return canvas;
     }
 }
