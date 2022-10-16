@@ -8,7 +8,10 @@ export function registerFonts() {
 
 	// Required for initialization in the browser
 	// For the browser, use the @import url
-	if(!registerFont) return;
+	if(!registerFont) {
+		console.warn('Skipping font registration. For the browser, use the @import url');
+		return;
+	};
 
 
 	// Nunito
