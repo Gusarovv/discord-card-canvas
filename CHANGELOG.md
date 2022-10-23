@@ -1,3 +1,12 @@
+## [1.2.0](https://github.com/Gusarovv/discord-card-canvas/compare/v1.1.0...v1.2.0) (2022-10-23)
+
+### New feature:
+
+- Avatar border style for base card([`dc4ea04`](https://github.com/Gusarovv/discord-canvas-card/commit/dc4ea0479fd1287aa11b52b827228ca46a86bfdf))
+- Draw only([`c92d2cc`](https://github.com/Gusarovv/discord-canvas-card/commit/c92d2cccf9e8ae658814092df8ab2727afb96ad9))
+> The ability to draw only the specified objects, without redrawing the entire canvas.\
+> Example: `this.draw(ctx, canvas.width, canvas.height, ['nickname', 'mainText']); `Only nickname and main text will be drawn
+
 ## [1.1.0](https://github.com/Gusarovv/discord-card-canvas/compare/v1.0.3...v1.1.0) (2022-10-17)
 
 ### New feature:
