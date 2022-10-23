@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.0...v1.2.1) (2022-10-23)
+
+### Bugs fixed:
+
+- Content stroke (due to "destination-over")([`de4999e`](https://github.com/Gusarovv/discord-canvas-card/commit/de4999e02d5475001ed4a817a34e318d68a4607a))
+- Clip avatar (deleted after drawing the avatar)([`ac03215`](https://github.com/Gusarovv/discord-canvas-card/commit/ac03215189e0e815b8f59777f81a090632b3c3de))
+
 ## [1.2.0](https://github.com/Gusarovv/discord-card-canvas/compare/v1.1.0...v1.2.0) (2022-10-23)
 
 ### New feature:
