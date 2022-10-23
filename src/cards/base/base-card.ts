@@ -258,6 +258,7 @@ export class BaseCardBuilder {
             (only?.includes('avatarBorder') && this.avatarBorderStyle === 'fill')
         ) {
             if (this.avatarImgURL) {
+                ctx.save();
                 // Avatar
                 ctx.beginPath();
                 ctx.arc(400, 100, 75, 0, Math.PI * 2, true);
@@ -269,6 +270,7 @@ export class BaseCardBuilder {
                     throw new Error('Error loading the avatar image. The URL may be invalid.');
                 }
                 ctx.closePath();
+                ctx.restore();
             }
         }
     }
