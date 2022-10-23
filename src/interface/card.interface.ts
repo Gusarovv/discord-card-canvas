@@ -39,3 +39,5 @@ export interface TextCard {
      */
     font?: FontResolvable;
 }
+
+export type BorderStyle = 'fill' | 'stroke';

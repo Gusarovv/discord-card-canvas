@@ -1,5 +1,5 @@
 import { Canvas, createCanvas, loadImage } from 'canvas';
-import { Color, FontResolvable, TextCard } from '../../interface/card.interface';
+import { BorderStyle, Color, FontResolvable, TextCard } from '../../interface/card.interface';
 
 /**
  * Base Card Parameters
@@ -34,6 +34,10 @@ export interface BaseCardParams {
      */
     avatarBorderColor?: Color;
     /**
+     * Border type for avatar ('fill' fits transparent avatars)
+     */
+    avatarBorderStyle?: BorderStyle;
+    /**
      * Default font (applies if a specific font is not selected in the TextCard object); Default: 'Nunito'
      */
     fontDefault?: FontResolvable;
@@ -52,6 +56,7 @@ export class BaseCardBuilder {
     public secondText?: TextCard;
     public backgroundImgURL?: string;
     public backgroundColor: Color = '#bbe8ff';
+    public avatarBorderStyle?: BorderStyle;
     public avatarImgURL?: string;
     public avatarBorderColor: Color = '#0CA7FF';
     public fontDefault: FontResolvable = 'Nunito';
@@ -66,6 +71,7 @@ export class BaseCardBuilder {
         if (params.backgroundColor) this.backgroundColor = params.backgroundColor;
         if (params.avatarImgURL) this.avatarImgURL = params.avatarImgURL;
         if (params.avatarBorderColor) this.avatarBorderColor = params.avatarBorderColor;
+        if (params.avatarBorderStyle) this.avatarBorderStyle = params.avatarBorderStyle;
         if (params.fontDefault) this.fontDefault = params.fontDefault;
         if (params.colorTextDefault) this.colorTextDefault = params.colorTextDefault;
     }
@@ -167,8 +173,8 @@ export class BaseCardBuilder {
         only?: string[],
     ): Promise<void> {
         if (!only || only?.includes('background')) {
-			ctx.save();
-			ctx.globalCompositeOperation = 'destination-over';
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-over';
             // Background
             if (this.backgroundImgURL) {
                 try {
@@ -181,7 +187,7 @@ export class BaseCardBuilder {
                 ctx.fillStyle = this.backgroundColor;
                 ctx.fillRect(0, 0, canvasWidth, canvasHeight);
             }
-			ctx.restore();
+            ctx.restore();
         }
 
         const textRender = (
@@ -231,14 +237,27 @@ export class BaseCardBuilder {
 
         if (!only || only?.includes('avatarBorder')) {
             // Avatar Border
+            ctx.save();
             ctx.beginPath();
-            ctx.fillStyle = this.avatarBorderColor;
-            ctx.arc(400, 100, 80, 0, Math.PI * 2);
-            ctx.fill();
+            if (this.avatarBorderStyle === 'stroke') {
+                ctx.strokeStyle = this.avatarBorderColor;
+                ctx.lineWidth = 5;
+                ctx.arc(400, 100, 77.5, 0, Math.PI * 2);
+                ctx.stroke();
+            } else {
+                ctx.fillStyle = this.avatarBorderColor;
+                ctx.arc(400, 100, 80, 0, Math.PI * 2);
+                ctx.fill();
+            }
             ctx.closePath();
+            ctx.restore();
         }
 
-        if (!only || only?.includes('avatar') || only?.includes('avatarBorder')) {
+        if (
+            !only ||
+            only?.includes('avatar') ||
+            (only?.includes('avatarBorder') && this.avatarBorderStyle === 'fill')
+        ) {
             if (this.avatarImgURL) {
                 // Avatar
                 ctx.beginPath();
