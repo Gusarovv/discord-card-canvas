@@ -136,6 +136,8 @@ Creating a base card with a resolution of 800x350 px.
 - `avatarImgURL` - URL to the avatar user image.
 - `avatarBorderColor` - The outline color of the user's avatar.
 	- Default: `'#0CA7FF'`
+- `avatarBorderStyle` - Border type for avatar ('fill' fits transparent avatars)
+	- `'fill'` or `'stroke'`
 - `fontDefault` - Default font. Applies if a specific font is not selected in the TextCard object.
 	- Default: `'Nunito'`
 - `colorTextDefault` - Default text color. Applies if a specific text color is not selected in the Text Card object.
@@ -196,6 +198,7 @@ Creating a card-an information header.
 - `Color` - **String** - RGB | RGBA | HEX
 - `FontResolvable` - **String** - 'Inter' | 'Nunito' | 'Manrope'
 - `UserStatus` - **String** - 'online' | 'idle' | 'dnd' | 'offline' | 'streaming'
+- `BorderStyle` - **String** - 'fill' | 'stroke'
 - `TextCard` - ```{
     content: string;
     color?: Color;
