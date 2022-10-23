@@ -249,181 +249,208 @@ export class RankCardBuilder {
      * @param ctx The context of the created canvas
      * @param canvasWidth Width of the created canvas
      * @param canvasHeight Height of the created canvas
+     * @param only Objects (name) that will only be drawn
+     * @remark only: "background" | "nickname" | "avatarBorder" | "avatar" | "rank" | "lvl" | "progressBar" | xp
      */
-    async draw(ctx: any, canvasWidth: number, canvasHeight: number): Promise<void> {
-        // Border radius
-        ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(1000, 250);
-        ctx.arcTo(0, 250, 0, 0, 30);
-        ctx.arcTo(0, 0, 1000, 0, 30);
-        ctx.arcTo(1000, 0, 1000, 250, 30);
-        ctx.arcTo(1000, 250, 0, 250, 30);
-        ctx.clip();
-
-        // Background
-        if (this.backgroundImgURL) {
-            try {
-                const img = await loadImage(this.backgroundImgURL);
-                ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-            } catch (err) {
-                throw new Error('Error loading the background image. The URL may be invalid.');
-            }
-        } else {
-            ctx.fillStyle = this.backgroundColor;
-            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-        }
-        ctx.restore();
-
-        // Задний фон аватарки
-        if (this.avatarBackgroundEnable) {
-            ctx.beginPath();
-            ctx.arc(88, 101, 75, 0, Math.PI * 2);
-            ctx.fillStyle = this.avatarBackgroundColor;
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        if (this.avatarImgURL) {
-            // Avatar
-            ctx.beginPath();
-            ctx.arc(105, 125, 75, 0, Math.PI * 0.36, true);
-            ctx.arc(159, 179, 23.5, Math.PI * 0.82, Math.PI * 1.68, false);
-            ctx.arc(105, 125, 75, Math.PI * 0.15, Math.PI * 1.5, true);
-            ctx.closePath();
+    async draw(
+        ctx: any,
+        canvasWidth: number,
+        canvasHeight: number,
+        only?: string[],
+    ): Promise<void> {
+        if (!only || only?.includes('background')) {
+            // Border radius
             ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(1000, 250);
+            ctx.arcTo(0, 250, 0, 0, 30);
+            ctx.arcTo(0, 0, 1000, 0, 30);
+            ctx.arcTo(1000, 0, 1000, 250, 30);
+            ctx.arcTo(1000, 250, 0, 250, 30);
             ctx.clip();
-            try {
-                const img = await loadImage(this.avatarImgURL);
-                ctx.drawImage(img, 30, 50, 150, 150);
-            } catch (err) {
-                throw new Error('Error loading the avatar image. The URL may be invalid.');
+
+            ctx.globalCompositeOperation = 'destination-over';
+            // Background
+            if (this.backgroundImgURL) {
+                try {
+                    const img = await loadImage(this.backgroundImgURL);
+                    ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+                } catch (err) {
+                    throw new Error('Error loading the background image. The URL may be invalid.');
+                }
+            } else {
+                ctx.fillStyle = this.backgroundColor;
+                ctx.fillRect(0, 0, canvasWidth, canvasHeight);
             }
             ctx.restore();
-
-            // Status
-            ctx.beginPath();
-            if (this.userStatus === 'online') {
-                ctx.arc(159, 179, 17, 0, Math.PI * 2);
-                ctx.fillStyle = '#57F287';
-            } else if (this.userStatus === 'idle') {
-                ctx.arc(159, 179, 17, Math.PI * 0.9, Math.PI * 1.6, true);
-                ctx.arc(148, 168, 17, Math.PI * 1.9, Math.PI * 0.6);
-                ctx.fillStyle = '#faa61a';
-            } else if (this.userStatus === 'dnd') {
-                ctx.arc(151, 179, 3.5, Math.PI * 1.5, Math.PI * 0.5, true);
-                ctx.arc(167, 179, 3.5, Math.PI * 0.5, Math.PI * 1.5, true);
-                ctx.closePath();
-                ctx.arc(159, 179, 17, 0, Math.PI * 2);
-                ctx.fillStyle = '#ed4245';
-            } else if (this.userStatus === 'streaming') {
-                ctx.moveTo(168, 179);
-                ctx.lineTo(154.5, 170);
-                ctx.lineTo(154.5, 188);
-                ctx.closePath();
-                ctx.arc(159, 179, 17, 0, Math.PI * 2);
-                ctx.fillStyle = '#593695';
-            } else {
-                ctx.arc(159, 179, 9, Math.PI * 1.5, Math.PI * 0.5, true);
-                ctx.arc(159, 179, 9, Math.PI * 0.5, Math.PI * 1.5, true);
-                ctx.closePath();
-                ctx.arc(159, 179, 17, 0, Math.PI * 2);
-                ctx.fillStyle = '#747f8d';
-            }
-            ctx.fill();
         }
 
-        // Progress Bar
-        ctx.save();
+        if (!only || only?.includes('avatarBorder')) {
+            // Задний фон аватарки
+            if (this.avatarBackgroundEnable) {
+                ctx.beginPath();
+                ctx.arc(88, 101, 75, 0, Math.PI * 2);
+                ctx.fillStyle = this.avatarBackgroundColor;
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
 
-        // Progress Bar Back
-        ctx.beginPath();
-        ctx.globalAlpha = 0.5;
-        ctx.fillStyle = this.progressBarColor;
-        ctx.arc(canvasWidth - 47.5, 182.5, 17.5, Math.PI * 1.5, Math.PI * 0.5);
-        ctx.arc(227.5, 182.5, 17.5, Math.PI * 0.5, Math.PI * 1.5);
-        ctx.fill();
-        ctx.clip();
-        ctx.closePath();
+        if (!only || only?.includes('avatar') || only?.includes('avatarBorder')) {
+            if (this.avatarImgURL) {
+                // Avatar
+                ctx.beginPath();
+                ctx.arc(105, 125, 75, 0, Math.PI * 0.36, true);
+                ctx.arc(159, 179, 23.5, Math.PI * 0.82, Math.PI * 1.68, false);
+                ctx.arc(105, 125, 75, Math.PI * 0.15, Math.PI * 1.5, true);
+                ctx.closePath();
+                ctx.save();
+                ctx.clip();
+                try {
+                    const img = await loadImage(this.avatarImgURL);
+                    ctx.drawImage(img, 30, 50, 150, 150);
+                } catch (err) {
+                    throw new Error('Error loading the avatar image. The URL may be invalid.');
+                }
+                ctx.restore();
 
-        // Progress Bar Front
-        const currentPercentXP = Math.floor((this.currentXP / this.requiredXP) * 100);
-        if (currentPercentXP >= 1) {
+                // Status
+                ctx.beginPath();
+                if (this.userStatus === 'online') {
+                    ctx.arc(159, 179, 17, 0, Math.PI * 2);
+                    ctx.fillStyle = '#57F287';
+                } else if (this.userStatus === 'idle') {
+                    ctx.arc(159, 179, 17, Math.PI * 0.9, Math.PI * 1.6, true);
+                    ctx.arc(148, 168, 17, Math.PI * 1.9, Math.PI * 0.6);
+                    ctx.fillStyle = '#faa61a';
+                } else if (this.userStatus === 'dnd') {
+                    ctx.arc(151, 179, 3.5, Math.PI * 1.5, Math.PI * 0.5, true);
+                    ctx.arc(167, 179, 3.5, Math.PI * 0.5, Math.PI * 1.5, true);
+                    ctx.closePath();
+                    ctx.arc(159, 179, 17, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ed4245';
+                } else if (this.userStatus === 'streaming') {
+                    ctx.moveTo(168, 179);
+                    ctx.lineTo(154.5, 170);
+                    ctx.lineTo(154.5, 188);
+                    ctx.closePath();
+                    ctx.arc(159, 179, 17, 0, Math.PI * 2);
+                    ctx.fillStyle = '#593695';
+                } else {
+                    ctx.arc(159, 179, 9, Math.PI * 1.5, Math.PI * 0.5, true);
+                    ctx.arc(159, 179, 9, Math.PI * 0.5, Math.PI * 1.5, true);
+                    ctx.closePath();
+                    ctx.arc(159, 179, 17, 0, Math.PI * 2);
+                    ctx.fillStyle = '#747f8d';
+                }
+                ctx.fill();
+            }
+        }
+
+        if (!only || only?.includes('progressBar')) {
+            // Progress Bar
+            ctx.save();
+
+            // Progress Bar Back
             ctx.beginPath();
-            const onePercentBar = (canvasWidth - 30 - 210) / 100;
-            const pxBar = onePercentBar * currentPercentXP;
-            ctx.globalAlpha = 1;
+            ctx.globalAlpha = 0.5;
             ctx.fillStyle = this.progressBarColor;
-            ctx.arc(192.5 + pxBar, 182.5, 17.5, Math.PI * 1.5, Math.PI * 0.5);
+            ctx.arc(canvasWidth - 47.5, 182.5, 17.5, Math.PI * 1.5, Math.PI * 0.5);
             ctx.arc(227.5, 182.5, 17.5, Math.PI * 0.5, Math.PI * 1.5);
             ctx.fill();
+            ctx.clip();
             ctx.closePath();
+
+            // Progress Bar Front
+            const currentPercentXP = Math.floor((this.currentXP / this.requiredXP) * 100);
+            if (currentPercentXP >= 1) {
+                ctx.beginPath();
+                const onePercentBar = (canvasWidth - 30 - 210) / 100;
+                const pxBar = onePercentBar * currentPercentXP;
+                ctx.globalAlpha = 1;
+                ctx.fillStyle = this.progressBarColor;
+                ctx.arc(192.5 + pxBar, 182.5, 17.5, Math.PI * 1.5, Math.PI * 0.5);
+                ctx.arc(227.5, 182.5, 17.5, Math.PI * 0.5, Math.PI * 1.5);
+                ctx.fill();
+                ctx.closePath();
+            }
+            ctx.restore();
         }
-        ctx.restore();
-
-        // XP
-        ctx.save();
         let offsetLvlXP = canvasWidth - 30;
-        ctx.font = `600 35px '${this.fontDefault}'`;
-        ctx.textAlign = 'right';
-        ctx.fillStyle = this.requiredXPColor;
-        ctx.fillText(`${this.requiredXP} xp`, offsetLvlXP, 150);
-        offsetLvlXP -= ctx.measureText(`${this.requiredXP} xp`).width + 3;
-        ctx.fillText('/', offsetLvlXP, 150);
-        ctx.fillStyle = this.currentXPColor;
-        // 3px - the distance to the left and right of "/"
-        offsetLvlXP -= ctx.measureText(`/`).width + 3;
-        ctx.fillText(`${this.currentXP}`, offsetLvlXP, 150);
-        offsetLvlXP -= ctx.measureText(`${this.currentXP}`).width;
-        ctx.restore();
+        if (!only || only?.includes('xp')) {
+            // XP
+            ctx.save();
+            ctx.font = `600 35px '${this.fontDefault}'`;
+            ctx.textAlign = 'right';
+            ctx.fillStyle = this.requiredXPColor;
+            ctx.fillText(`${this.requiredXP} xp`, offsetLvlXP, 150);
+            offsetLvlXP -= ctx.measureText(`${this.requiredXP} xp`).width + 3;
+            ctx.fillText('/', offsetLvlXP, 150);
+            ctx.fillStyle = this.currentXPColor;
+            // 3px - the distance to the left and right of "/"
+            offsetLvlXP -= ctx.measureText(`/`).width + 3;
+            ctx.fillText(`${this.currentXP}`, offsetLvlXP, 150);
+            offsetLvlXP -= ctx.measureText(`${this.currentXP}`).width;
+            ctx.restore();
+        }
 
-        // Nickname
-        const nicknameFont = this.nicknameText.font ? this.nicknameText.font : this.fontDefault;
-        ctx.font = `600 35px '${nicknameFont}'`;
-        ctx.fillStyle = this.nicknameText.color ? this.nicknameText.color : this.colorTextDefault;
-        ctx.fillText(this.nicknameText.content, 210, 150, offsetLvlXP - 210 - 15);
+        if (!only || only?.includes('nickname')) {
+            // Nickname
+            const nicknameFont = this.nicknameText.font ? this.nicknameText.font : this.fontDefault;
+            ctx.font = `600 35px '${nicknameFont}'`;
+            ctx.fillStyle = this.nicknameText.color
+                ? this.nicknameText.color
+                : this.colorTextDefault;
+            ctx.fillText(this.nicknameText.content, 210, 150, offsetLvlXP - 210 - 15);
+        }
 
         // RANK
         ctx.save();
-        ctx.textAlign = 'right';
         let offsetRankX = canvasWidth - 30;
+        if (!only || only?.includes('rank')) {
+            ctx.textAlign = 'right';
 
-        const rankFont =
-            this.rankPrefix && this.rankPrefix.font ? this.rankPrefix.font : this.fontDefault;
-        const rankContent =
-            this.rankPrefix && this.rankPrefix.content ? this.rankPrefix.content : 'RANK';
-        ctx.fillStyle =
-            this.rankPrefix && this.rankPrefix.color
-                ? this.rankPrefix.color
-                : this.colorTextDefault;
+            const rankFont =
+                this.rankPrefix && this.rankPrefix.font ? this.rankPrefix.font : this.fontDefault;
+            const rankContent =
+                this.rankPrefix && this.rankPrefix.content ? this.rankPrefix.content : 'RANK';
+            ctx.fillStyle =
+                this.rankPrefix && this.rankPrefix.color
+                    ? this.rankPrefix.color
+                    : this.colorTextDefault;
 
-        // rank number
-        ctx.font = `600 60px '${rankFont}'`;
-        ctx.fillText(`${this.currentRank}`, offsetRankX, 75);
-        offsetRankX -= ctx.measureText(`${this.currentRank}`).width;
+            // rank number
+            ctx.font = `600 60px '${rankFont}'`;
+            ctx.fillText(`${this.currentRank}`, offsetRankX, 75);
+            offsetRankX -= ctx.measureText(`${this.currentRank}`).width;
 
-        // rank string
-        ctx.font = `600 35px '${rankFont}'`;
-        ctx.fillText(` ${rankContent} `, offsetRankX, 75);
-        offsetRankX -= ctx.measureText(` ${rankContent} `).width;
+            // rank string
+            ctx.font = `600 35px '${rankFont}'`;
+            ctx.fillText(` ${rankContent} `, offsetRankX, 75);
+            offsetRankX -= ctx.measureText(` ${rankContent} `).width;
+        }
 
-        // LVL
-        const lvlFont =
-            this.lvlPrefix && this.lvlPrefix.font ? this.lvlPrefix.font : this.fontDefault;
-        const lvlContent =
-            this.lvlPrefix && this.lvlPrefix.content ? this.lvlPrefix.content : 'LVL';
-        ctx.fillStyle =
-            this.lvlPrefix && this.lvlPrefix.color ? this.lvlPrefix.color : this.colorTextDefault;
+        if (!only || only?.includes('lvl')) {
+            // LVL
+            const lvlFont =
+                this.lvlPrefix && this.lvlPrefix.font ? this.lvlPrefix.font : this.fontDefault;
+            const lvlContent =
+                this.lvlPrefix && this.lvlPrefix.content ? this.lvlPrefix.content : 'LVL';
+            ctx.fillStyle =
+                this.lvlPrefix && this.lvlPrefix.color
+                    ? this.lvlPrefix.color
+                    : this.colorTextDefault;
 
-        // lvl number
-        ctx.font = `600 60px '${lvlFont}'`;
-        ctx.fillText(`${this.currentLvl}`, offsetRankX, 75);
-        offsetRankX -= ctx.measureText(`${this.currentLvl}`).width;
+            // lvl number
+            ctx.font = `600 60px '${lvlFont}'`;
+            ctx.fillText(`${this.currentLvl}`, offsetRankX, 75);
+            offsetRankX -= ctx.measureText(`${this.currentLvl}`).width;
 
-        // lvl string
-        ctx.font = `600 35px '${lvlFont}'`;
-        ctx.fillText(`${lvlContent} `, offsetRankX, 75);
-        ctx.restore();
+            // lvl string
+            ctx.font = `600 35px '${lvlFont}'`;
+            ctx.fillText(`${lvlContent} `, offsetRankX, 75);
+            ctx.restore();
+        }
     }
 
     /**

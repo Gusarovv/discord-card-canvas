@@ -157,19 +157,31 @@ export class BaseCardBuilder {
      * @param ctx The context of the created canvas
      * @param canvasWidth Width of the created canvas
      * @param canvasHeight Height of the created canvas
+     * @param only Objects (name) that will only be drawn
+     * @remark only: "background" | "mainText" | "nickname" | "secondText" | "avatarBorder" | "avatar"
      */
-    async draw(ctx: any, canvasWidth: number, canvasHeight: number): Promise<void> {
-        // Background
-        if (this.backgroundImgURL) {
-            try {
-                const img = await loadImage(this.backgroundImgURL);
-                ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-            } catch (err) {
-                throw new Error('Error loading the background image. The URL may be invalid.');
+    async draw(
+        ctx: any,
+        canvasWidth: number,
+        canvasHeight: number,
+        only?: string[],
+    ): Promise<void> {
+        if (!only || only?.includes('background')) {
+			ctx.save();
+			ctx.globalCompositeOperation = 'destination-over';
+            // Background
+            if (this.backgroundImgURL) {
+                try {
+                    const img = await loadImage(this.backgroundImgURL);
+                    ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+                } catch (err) {
+                    throw new Error('Error loading the background image. The URL may be invalid.');
+                }
+            } else {
+                ctx.fillStyle = this.backgroundColor;
+                ctx.fillRect(0, 0, canvasWidth, canvasHeight);
             }
-        } else {
-            ctx.fillStyle = this.backgroundColor;
-            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+			ctx.restore();
         }
 
         const textRender = (
@@ -196,40 +208,50 @@ export class BaseCardBuilder {
             ctx.fillText(text.content, 400, cpy, 800);
         };
 
-        // Main TextCard
-        if (this.mainText) {
-            textRender(this.mainText, 'main', 40, 225);
-        }
-
-        // Nickname
-        if (this.nicknameText) {
-            textRender(this.nicknameText, 'nickname', 60, 265);
-        }
-
-        // Second text
-        if (this.secondText) {
-            textRender(this.secondText, 'second', 65, 310);
-        }
-
-        // Avatar Border
-        ctx.beginPath();
-        ctx.fillStyle = this.avatarBorderColor;
-        ctx.arc(400, 100, 80, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.closePath();
-
-        if (this.avatarImgURL) {
-            // Avatar
-            ctx.beginPath();
-            ctx.arc(400, 100, 75, 0, Math.PI * 2, true);
-            ctx.clip();
-            try {
-                const img = await loadImage(this.avatarImgURL);
-                ctx.drawImage(img, 325, 25, 150, 150);
-            } catch (err) {
-                throw new Error('Error loading the avatar image. The URL may be invalid.');
+        if (!only || only?.includes('mainText')) {
+            // Main TextCard
+            if (this.mainText) {
+                textRender(this.mainText, 'main', 40, 225);
             }
+        }
+
+        if (!only || only?.includes('nickname')) {
+            // Nickname
+            if (this.nicknameText) {
+                textRender(this.nicknameText, 'nickname', 60, 265);
+            }
+        }
+
+        if (!only || only?.includes('secondText')) {
+            // Second text
+            if (this.secondText) {
+                textRender(this.secondText, 'second', 65, 310);
+            }
+        }
+
+        if (!only || only?.includes('avatarBorder')) {
+            // Avatar Border
+            ctx.beginPath();
+            ctx.fillStyle = this.avatarBorderColor;
+            ctx.arc(400, 100, 80, 0, Math.PI * 2);
+            ctx.fill();
             ctx.closePath();
+        }
+
+        if (!only || only?.includes('avatar') || only?.includes('avatarBorder')) {
+            if (this.avatarImgURL) {
+                // Avatar
+                ctx.beginPath();
+                ctx.arc(400, 100, 75, 0, Math.PI * 2, true);
+                ctx.clip();
+                try {
+                    const img = await loadImage(this.avatarImgURL);
+                    ctx.drawImage(img, 325, 25, 150, 150);
+                } catch (err) {
+                    throw new Error('Error loading the avatar image. The URL may be invalid.');
+                }
+                ctx.closePath();
+            }
         }
     }
 
