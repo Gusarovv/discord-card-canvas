@@ -174,7 +174,6 @@ export class BaseCardBuilder {
     ): Promise<void> {
         if (!only || only?.includes('background')) {
             ctx.save();
-            ctx.globalCompositeOperation = 'destination-over';
             // Background
             if (this.backgroundImgURL) {
                 try {

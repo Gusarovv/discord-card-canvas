@@ -269,7 +269,6 @@ export class RankCardBuilder {
             ctx.arcTo(1000, 250, 0, 250, 30);
             ctx.clip();
 
-            ctx.globalCompositeOperation = 'destination-over';
             // Background
             if (this.backgroundImgURL) {
                 try {
