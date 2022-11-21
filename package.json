@@ -34,6 +34,6 @@
     },
     "dependencies": {
         "app-root-path": "^3.1.0",
-        "canvas": "^2.10.1"
+        "canvas": "^2.10.2"
     }
 }
