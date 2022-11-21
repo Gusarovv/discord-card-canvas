@@ -1,3 +1,11 @@
+## [1.2.2](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.1...v1.2.2) (2022-11-21)
+
+### Dependencies:
+
+- Bump typescript to 4.9.3
+- Bump canvas to 2.10.2
+- Bump @types/node to 18.11.9
+
 ## [1.2.1](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.0...v1.2.1) (2022-10-23)
 
 ### Bugs fixed:
