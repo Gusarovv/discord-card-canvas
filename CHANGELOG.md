@@ -1,3 +1,13 @@
+## [1.2.3](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.2...v1.2.3) (2022-12-20)
+
+### Bugs fixed:
+- Added support for 'invisible' user status([`7567376`](https://github.com/Gusarovv/discord-canvas-card/commit/75673768f51b1070dc99de6a471023764b8ecf51))
+
+### Dependencies:
+
+- Bump typescript to 4.9.4
+- Bump @types/node to 18.11.17
+
 ## [1.2.2](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.1...v1.2.2) (2022-11-21)
 
 ### Dependencies:
