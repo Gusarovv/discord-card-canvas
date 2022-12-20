@@ -197,7 +197,7 @@ Creating a card-an information header.
 
 - `Color` - **String** - RGB | RGBA | HEX
 - `FontResolvable` - **String** - 'Inter' | 'Nunito' | 'Manrope'
-- `UserStatus` - **String** - 'online' | 'idle' | 'dnd' | 'offline' | 'streaming'
+- `UserStatus` - **String** - 'online' | 'idle' | 'dnd' | 'offline' | 'invisible' | 'streaming'
 - `BorderStyle` - **String** - 'fill' | 'stroke'
 - `TextCard` - ```{
     content: string;

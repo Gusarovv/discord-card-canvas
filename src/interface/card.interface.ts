@@ -23,7 +23,7 @@ export type FontResolvable =
 /**
  * User status in Discord
  */
-export type UserStatus = 'online' | 'idle' | 'dnd' | 'offline' | 'streaming';
+export type UserStatus = 'online' | 'idle' | 'dnd' | 'offline' | 'invisible' | 'streaming';
 
 export interface TextCard {
     /**
