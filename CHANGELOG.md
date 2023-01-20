@@ -1,3 +1,11 @@
+## [1.2.4](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.2...v1.2.3) (2022-01-20)
+
+### Dependencies:
+
+- Bump canvas from 2.10.2 to 2.11.0 (@dependabot) in https://github.com/Gusarovv/discord-card-canvas/pull/2
+- Bump rimraf from 3.0.2 to 4.1.1 (@dependabot) in https://github.com/Gusarovv/discord-card-canvas/pull/3
+- Bump @types/node from 18.11.17 to 18.11.18 (@dependabot) in https://github.com/Gusarovv/discord-card-canvas/pull/4
+
 ## [1.2.3](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.2...v1.2.3) (2022-12-20)
 
 ### Bugs fixed:
