@@ -211,3 +211,5 @@ If you have a request for a new feature you can open an issue on Github.
 
 # 📄 Credits
 Made by [gusarovv](https://github.com/gusarovv) with ❤️
+
+Please give a ⭐️ if this project helped you!
