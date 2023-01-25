@@ -1,4 +1,14 @@
-## [1.2.4](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.2...v1.2.3) (2023-01-20)
+## [1.2.5](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.4...v1.2.5) (2023-01-25)
+
+### Other
+
+- Package size reduction
+
+### Dependencies:
+
+- Bump rimraf from 4.1.1 to 4.1.2 (@dependabot) in https://github.com/Gusarovv/discord-card-canvas/pull/5
+
+## [1.2.4](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.3...v1.2.4) (2023-01-20)
 
 ### Dependencies:
 
