@@ -1,6 +1,6 @@
 {
     "name": "discord-card-canvas",
-    "version": "1.2.4",
+    "version": "1.2.5",
     "description": "👾 Simple creating cards using canvas. Welcome, Rank, Info and so on.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -10,6 +10,9 @@
         "build": "npm run clean && tsc && npm run copy-files",
         "prepare": "npm run build"
     },
+    "files": [
+        "dist/**/*"
+    ],
     "keywords": [
         "discord",
         "discord.js",
