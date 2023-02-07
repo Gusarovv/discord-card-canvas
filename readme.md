@@ -196,7 +196,7 @@ Creating a card-an information header.
 ## **🔖 Additional Types and Interfaces**
 
 - `Color` - **String** - RGB | RGBA | HEX
-- `FontResolvable` - **String** - 'Inter' | 'Nunito' | 'Manrope'
+- `FontResolvable` - **String** - 'Inter' | 'Nunito' | 'Manrope' | 'Open Sans' | 'Raleway' | 'Roboto Slab' | 'Spectral SC' | 'Bellota'
 - `UserStatus` - **String** - 'online' | 'idle' | 'dnd' | 'offline' | 'invisible' | 'streaming'
 - `BorderStyle` - **String** - 'fill' | 'stroke'
 - `TextCard` - ```{
