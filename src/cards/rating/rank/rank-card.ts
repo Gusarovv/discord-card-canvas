@@ -1,5 +1,12 @@
 import { Canvas, createCanvas, loadImage } from 'canvas';
-import { Color, FontResolvable, TextCard, UserStatus } from '../../../interface/card.interface';
+import {
+    BackgroundRankColor,
+    Color,
+    FontResolvable,
+    TextCard,
+    UserStatus,
+} from '../../../interface/card.interface';
+import { hexToRgbA } from '../../../utils/hex-rgba';
 
 export interface RankCardParams {
     /**
@@ -39,9 +46,9 @@ export interface RankCardParams {
      */
     backgroundImgURL?: string;
     /**
-     * Background color; Default: '#BBE8FF'
+     * Background color; Default: '#0CA7FF' | 'bubbles'
      */
-    backgroundColor?: Color;
+    backgroundColor?: BackgroundRankColor;
     /**
      * URL to the avatar user image
      */
@@ -84,7 +91,7 @@ export class RankCardBuilder {
     public requiredXP: number;
     public userStatus: UserStatus;
     public backgroundImgURL?: string;
-    public backgroundColor: Color = '#BBE8FF';
+    public backgroundColor: BackgroundRankColor = { background: '#FFF', bubbles: '#0CA7FF' };
     public avatarImgURL?: string;
     public avatarBackgroundColor: Color = '#0CA7FF';
     public avatarBackgroundEnable: boolean = true;
@@ -121,7 +128,7 @@ export class RankCardBuilder {
      * Sets the background color of this card (if no background image is selected)
      * @param backgroundColor Background color
      */
-    setBackgroundColor(backgroundColor: Color): this {
+    setBackgroundColor(backgroundColor: BackgroundRankColor): this {
         this.backgroundColor = backgroundColor;
         return this;
     }
@@ -278,8 +285,62 @@ export class RankCardBuilder {
                     throw new Error('Error loading the background image. The URL may be invalid.');
                 }
             } else {
-                ctx.fillStyle = this.backgroundColor;
+                ctx.fillStyle = this.backgroundColor.background;
                 ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+                if (this.backgroundColor.bubbles) {
+                    ctx.beginPath();
+                    ctx.arc(153, 225, 10, 0, Math.PI * 2);
+                    ctx.fillStyle = hexToRgbA(this.backgroundColor.bubbles, 0.31);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.arc(213, 81, 10, 0, Math.PI * 2);
+                    ctx.fillStyle = hexToRgbA(this.backgroundColor.bubbles, 0.07);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.arc(238, 16, 10, 0, Math.PI * 2);
+                    ctx.fillStyle = hexToRgbA(this.backgroundColor.bubbles, 0.6);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.arc(486, 148, 40, 0, Math.PI * 2);
+                    ctx.fillStyle = hexToRgbA(this.backgroundColor.bubbles, 0.1);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.arc(396.5, 33.5, 7.5, 0, Math.PI * 2);
+                    ctx.fillStyle = hexToRgbA(this.backgroundColor.bubbles, 0.05);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.arc(515.5, 38.5, 12.5, 0, Math.PI * 2);
+                    ctx.fillStyle = hexToRgbA(this.backgroundColor.bubbles, 0.43);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.arc(572, 257, 30, 0, Math.PI * 2);
+                    ctx.fillStyle = hexToRgbA(this.backgroundColor.bubbles, 1);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.arc(782.5, 226.5, 8.5, 0, Math.PI * 2);
+                    ctx.fillStyle = hexToRgbA(this.backgroundColor.bubbles, 0.15);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.arc(1000, 101, 10, 0, Math.PI * 2);
+                    ctx.fillStyle = hexToRgbA(this.backgroundColor.bubbles, 0.63);
+                    ctx.fill();
+                    ctx.closePath();
+                }
             }
             ctx.restore();
         }
