@@ -1,5 +1,13 @@
 import { Canvas, createCanvas, loadImage } from 'canvas';
-import { BorderStyle, Color, FontResolvable, TextCard } from '../../interface/card.interface';
+import {
+    BackgroundBaseColor,
+    BorderStyle,
+    Color,
+    FontResolvable,
+    TextCard,
+} from '../../interface/card.interface';
+import { hexToRgbA } from '../../utils/hex-rgba';
+import { rgbToHex } from '../../utils/rgb-hex';
 
 /**
  * Base Card Parameters
@@ -18,9 +26,9 @@ export interface BaseCardParams {
      */
     secondText?: TextCard;
     /**
-     * Background color; Default: '#BBE8FF'
+     * Background color; Default: '#0CA7FF' | 'waves'
      */
-    backgroundColor?: Color;
+    backgroundColor?: BackgroundBaseColor;
     /**
      * URL to the background image (800x350 px)
      */
@@ -55,7 +63,7 @@ export class BaseCardBuilder {
     public nicknameText?: TextCard;
     public secondText?: TextCard;
     public backgroundImgURL?: string;
-    public backgroundColor: Color = '#bbe8ff';
+    public backgroundColor: BackgroundBaseColor = { background: '#FFF', waves: '#0CA7FF' };
     public avatarBorderStyle?: BorderStyle;
     public avatarImgURL?: string;
     public avatarBorderColor: Color = '#0CA7FF';
@@ -80,7 +88,7 @@ export class BaseCardBuilder {
      * Sets the background color of this card (if no background image is selected)
      * @param backgroundColor Background color
      */
-    setBackgroundColor(backgroundColor: Color): this {
+    setBackgroundColor(backgroundColor: BackgroundBaseColor): this {
         this.backgroundColor = backgroundColor;
         return this;
     }
@@ -183,8 +191,83 @@ export class BaseCardBuilder {
                     throw new Error('Error loading the background image. The URL may be invalid.');
                 }
             } else {
-                ctx.fillStyle = this.backgroundColor;
+                ctx.fillStyle = this.backgroundColor.background;
                 ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+                if (this.backgroundColor.waves) {
+                    let wavesColor: string = this.backgroundColor.waves;
+                    if (wavesColor.includes('rgb')) wavesColor = rgbToHex(wavesColor);
+
+                    ctx.beginPath();
+                    ctx.fillStyle = hexToRgbA(wavesColor, 1);
+                    ctx.moveTo(0, 120);
+                    ctx.bezierCurveTo(25.6, 97.9, 64.94, 91.49, 97, 77);
+                    ctx.bezierCurveTo(132.43, 63.25, 160.64, 40.33, 186.02, 14.94);
+                    ctx.lineTo(200.64, 0);
+                    ctx.lineTo(0, 0);
+                    ctx.lineTo(0, 120);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.fillStyle = hexToRgbA(wavesColor, 0.74);
+                    ctx.moveTo(0, 176.82);
+                    ctx.bezierCurveTo(5.2, 166.79, 11.53, 157.36, 19.25, 149.64);
+                    ctx.bezierCurveTo(44.99, 123.9, 86.24, 117.9, 120.8, 103.45);
+                    ctx.bezierCurveTo(155.35, 88.99, 183.21, 66.07, 208.95, 40.68);
+                    ctx.bezierCurveTo(223.68, 28.13, 247.85, 1, 247.85, 0);
+                    ctx.lineTo(0, 0);
+                    ctx.lineTo(0, 176.82);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.fillStyle = hexToRgbA(wavesColor, 0.15);
+                    ctx.moveTo(0, 290.92);
+                    ctx.lineTo(3.01, 272.34);
+                    ctx.bezierCurveTo(6.88, 248.37, 14.64, 200.41, 40.03, 174.67);
+                    ctx.bezierCurveTo(65.42, 148.93, 108.43, 144.7, 144.05, 131.3);
+                    ctx.bezierCurveTo(179.66, 117.9, 207.52, 95.34, 232.9, 69.24);
+                    ctx.bezierCurveTo(258.17, 43.63, 280.99, 14.87, 292.67, 0);
+                    ctx.lineTo(0, 0);
+                    ctx.lineTo(0, 290.92);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.fillStyle = hexToRgbA(wavesColor, 1);
+                    ctx.moveTo(800, 350);
+                    ctx.lineTo(659.54, 350);
+                    ctx.bezierCurveTo(682.24, 320.97, 707.11, 294.92, 739.63, 276.46);
+                    ctx.bezierCurveTo(749.37, 270.94, 790.48, 251.69, 800, 246.35);
+                    ctx.lineTo(800, 350);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.fillStyle = hexToRgbA(wavesColor, 0.74);
+                    ctx.moveTo(800, 350);
+                    ctx.lineTo(615.84, 350);
+                    ctx.bezierCurveTo(656.4, 297.84, 681.28, 271.8, 713.8, 253.34);
+                    ctx.bezierCurveTo(723.54, 247.81, 733.95, 242.94, 744.38, 238.06);
+                    ctx.bezierCurveTo(764.54, 228.62, 784.71, 219.18, 800, 205.01);
+                    ctx.lineTo(800, 350);
+                    ctx.fill();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.fillStyle = hexToRgbA(wavesColor, 0.15);
+                    ctx.moveTo(800, 350);
+                    ctx.lineTo(572.33, 350);
+                    ctx.bezierCurveTo(581.96, 335, 593.86, 317.27, 606.73, 300.64);
+                    ctx.bezierCurveTo(628.78, 271.74, 653.69, 246.04, 687.39, 228.51);
+                    ctx.bezierCurveTo(697.45, 223.28, 708.25, 218.78, 719.05, 214.28);
+                    ctx.bezierCurveTo(744.45, 203.69, 769.82, 193.12, 785.32, 173.09);
+                    ctx.bezierCurveTo(791.77, 164.75, 796.51, 154.72, 800, 144.08);
+                    ctx.lineTo(800, 350);
+                    ctx.fill();
+                    ctx.closePath();
+                }
             }
             ctx.restore();
         }
