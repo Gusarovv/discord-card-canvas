@@ -1,3 +1,9 @@
+/**
+ * Color conversion from hex to rgba
+ * @param hex hex
+ * @param opacity opacity from rgba (default 1)
+ * @returns rgba
+ */
 export const hexToRgbA = (hex: string, opacity = 1): string => {
     let c: any;
     if (hex.length === 9 && hex.includes('#')) hex = hex.slice(0, 7);

@@ -205,6 +205,9 @@ Creating a card-an information header.
     font?: FontResolvable;
 }```
 
+# 📗 Utils
+- `rgbToHex` - Color conversion from rgb | rgba to hex
+- `hexToRgbA` - Color conversion from hex to rgba
 
 # 💎 Contributing
 If you have a request for a new feature you can open an issue on Github.
