@@ -8,3 +8,4 @@ export * from './cards/base/welcome-card';
 export * from './cards/info/info-card';
 export * from './cards/rating/rank/rank-card';
 export * from './utils/hex-rgba';
+export * from './utils/rgb-hex';
