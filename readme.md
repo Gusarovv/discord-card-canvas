@@ -204,6 +204,14 @@ Creating a card-an information header.
     color?: Color;
     font?: FontResolvable;
 }```
+- `BackgroundBaseColor` - ```{
+    background: Color;
+    waves?: Color;
+}```
+- `BackgroundRankColor` - ```{
+    background: Color;
+    bubbles?: Color;
+}```
 
 # 📗 Utils
 - `rgbToHex` - Color conversion from rgb | rgba to hex
