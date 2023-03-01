@@ -1,3 +1,20 @@
+## [1.2.6](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.5...v1.2.6) (2023-03-01)
+
+### New feature:
+
+- Default background with waves for base card (via canvas)([`6fb1561`](https://github.com/Gusarovv/discord-canvas-card/commit/6fb156140c254079786a924571420ed301cf4425))
+> Example: `new BaseCardBuilder({ background: '#FFFFFF', waves: '#FFAD4E' }, ... })` 
+- Default background with bubbles for rank card (via canvas)([`5153140`](https://github.com/Gusarovv/discord-canvas-card/commit/5153140c02f922d87cd49da9752261a3cdd45d4d))
+> Example: `new RankCardBuilder({ backgroundColor: { background: '#FFFFFF', bubbles: '#0CA7FF' }, ... })`
+- Default background with waves for base card (via canvas)([`2f41095`](https://github.com/Gusarovv/discord-canvas-card/commit/2f41095370b2ddef61c153188af93a15813ab447))
+- Color conversion utility from rgb to hex([`e6787c7`](https://github.com/Gusarovv/discord-canvas-card/commit/e6787c7da25046294fbba1997c12b282844bcb86))
+- Color conversion utility from hex to rgba([`d36f36a`](https://github.com/Gusarovv/discord-canvas-card/commit/d36f36a645f71368852616b740617c32580e2653))
+
+### Dependencies:
+
+* Bump @types/node from 18.11.18 to 18.14.2 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/11
+* Bump typescript from 4.9.4 to 4.9.5 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/6
+
 ## [1.2.5](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.4...v1.2.5) (2023-01-25)
 
 ### Other
