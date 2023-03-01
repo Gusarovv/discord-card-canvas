@@ -1,4 +1,4 @@
-## [1.2.6](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.5...v1.2.6) (2023-03-01)
+## [1.3.0](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.5...v1.3.0) (2023-03-01)
 
 ### New feature:
 
