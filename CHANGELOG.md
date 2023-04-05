@@ -1,3 +1,16 @@
+## [1.3.1](https://github.com/Gusarovv/discord-card-canvas/compare/v1.3.0...v1.3.1) (2023-04-05)
+
+### Dependencies:
+
+* Bump rimraf from 4.1.2 to 4.1.3 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/13
+* Bump @types/node from 18.14.2 to 18.14.4 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/12
+* Bump rimraf from 4.1.3 to 4.3.1 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/17
+* Bump @types/node from 18.14.4 to 18.14.6 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/16
+* Bump canvas from 2.11.0 to 2.11.2 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/29
+* Bump rimraf from 4.3.1 to 4.4.1 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/24
+* Bump typescript from 4.9.5 to 5.0.3 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/28
+* Bump @types/node from 18.14.6 to 18.15.11 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/27
+
 ## [1.3.0](https://github.com/Gusarovv/discord-card-canvas/compare/v1.2.5...v1.3.0) (2023-03-01)
 
 ### New feature:
