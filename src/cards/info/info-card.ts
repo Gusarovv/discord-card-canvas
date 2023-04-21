@@ -18,6 +18,13 @@ export interface InfoCardParams {
     mainText?: TextCard;
 }
 
+type OptionsDraw = {
+    /**
+     * Sets show, the image size should be resized so that it fits the canvas
+     */
+    objectFit?: 'fill' | 'cover';
+};
+
 export class InfoCardBuilder {
     public backgroundColor: BackgroundBaseColor = { background: '#FFF', waves: '#0CA7FF' };
     public backgroundImgURL?: string;
@@ -67,13 +74,64 @@ export class InfoCardBuilder {
      * @param ctx The context of the created canvas
      * @param canvasWidth Width of the created canvas
      * @param canvasHeight Height of the created canvas
+     * @param options Additional options
      */
-    async draw(ctx: any, canvasWidth: number, canvasHeight: number): Promise<void> {
+    async draw(
+        ctx: any,
+        canvasWidth: number,
+        canvasHeight: number,
+        options?: OptionsDraw,
+    ): Promise<void> {
         // Background
         if (this.backgroundImgURL) {
             try {
                 const img = await loadImage(this.backgroundImgURL);
-                ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+                if (options?.objectFit === 'cover') {
+                    // Default offset is center
+                    let offsetX = 0.5;
+                    let offsetY = 0.5;
+
+                    // [0.0, 1.0]
+                    if (offsetX < 0) offsetX = 0;
+                    if (offsetY < 0) offsetY = 0;
+                    if (offsetX > 1) offsetX = 1;
+                    if (offsetY > 1) offsetY = 1;
+
+                    let iw = img.width,
+                        ih = img.height,
+                        r = Math.min(canvasWidth / iw, canvasHeight / ih),
+                        nw = iw * r, // new prop. width
+                        nh = ih * r, // new prop. height
+                        cx: number,
+                        cy: number,
+                        cw: number,
+                        ch: number,
+                        ar: number = 1;
+
+                    // Decide which gap to fill
+                    if (nw < canvasWidth) ar = canvasWidth / nw;
+                    if (Math.abs(ar - 1) < 1e-14 && nh < canvasHeight) ar = canvasHeight / nh; // updated
+                    nw *= ar;
+                    nh *= ar;
+
+                    // Calc source rectangle
+                    cw = iw / (nw / canvasWidth);
+                    ch = ih / (nh / canvasHeight);
+
+                    cx = (iw - cw) * offsetX;
+                    cy = (ih - ch) * offsetY;
+
+                    // Make sure source rectangle is valid
+                    if (cx < 0) cx = 0;
+                    if (cy < 0) cy = 0;
+                    if (cw > iw) cw = iw;
+                    if (ch > ih) ch = ih;
+
+                    // Cover
+                    ctx.drawImage(img, cx, cy, cw, ch, 0, 0, canvasWidth, canvasHeight);
+                } else {
+                    ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+                }
             } catch (err) {
                 throw new Error('Error loading the background image. The URL may be invalid.');
             }
@@ -184,10 +242,10 @@ export class InfoCardBuilder {
     /**
      * Builds a Canvas with the specified parameters
      */
-    async build(): Promise<Canvas> {
+    async build(options?: OptionsDraw): Promise<Canvas> {
         const canvas = createCanvas(1000, 200);
         const ctx = canvas.getContext('2d');
-        await this.draw(ctx, canvas.width, canvas.height);
+        await this.draw(ctx, canvas.width, canvas.height, options);
         return canvas;
     }
 }
