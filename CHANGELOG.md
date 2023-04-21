@@ -1,3 +1,21 @@
+## [1.4.0](https://github.com/Gusarovv/discord-card-canvas/compare/v1.3.1...v1.4.0) (2023-04-22)
+
+### New feature:
+
+* Added the ability to draw the image in the 'Cover' mode.  The image will retain its proportions when filling the block: the final size of the content will be defined as the "coverage" of the block, limited by its width and height.
+* Now drawing options can be set when called .build()
+> Example: `new BaseCardBuilder({ ... }).build({ objectFit: 'cover', only: ['background', 'nickname'] })`
+
+> 🔹 By default, all images are still drawn in the 'fill' mode.
+
+
+### Dependencies:
+
+* Bump typescript from 5.0.3 to 5.0.4 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/30
+* Bump @types/node from 18.15.11 to 18.15.13 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/33
+* Bump rimraf from 4.4.1 to 5.0.0 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/31
+
+
 ## [1.3.1](https://github.com/Gusarovv/discord-card-canvas/compare/v1.3.0...v1.3.1) (2023-04-05)
 
 ### Dependencies:
