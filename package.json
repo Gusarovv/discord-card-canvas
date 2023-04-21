@@ -32,7 +32,7 @@
     "devDependencies": {
         "@types/node": "^18.11.17",
         "copyfiles": "^2.4.1",
-        "rimraf": "^4.1.2",
+        "rimraf": "^5.0.0",
         "typescript": "^5.0.3"
     },
     "dependencies": {
