@@ -21,6 +21,7 @@ export interface InfoCardParams {
 type OptionsDraw = {
     /**
      * Sets show, the image size should be resized so that it fits the canvas
+     * @remark default 'fill'
      */
     objectFit?: 'fill' | 'cover';
 };
