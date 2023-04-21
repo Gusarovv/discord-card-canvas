@@ -55,6 +55,18 @@ export interface BaseCardParams {
     colorTextDefault?: Color;
 }
 
+type OptionsDraw = {
+    /**
+     * Objects (name) that will only be drawn
+     * @remark only: "background" | "mainText" | "nickname" | "secondText" | "avatarBorder" | "avatar"
+     */
+    only?: string[];
+    /**
+     * Sets show, the image size should be resized so that it fits the canvas
+     */
+    objectFit?: 'fill' | 'cover';
+};
+
 /**
  * Base Card Builder
  */
@@ -171,22 +183,66 @@ export class BaseCardBuilder {
      * @param ctx The context of the created canvas
      * @param canvasWidth Width of the created canvas
      * @param canvasHeight Height of the created canvas
-     * @param only Objects (name) that will only be drawn
-     * @remark only: "background" | "mainText" | "nickname" | "secondText" | "avatarBorder" | "avatar"
+     * @param options Additional options
      */
     async draw(
         ctx: any,
         canvasWidth: number,
         canvasHeight: number,
-        only?: string[],
+        options?: OptionsDraw,
     ): Promise<void> {
-        if (!only || only?.includes('background')) {
+        if (!options?.only || options.only.includes('background')) {
             ctx.save();
             // Background
             if (this.backgroundImgURL) {
                 try {
                     const img = await loadImage(this.backgroundImgURL);
-                    ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+                    if (options?.objectFit === 'cover') {
+                        // Default offset is center
+                        let offsetX = 0.5;
+                        let offsetY = 0.5;
+
+                        // [0.0, 1.0]
+                        if (offsetX < 0) offsetX = 0;
+                        if (offsetY < 0) offsetY = 0;
+                        if (offsetX > 1) offsetX = 1;
+                        if (offsetY > 1) offsetY = 1;
+
+                        let iw = img.width,
+                            ih = img.height,
+                            r = Math.min(canvasWidth / iw, canvasHeight / ih),
+                            nw = iw * r, // new prop. width
+                            nh = ih * r, // new prop. height
+                            cx: number,
+                            cy: number,
+                            cw: number,
+                            ch: number,
+                            ar: number = 1;
+
+                        // Decide which gap to fill
+                        if (nw < canvasWidth) ar = canvasWidth / nw;
+                        if (Math.abs(ar - 1) < 1e-14 && nh < canvasHeight) ar = canvasHeight / nh; // updated
+                        nw *= ar;
+                        nh *= ar;
+
+                        // Calc source rectangle
+                        cw = iw / (nw / canvasWidth);
+                        ch = ih / (nh / canvasHeight);
+
+                        cx = (iw - cw) * offsetX;
+                        cy = (ih - ch) * offsetY;
+
+                        // Make sure source rectangle is valid
+                        if (cx < 0) cx = 0;
+                        if (cy < 0) cy = 0;
+                        if (cw > iw) cw = iw;
+                        if (ch > ih) ch = ih;
+
+                        // Cover
+                        ctx.drawImage(img, cx, cy, cw, ch, 0, 0, canvasWidth, canvasHeight);
+                    } else {
+                        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+                    }
                 } catch (err) {
                     throw new Error('Error loading the background image. The URL may be invalid.');
                 }
@@ -296,28 +352,28 @@ export class BaseCardBuilder {
             ctx.fillText(text.content, 400, cpy, 800);
         };
 
-        if (!only || only?.includes('mainText')) {
+        if (!options?.only || options.only.includes('mainText')) {
             // Main TextCard
             if (this.mainText) {
                 textRender(this.mainText, 'main', 40, 225);
             }
         }
 
-        if (!only || only?.includes('nickname')) {
+        if (!options?.only || options.only.includes('nickname')) {
             // Nickname
             if (this.nicknameText) {
                 textRender(this.nicknameText, 'nickname', 60, 265);
             }
         }
 
-        if (!only || only?.includes('secondText')) {
+        if (!options?.only || options.only.includes('secondText')) {
             // Second text
             if (this.secondText) {
                 textRender(this.secondText, 'second', 65, 310);
             }
         }
 
-        if (!only || only?.includes('avatarBorder')) {
+        if (!options?.only || options.only.includes('avatarBorder')) {
             // Avatar Border
             ctx.save();
             ctx.beginPath();
@@ -336,9 +392,9 @@ export class BaseCardBuilder {
         }
 
         if (
-            !only ||
-            only?.includes('avatar') ||
-            (only?.includes('avatarBorder') && this.avatarBorderStyle === 'fill')
+            !options?.only ||
+            options.only.includes('avatar') ||
+            (options.only.includes('avatarBorder') && this.avatarBorderStyle === 'fill')
         ) {
             if (this.avatarImgURL) {
                 ctx.save();
@@ -361,10 +417,10 @@ export class BaseCardBuilder {
     /**
      * Builds a Canvas with the specified parameters
      */
-    async build(): Promise<Canvas> {
+    async build(options?: OptionsDraw): Promise<Canvas> {
         const canvas = createCanvas(800, 350);
         const ctx = canvas.getContext('2d');
-        await this.draw(ctx, canvas.width, canvas.height);
+        await this.draw(ctx, canvas.width, canvas.height, options);
         return canvas;
     }
 }
