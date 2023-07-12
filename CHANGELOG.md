@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/Gusarovv/discord-card-canvas/compare/v1.4.0...v1.4.1) (2023-07-12)
+
+### Dependencies:
+* Bump @types/node from 20.1.1 to 20.4.1
+* Bump rimraf from 5.0.0 to 5.0.1
+* Bump typescript from 5.0.3 to 5.1.6
+
 ## [1.4.0](https://github.com/Gusarovv/discord-card-canvas/compare/v1.3.1...v1.4.0) (2023-04-22)
 
 ### New feature:
