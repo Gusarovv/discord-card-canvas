@@ -1,3 +1,9 @@
+## [1.4.2](https://github.com/Gusarovv/discord-card-canvas/compare/v1.4.1...v1.4.2) (2023-07-29)
+
+### Dependencies:
+* Bump @types/node from 20.4.1 to 20.4.5 by @dependabot in https://github.com/Gusarovv/discord-card-canvas/pull/63
+
+
 ## [1.4.1](https://github.com/Gusarovv/discord-card-canvas/compare/v1.4.0...v1.4.1) (2023-07-12)
 
 ### Dependencies:
