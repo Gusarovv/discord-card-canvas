@@ -1,10 +1,10 @@
 import { Canvas, createCanvas, loadImage } from 'canvas';
 import {
-    BackgroundRankColor,
-    Color,
-    FontResolvable,
-    TextCard,
-    UserStatus,
+  BackgroundRankColor,
+  Color,
+  FontResolvable,
+  TextCard,
+  UserStatus,
 } from '../../../interface/card.interface';
 import { hexToRgbA } from '../../../utils/hex-rgba';
 
@@ -580,7 +580,7 @@ export class RankCardBuilder {
     async build(options?: OptionsDraw): Promise<Canvas> {
         const canvas = createCanvas(1000, 250);
         const ctx = canvas.getContext('2d');
-        await this.draw(ctx, canvas.width, canvas.height);
+        await this.draw(ctx, canvas.width, canvas.height, options);
         return canvas;
     }
 }
