@@ -1,3 +1,16 @@
+## [1.4.3](https://github.com/Gusarovv/discord-card-canvas/compare/v1.4.2...v1.4.3) (2023-09-22)
+### Bugs fixed:
+* The options for building a rating card did not affect the drawing
+> `new RankCardBuilder({ ... }).build({ objectFit: 'cover' })`
+
+### Documentation:
+* Minor documentation corrections
+
+### Dependencies:
+* Bump canvas from 2.10.2 to 2.11.2
+* Bump @types/node from 20.4.5 to 20.6.3
+* Bump typescript from 5.1.6 to 5.2.2
+
 ## [1.4.2](https://github.com/Gusarovv/discord-card-canvas/compare/v1.4.1...v1.4.2) (2023-07-29)
 
 ### Dependencies:
