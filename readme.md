@@ -85,7 +85,7 @@ let cv = new WelcomeBuilder({
     avatarImgURL: 'Sad_KnopKa.gif',
 }).build();
 
-fs.writeFileSync('welcome-1.png', canvas1.toBuffer());
+fs.writeFileSync('welcome-1.png', cv.toBuffer());
 ```
 
 ---
@@ -100,7 +100,7 @@ let cv = new LeaveBuilder({
 cv.setFontDefault('Inter');
 cv.setSecondText({ content: 'Raccoon Bot Discord' }).build();
 
-fs.writeFileSync('welcome-2.png', canvas2.toBuffer());
+fs.writeFileSync('welcome-2.png', cv.toBuffer());
 ```
 
 > ⚠️For full control when creating a card, use BaseCardBuilder.
