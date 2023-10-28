@@ -1,3 +1,9 @@
+## [1.4.4](https://github.com/Gusarovv/discord-card-canvas/compare/v1.4.3...v1.4.4) (2023-10-28)
+
+### Dependencies:
+* Bump @types/node from 20.6.3 to 20.8.9
+* Bump rimraf from 5.0.1 to 5.0.5
+
 ## [1.4.3](https://github.com/Gusarovv/discord-card-canvas/compare/v1.4.2...v1.4.3) (2023-09-22)
 ### Bugs fixed:
 * The options for building a rating card did not affect the drawing
