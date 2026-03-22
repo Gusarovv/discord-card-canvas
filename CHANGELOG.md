@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/Gusarovv/discord-card-canvas/compare/v2.0.1...v2.0.2) (2026-03-22)
+
+### 🛠 Dependencies:
+
+- Updated `@types/node` from `22.13.5` to `22.15.24`
+- Updated `typescript` from `5.7.3` to `5.8.3`
+
 ## [2.0.1](https://github.com/Gusarovv/discord-card-canvas/compare/v2.0.0...v2.0.1) (2024-12-01)
 
 ### 🛠 Dependencies:

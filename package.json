@@ -1,6 +1,6 @@
 {
   "name": "discord-card-canvas",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "👾 Simple creating cards using canvas. Welcome, Rank, Info and so on.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -32,8 +32,8 @@
     "canvas": "3.1.0"
   },
   "devDependencies": {
-    "@types/node": "22.13.5",
+    "@types/node": "22.15.24",
     "rimraf": "6.0.1",
-    "typescript": "5.7.3"
+    "typescript": "5.8.3"
   }
 }
