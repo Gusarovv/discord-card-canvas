@@ -143,6 +143,55 @@ describe('RankCardBuilder', () => {
     }
   });
 
+  // --- Edge cases ---
+
+  it('XP exceeds requiredXP (overflow)', async () => {
+    const canvas = await new RankCardBuilder({
+      ...blueParams,
+      currentXP: 15000,
+      requiredXP: 10000,
+    }).build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
+  });
+
+  it('XP is zero', async () => {
+    const canvas = await new RankCardBuilder({
+      ...blueParams,
+      currentXP: 0,
+    }).build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
+  });
+
+  it('very long nickname — should be truncated', async () => {
+    const canvas = await new RankCardBuilder({
+      ...orangeParams,
+      nicknameText: { content: 'ThisIsAnExtremelyLongNicknameThatShouldBeTruncated' },
+    }).build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
+  });
+
+  it('large level and rank numbers', async () => {
+    const canvas = await new RankCardBuilder({
+      ...blueParams,
+      currentLvl: 99999,
+      currentRank: 99999,
+      currentXP: 9999999,
+      requiredXP: 9999999,
+    }).build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
+  });
+
+  it('level 0, rank 0', async () => {
+    const canvas = await new RankCardBuilder({
+      ...orangeParams,
+      currentLvl: 0,
+      currentRank: 0,
+      currentXP: 0,
+      requiredXP: 100,
+    }).build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
+  });
+
   it('setters work via fluent API', async () => {
     const builder = new RankCardBuilder(orangeParams);
     builder.setAvatarShape('square');
