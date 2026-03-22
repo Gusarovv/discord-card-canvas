@@ -555,7 +555,7 @@ export class RankCardBuilder {
         ctx.clip();
         const img = await loadImageSafe(this.avatarImgURL);
         if (!img) {
-          throw new Error('Error loading the background image. The URL may be invalid.');
+          throw new Error('Error loading the avatar image. The URL may be invalid.');
         }
         ctx.drawImage(img, 30, 50, 150, 150);
         ctx.restore();

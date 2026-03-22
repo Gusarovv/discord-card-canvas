@@ -36,9 +36,6 @@ export type FontDescriptor = {
  * @param basePath Base path for all fonts (optional).
  */
 export function loadFonts(fonts: FontDescriptor[], basePath: string = __dirname): void {
-  if (!fonts) {
-    throw new Error('No fonts provided');
-  }
   fonts.forEach((font) => {
     const fontPath = resolve(basePath, font.path);
     try {
