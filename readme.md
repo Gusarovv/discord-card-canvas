@@ -4,6 +4,11 @@
 
 <p align="center">You can create great welcome, goodbye, rank, info banner images fully customizable using the many easy-to-use features!</p>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/discord-card-canvas"><img src="https://img.shields.io/npm/v/discord-card-canvas" alt="npm version" /></a>
+  <a href="https://github.com/Gusarovv/discord-card-canvas/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/discord-card-canvas" alt="license" /></a>
+</p>
+
 > <p align="center">TypeScript</p>
 
 ## 👨🏻‍💻 Installation <a name="Installation"></a>
