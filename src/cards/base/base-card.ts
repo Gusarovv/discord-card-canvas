@@ -417,7 +417,7 @@ export class BaseCardBuilder {
         // try {
         const img = await loadImageSafe(this.avatarImgURL);
         if (!img) {
-          throw new Error('Error loading the background image. The URL may be invalid.');
+          throw new Error('Error loading the avatar image. The URL may be invalid.');
         }
         ctx.drawImage(img, 325, 25, 150, 150);
         ctx.closePath();
