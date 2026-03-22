@@ -1,3 +1,26 @@
+## [2.1.0](https://github.com/Gusarovv/discord-card-canvas/compare/v2.0.2...v2.1.0) (2026-03-22)
+
+### ✨ New Features:
+
+- **RankCardBuilder — new customization options** ([#138](https://github.com/Gusarovv/discord-card-canvas/issues/138)):
+  - `avatarShape` — avatar shape: `'circle'` (default) or `'square'` (rounded corners).
+  - `userStatusEnable` — toggle the status indicator visibility (default: `true`). When disabled, the avatar is drawn as a clean shape without the status cutout.
+  - `bubblesEnable` — toggle the background bubbles visibility (default: `true`). Works independently of `backgroundColor.bubbles` color setting.
+
+  > All new parameters are optional with backwards-compatible defaults.
+
+  > Example:
+  > ```typescript
+  > const card = await new RankCardBuilder({
+  >   // ...required params
+  >   avatarShape: 'square',
+  >   userStatusEnable: false,
+  >   bubblesEnable: false,
+  > }).build();
+  > ```
+
+- **New exported type:** `AvatarShape` — `'circle' | 'square'`
+
 ## [2.0.2](https://github.com/Gusarovv/discord-card-canvas/compare/v2.0.1...v2.0.2) (2026-03-22)
 
 ### 🛠 Dependencies:

@@ -174,6 +174,13 @@ Creating a user rating card with a resolution of 1000x250 px.
   - Default: `True`
 - `avatarBackgroundColor` - The color of the circle behind the avatar.
   - Default: `'#0CA7FF'`
+- `avatarShape` - Avatar shape.
+  - `'circle'` or `'square'`
+  - Default: `'circle'`
+- `userStatusEnable` - Whether the user status indicator is shown.
+  - Default: `True`
+- `bubblesEnable` - Whether the background bubbles are shown (when no background image).
+  - Default: `True`
 - `fontDefault` - Default font. Applies if a specific font is not selected in the TextCard object.
   - Default: `'Nunito'`
 - `colorTextDefault` - Default text color. Applies if a specific text color is not selected in the Text Card object.
@@ -377,6 +384,7 @@ fs.writeFileSync('rank-custom-font.png', rankCard.toBuffer());
 - `Color` - **String** - RGB | RGBA | HEX
 - `UserStatus` - **String** - 'online' | 'idle' | 'dnd' | 'offline' | 'invisible' | 'streaming'
 - `BorderStyle` - **String** - 'fill' | 'stroke'
+- `AvatarShape` - **String** - 'circle' | 'square'
 - `TextCard` - `{
     content: string;
     color?: Color;

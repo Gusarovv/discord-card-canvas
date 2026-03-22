@@ -1,5 +1,6 @@
 import { Canvas, CanvasRenderingContext2D, createCanvas, loadImage } from 'canvas';
 import {
+  AvatarShape,
   BackgroundRankColor,
   Color,
   TextCard,
@@ -62,6 +63,18 @@ export interface RankCardParams {
    */
   avatarBackgroundEnable?: boolean;
   /**
+   * Avatar shape; Default: 'circle'
+   */
+  avatarShape?: AvatarShape;
+  /**
+   * Whether the user status indicator is shown; Default: True
+   */
+  userStatusEnable?: boolean;
+  /**
+   * Whether the background bubbles are shown (when no background image); Default: True
+   */
+  bubblesEnable?: boolean;
+  /**
    * The color of the progress bar
    */
   progressBarColor?: Color;
@@ -116,6 +129,9 @@ export class RankCardBuilder {
   public avatarImgURL?: string;
   public avatarBackgroundColor: Color;
   public avatarBackgroundEnable: boolean;
+  public avatarShape: AvatarShape;
+  public userStatusEnable: boolean;
+  public bubblesEnable: boolean;
   public fontDefault: string;
   public colorTextDefault: Color;
   public progressBarColor: Color;
@@ -138,6 +154,9 @@ export class RankCardBuilder {
     avatarImgURL,
     avatarBackgroundColor = '#0CA7FF',
     avatarBackgroundEnable = true,
+    avatarShape = 'circle',
+    userStatusEnable = true,
+    bubblesEnable = true,
     fontDefault = 'Nunito',
     colorTextDefault = '#0CA7FF',
     progressBarColor = '#0CA7FF',
@@ -159,6 +178,9 @@ export class RankCardBuilder {
     this.avatarImgURL = avatarImgURL;
     this.avatarBackgroundColor = avatarBackgroundColor;
     this.avatarBackgroundEnable = avatarBackgroundEnable;
+    this.avatarShape = avatarShape;
+    this.userStatusEnable = userStatusEnable;
+    this.bubblesEnable = bubblesEnable;
     this.fontDefault = fontDefault;
     this.colorTextDefault = colorTextDefault;
     this.progressBarColor = progressBarColor;
@@ -213,6 +235,33 @@ export class RankCardBuilder {
    */
   setAvatarBackgroundEnable(avatarBackgroundEnable: boolean): this {
     this.avatarBackgroundEnable = avatarBackgroundEnable;
+    return this;
+  }
+
+  /**
+   * Sets the avatar shape
+   * @param avatarShape Avatar shape ('circle' or 'square')
+   */
+  setAvatarShape(avatarShape: AvatarShape): this {
+    this.avatarShape = avatarShape;
+    return this;
+  }
+
+  /**
+   * Sets whether the user status indicator is shown
+   * @param userStatusEnable Whether the user status is shown
+   */
+  setUserStatusEnable(userStatusEnable: boolean): this {
+    this.userStatusEnable = userStatusEnable;
+    return this;
+  }
+
+  /**
+   * Sets whether the background bubbles are shown
+   * @param bubblesEnable Whether the bubbles are shown
+   */
+  setBubblesEnable(bubblesEnable: boolean): this {
+    this.bubblesEnable = bubblesEnable;
     return this;
   }
 
@@ -396,7 +445,7 @@ export class RankCardBuilder {
         ctx.fillStyle = this.backgroundColor.background;
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-        if (this.backgroundColor.bubbles) {
+        if (this.backgroundColor.bubbles && this.bubblesEnable) {
           ctx.beginPath();
           ctx.arc(153, 225, 10, 0, Math.PI * 2);
           ctx.fillStyle = hexToRgbA(this.backgroundColor.bubbles, 0.31);
@@ -457,7 +506,19 @@ export class RankCardBuilder {
       // Задний фон аватарки
       if (this.avatarBackgroundEnable) {
         ctx.beginPath();
-        ctx.arc(88, 101, 75, 0, Math.PI * 2);
+        if (this.avatarShape === 'square') {
+          const size = 150;
+          const x = 13;
+          const y = 26;
+          const radius = 20;
+          ctx.moveTo(x + radius, y);
+          ctx.arcTo(x + size, y, x + size, y + size, radius);
+          ctx.arcTo(x + size, y + size, x, y + size, radius);
+          ctx.arcTo(x, y + size, x, y, radius);
+          ctx.arcTo(x, y, x + size, y, radius);
+        } else {
+          ctx.arc(88, 101, 75, 0, Math.PI * 2);
+        }
         ctx.fillStyle = this.avatarBackgroundColor;
         ctx.fill();
         ctx.closePath();
@@ -472,9 +533,23 @@ export class RankCardBuilder {
       if (this.avatarImgURL) {
         // Avatar
         ctx.beginPath();
-        ctx.arc(105, 125, 75, 0, Math.PI * 0.36, true);
-        ctx.arc(159, 179, 23.5, Math.PI * 0.82, Math.PI * 1.68, false);
-        ctx.arc(105, 125, 75, Math.PI * 0.15, Math.PI * 1.5, true);
+        if (this.avatarShape === 'square') {
+          const size = 150;
+          const x = 30;
+          const y = 50;
+          const radius = 15;
+          ctx.moveTo(x + radius, y);
+          ctx.arcTo(x + size, y, x + size, y + size, radius);
+          ctx.arcTo(x + size, y + size, x, y + size, radius);
+          ctx.arcTo(x, y + size, x, y, radius);
+          ctx.arcTo(x, y, x + size, y, radius);
+        } else if (this.userStatusEnable) {
+          ctx.arc(105, 125, 75, 0, Math.PI * 0.36, true);
+          ctx.arc(159, 179, 23.5, Math.PI * 0.82, Math.PI * 1.68, false);
+          ctx.arc(105, 125, 75, Math.PI * 0.15, Math.PI * 1.5, true);
+        } else {
+          ctx.arc(105, 125, 75, 0, Math.PI * 2);
+        }
         ctx.closePath();
         ctx.save();
         ctx.clip();
@@ -486,35 +561,37 @@ export class RankCardBuilder {
         ctx.restore();
 
         // Status
-        ctx.beginPath();
-        if (this.userStatus === 'online') {
-          ctx.arc(159, 179, 17, 0, Math.PI * 2);
-          ctx.fillStyle = '#57F287';
-        } else if (this.userStatus === 'idle') {
-          ctx.arc(159, 179, 17, Math.PI * 0.9, Math.PI * 1.6, true);
-          ctx.arc(148, 168, 17, Math.PI * 1.9, Math.PI * 0.6);
-          ctx.fillStyle = '#faa61a';
-        } else if (this.userStatus === 'dnd') {
-          ctx.arc(151, 179, 3.5, Math.PI * 1.5, Math.PI * 0.5, true);
-          ctx.arc(167, 179, 3.5, Math.PI * 0.5, Math.PI * 1.5, true);
-          ctx.closePath();
-          ctx.arc(159, 179, 17, 0, Math.PI * 2);
-          ctx.fillStyle = '#ed4245';
-        } else if (this.userStatus === 'streaming') {
-          ctx.moveTo(168, 179);
-          ctx.lineTo(154.5, 170);
-          ctx.lineTo(154.5, 188);
-          ctx.closePath();
-          ctx.arc(159, 179, 17, 0, Math.PI * 2);
-          ctx.fillStyle = '#593695';
-        } else {
-          ctx.arc(159, 179, 9, Math.PI * 1.5, Math.PI * 0.5, true);
-          ctx.arc(159, 179, 9, Math.PI * 0.5, Math.PI * 1.5, true);
-          ctx.closePath();
-          ctx.arc(159, 179, 17, 0, Math.PI * 2);
-          ctx.fillStyle = '#747f8d';
+        if (this.userStatusEnable) {
+          ctx.beginPath();
+          if (this.userStatus === 'online') {
+            ctx.arc(159, 179, 17, 0, Math.PI * 2);
+            ctx.fillStyle = '#57F287';
+          } else if (this.userStatus === 'idle') {
+            ctx.arc(159, 179, 17, Math.PI * 0.9, Math.PI * 1.6, true);
+            ctx.arc(148, 168, 17, Math.PI * 1.9, Math.PI * 0.6);
+            ctx.fillStyle = '#faa61a';
+          } else if (this.userStatus === 'dnd') {
+            ctx.arc(151, 179, 3.5, Math.PI * 1.5, Math.PI * 0.5, true);
+            ctx.arc(167, 179, 3.5, Math.PI * 0.5, Math.PI * 1.5, true);
+            ctx.closePath();
+            ctx.arc(159, 179, 17, 0, Math.PI * 2);
+            ctx.fillStyle = '#ed4245';
+          } else if (this.userStatus === 'streaming') {
+            ctx.moveTo(168, 179);
+            ctx.lineTo(154.5, 170);
+            ctx.lineTo(154.5, 188);
+            ctx.closePath();
+            ctx.arc(159, 179, 17, 0, Math.PI * 2);
+            ctx.fillStyle = '#593695';
+          } else {
+            ctx.arc(159, 179, 9, Math.PI * 1.5, Math.PI * 0.5, true);
+            ctx.arc(159, 179, 9, Math.PI * 0.5, Math.PI * 1.5, true);
+            ctx.closePath();
+            ctx.arc(159, 179, 17, 0, Math.PI * 2);
+            ctx.fillStyle = '#747f8d';
+          }
+          ctx.fill();
         }
-        ctx.fill();
       }
     }
 

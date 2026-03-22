@@ -36,5 +36,6 @@ export interface TextCard {
 }
 
 export type BorderStyle = 'fill' | 'stroke';
+export type AvatarShape = 'circle' | 'square';
 export type BackgroundBaseColor = { background: Color; waves?: Color };
 export type BackgroundRankColor = { background: Color; bubbles?: Color };
