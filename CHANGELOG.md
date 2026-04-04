@@ -1,3 +1,17 @@
+## [2.1.1](https://github.com/Gusarovv/discord-card-canvas/compare/v2.1.0...v2.1.1) (2026-04-04)
+
+### 🛠 Dependencies:
+
+- Updated `canvas` from `3.1.0` to `3.2.3`
+- Updated `@types/node` from `22.15.24` to `25.5.2`
+- Updated `typescript` from `5.8.3` to `5.9.3`
+- Updated `rimraf` from `6.0.1` to `6.1.3`
+- Fixed transitive dependency vulnerabilities (`handlebars`, `lodash`, `picomatch`, `tar-fs`, `brace-expansion`)
+
+### ⚙️ Configuration:
+
+- Optimized Dependabot config: monthly schedule, all deps grouped into single PR
+
 ## [2.1.0](https://github.com/Gusarovv/discord-card-canvas/compare/v2.0.2...v2.1.0) (2026-03-22)
 
 ### ✨ New Features:
