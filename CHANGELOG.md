@@ -1,3 +1,38 @@
+## [2.2.0](https://github.com/Gusarovv/discord-card-canvas/compare/v2.1.1...v2.2.0) (2026-04-04)
+
+### ✨ New Features:
+
+- **LevelUpBuilder** - new card type for level-up notifications:
+  - `previousLvl` / `newLvl` - displays level transition (e.g. 9 → 10)
+  - `nicknameText` - user's nickname
+  - `avatarImgURL` - avatar with background circle (same style as RankCard)
+  - `userStatus` / `userStatusEnable` - Discord status indicator
+  - Two background patterns: `'stars'` (default, unique to Level Up) and `'bubbles'` (same as RankCard)
+  - `levelUpText` - customizable "LEVEL UP" text
+  - `backgroundImgURL` + `overlayOpacity` support
+  - new exported type - `BackgroundLevelUpColor` - `{ background: Color; pattern?: 'stars' | 'bubbles'; patternColor?: Color }`
+
+  > Example:
+  > ```typescript
+  > const card = await new LevelUpBuilder({
+  >   nicknameText: { content: 'Player', font: 'Nunito', color: '#0CA7FF' },
+  >   previousLvl: 9,
+  >   newLvl: 10,
+  >   avatarImgURL: 'avatar.jpg',
+  >   backgroundColor: { background: '#070d19', pattern: 'stars', patternColor: '#0CA7FF' },
+  > }).build();
+  > ```
+
+- **New parameter `overlayOpacity`** - parameter for all card builders (BaseCardBuilder, RankCardBuilder, InfoCardBuilder):
+  - Draws a semi-transparent dark overlay on background images (0–1)
+  - Only applies when `backgroundImgURL` is set
+  - TypeScript conditional union type prevents misuse at compile time
+
+### ⚙️ Configuration:
+
+- Added GitHub Actions CI workflow (build on Node 18/20/22)
+- Added GitHub issue templates (bug report, feature request)
+
 ## [2.1.1](https://github.com/Gusarovv/discord-card-canvas/compare/v2.1.0...v2.1.1) (2026-04-04)
 
 ### 🛠 Dependencies:
@@ -16,10 +51,10 @@
 
 ### ✨ New Features:
 
-- **RankCardBuilder — new customization options** ([#138](https://github.com/Gusarovv/discord-card-canvas/issues/138)):
-  - `avatarShape` — avatar shape: `'circle'` (default) or `'square'` (rounded corners).
-  - `userStatusEnable` — toggle the status indicator visibility (default: `true`). When disabled, the avatar is drawn as a clean shape without the status cutout.
-  - `bubblesEnable` — toggle the background bubbles visibility (default: `true`). Works independently of `backgroundColor.bubbles` color setting.
+- **RankCardBuilder - new customization options** ([#138](https://github.com/Gusarovv/discord-card-canvas/issues/138)):
+  - `avatarShape` - avatar shape: `'circle'` (default) or `'square'` (rounded corners).
+  - `userStatusEnable` - toggle the status indicator visibility (default: `true`). When disabled, the avatar is drawn as a clean shape without the status cutout.
+  - `bubblesEnable` - toggle the background bubbles visibility (default: `true`). Works independently of `backgroundColor.bubbles` color setting.
 
   > All new parameters are optional with backwards-compatible defaults.
 
@@ -33,7 +68,7 @@
   > }).build();
   > ```
 
-- **New exported type:** `AvatarShape` — `'circle' | 'square'`
+- **New exported type:** `AvatarShape` - `'circle' | 'square'`
 
 ## [2.0.2](https://github.com/Gusarovv/discord-card-canvas/compare/v2.0.1...v2.0.2) (2026-03-22)
 
