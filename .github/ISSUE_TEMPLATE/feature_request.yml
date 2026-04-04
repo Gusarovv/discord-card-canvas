@@ -1,0 +1,32 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: card-type
+    attributes:
+      label: Related card type
+      options:
+        - RankCardBuilder
+        - BaseCardBuilder
+        - WelcomeBuilder / LeaveBuilder
+        - InfoCardBuilder
+        - New card type
+        - General / Utils
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What would you like?
+      description: Describe the feature and why it would be useful.
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Example usage
+      description: How would the API look? (optional)
+      render: typescript
