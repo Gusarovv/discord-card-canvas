@@ -7,9 +7,10 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/discord-card-canvas"><img src="https://img.shields.io/npm/v/discord-card-canvas" alt="npm version" /></a>
   <a href="https://github.com/Gusarovv/discord-card-canvas/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/discord-card-canvas" alt="license" /></a>
+  <a href="https://github.com/Gusarovv/discord-card-canvas/actions/workflows/ci.yml"><img src="https://github.com/Gusarovv/discord-card-canvas/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <img src="https://img.shields.io/badge/TypeScript-blue?logo=typescript&logoColor=white" alt="TypeScript" />
+  <a href="https://www.npmjs.com/package/discord-card-canvas"><img src="https://img.shields.io/npm/unpacked-size/discord-card-canvas" alt="npm package size" /></a>
 </p>
-
-> <p align="center">TypeScript</p>
 
 ## 👨🏻‍💻 Installation <a name="Installation"></a>
 

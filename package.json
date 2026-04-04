@@ -1,7 +1,7 @@
 {
   "name": "discord-card-canvas",
   "version": "2.1.1",
-  "description": "👾 Simple creating cards using canvas. Welcome, Rank, Info and so on.",
+  "description": "👾 Canvas-based card generator for Discord bots — welcome, leave, rank & info cards with full customization",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -17,19 +17,35 @@
   "keywords": [
     "discord",
     "discord.js",
+    "discord-bot",
     "card",
     "canvas",
+    "image",
+    "generator",
     "welcome",
+    "leave",
     "rank",
-    "info"
+    "level",
+    "xp",
+    "profile",
+    "banner",
+    "info",
+    "progress-bar",
+    "bot"
   ],
   "author": "Alex Gusarov",
   "repository": {
     "type": "git",
     "url": "https://github.com/Gusarovv/discord-card-canvas.git"
   },
-  "homepage": "https://github.com/Gusarovv/discord-card-canvas.git#readme",
+  "homepage": "https://github.com/Gusarovv/discord-card-canvas#readme",
+  "bugs": {
+    "url": "https://github.com/Gusarovv/discord-card-canvas/issues"
+  },
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "canvas": "3.2.3"
   },
