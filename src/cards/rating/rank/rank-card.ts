@@ -9,7 +9,7 @@ import {
 import { hexToRgbA } from '../../../utils/hex-rgba';
 import { loadImageSafe } from '../../../utils/load-image';
 
-export interface RankCardParams {
+interface RankCardParamsCommon {
   /**
    * User's nickname
    */
@@ -42,10 +42,6 @@ export interface RankCardParams {
    * The color of the required experience number; Default: '#7F8384'
    */
   requiredXPColor?: Color;
-  /**
-   * URL to the background image (1000x250 px)
-   */
-  backgroundImgURL?: string;
   /**
    * Background color; Default: '#0CA7FF' | 'bubbles'
    */
@@ -104,6 +100,25 @@ export interface RankCardParams {
   rankNumFormat?: Omit<TextCard, 'content'>;
 }
 
+export type RankCardParams = RankCardParamsCommon &
+  (
+    | {
+        /**
+         * URL to the background image (1000x250 px)
+         */
+        backgroundImgURL: string;
+        /**
+         * Opacity of the dark overlay drawn on top of the background image (0–1).
+         * Only applies when `backgroundImgURL` is set. Ignored for solid color backgrounds.
+         */
+        overlayOpacity?: number;
+      }
+    | {
+        backgroundImgURL?: undefined;
+        overlayOpacity?: never;
+      }
+  );
+
 type OptionsDraw = {
   /**
    * Objects (name) that will only be drawn
@@ -141,6 +156,7 @@ export class RankCardBuilder {
   public rankPrefix?: Omit<TextCard, 'content'> & Partial<Pick<TextCard, 'content'>>;
   public lvlNumFormat?: Omit<TextCard, 'content'>;
   public rankNumFormat?: Omit<TextCard, 'content'>;
+  public overlayOpacity?: number;
 
   constructor({
     nicknameText,
@@ -166,6 +182,7 @@ export class RankCardBuilder {
     rankPrefix,
     lvlNumFormat,
     rankNumFormat,
+    overlayOpacity,
   }: RankCardParams) {
     this.nicknameText = nicknameText;
     this.currentLvl = currentLvl;
@@ -190,6 +207,7 @@ export class RankCardBuilder {
     this.rankPrefix = rankPrefix;
     this.lvlNumFormat = lvlNumFormat;
     this.rankNumFormat = rankNumFormat;
+    this.overlayOpacity = overlayOpacity;
   }
 
   /**
@@ -320,6 +338,15 @@ export class RankCardBuilder {
   }
 
   /**
+   * Sets the overlay opacity for background images
+   * @param overlayOpacity Opacity of the dark overlay (0–1)
+   */
+  setOverlayOpacity(overlayOpacity: number): this {
+    this.overlayOpacity = overlayOpacity;
+    return this;
+  }
+
+  /**
    * Sets the user's nickname
    * @param nicknameText User's nickname
    */
@@ -440,6 +467,11 @@ export class RankCardBuilder {
           }
         } catch (err) {
           throw new Error('Error loading the background image. The URL may be invalid.');
+        }
+        // Overlay
+        if (this.overlayOpacity) {
+          ctx.fillStyle = `rgba(0, 0, 0, ${this.overlayOpacity})`;
+          ctx.fillRect(0, 0, canvasWidth, canvasHeight);
         }
       } else {
         ctx.fillStyle = this.backgroundColor.background;

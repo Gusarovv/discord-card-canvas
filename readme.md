@@ -145,6 +145,7 @@ Creating a base card with a resolution of 800x350 px.
 - `secondText` - Text under the user's nickname.
   - Default: { size: `33`, weight: `'600'` }
 - `backgroundImgURL` - URL to the background image.
+- `overlayOpacity` - Opacity of the dark overlay on the background image (0–1). Only applies when `backgroundImgURL` is set.
 - `backgroundColor` - Background color (if no background image is selected).
   - Default: `'#0CA7FF'`
 - `avatarImgURL` - URL to the avatar user image.
@@ -173,6 +174,7 @@ Creating a user rating card with a resolution of 1000x250 px.
 - `requiredXP *` - Required experience to the next level
 - `userStatus *` - User status.
 - `backgroundImgURL` - URL to the background image.
+- `overlayOpacity` - Opacity of the dark overlay on the background image (0–1). Only applies when `backgroundImgURL` is set.
 - `backgroundColor` - Background color (if no background image is selected).
   - Default: `'#0CA7FF'`
 - `avatarImgURL` - URL to the avatar user image.
@@ -214,6 +216,7 @@ Creating a user rating card with a resolution of 1000x250 px.
 Creating a card-an information header.
 
 - `backgroundImgURL` - URL to the background image.
+- `overlayOpacity` - Opacity of the dark overlay on the background image (0–1). Only applies when `backgroundImgURL` is set.
 - `backgroundColor` - Background color (if no background image is selected).
 - `mainText` - The main text on the card.
 

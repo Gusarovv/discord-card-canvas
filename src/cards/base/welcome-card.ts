@@ -1,10 +1,10 @@
 import { TextCard } from '../../interface/card.interface';
 import { BaseCardBuilder, BaseCardParams } from './base-card';
 
-export interface UserParams extends BaseCardParams {
+export type UserParams = BaseCardParams & {
   avatarImgURL: string;
   nicknameText: TextCard;
-}
+};
 
 export class WelcomeBuilder extends BaseCardBuilder {
   constructor(params: UserParams) {

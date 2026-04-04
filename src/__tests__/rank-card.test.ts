@@ -1,6 +1,8 @@
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
 import { RankCardBuilder } from '../cards/rating/rank/rank-card';
-import { createTestAvatar } from './create-test-avatar';
+import { createTestAvatar, createTestBackground } from './create-test-avatar';
+
+const bgUrl = createTestBackground(1000, 250);
 
 expect.extend({ toMatchImageSnapshot });
 
@@ -201,5 +203,26 @@ describe('RankCardBuilder', () => {
     expect(canvas.toBuffer()).toMatchImageSnapshot({
       customSnapshotIdentifier: 'fluent-api-square-no-status-no-bubbles',
     });
+  });
+
+  // --- Overlay opacity ---
+
+  it('overlay on background image — opacity 0.5', async () => {
+    const canvas = await new RankCardBuilder({
+      ...orangeParams,
+      backgroundImgURL: bgUrl,
+      overlayOpacity: 0.5,
+    }).build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
+  });
+
+  it('setter — setOverlayOpacity', async () => {
+    const builder = new RankCardBuilder({
+      ...blueParams,
+      backgroundImgURL: bgUrl,
+    });
+    builder.setOverlayOpacity(0.7);
+    const canvas = await builder.build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
   });
 });

@@ -5,9 +5,9 @@ import { loadImageSafe } from '../../utils/load-image';
 import { rgbToHex } from '../../utils/rgb-hex';
 
 /**
- * Base Card Parameters
+ * Base Card Parameters (common fields)
  */
-export interface BaseCardParams {
+interface BaseCardParamsCommon {
   /**
    * Text above the user's nickname
    */
@@ -24,10 +24,6 @@ export interface BaseCardParams {
    * Background color; Default: '#0CA7FF' | 'waves'
    */
   backgroundColor?: BackgroundBaseColor;
-  /**
-   * URL to the background image (800x350 px)
-   */
-  backgroundImgURL?: string;
   /**
    * URL to the avatar user image
    */
@@ -49,6 +45,28 @@ export interface BaseCardParams {
    */
   colorTextDefault?: Color;
 }
+
+/**
+ * Base Card Parameters
+ */
+export type BaseCardParams = BaseCardParamsCommon &
+  (
+    | {
+        /**
+         * URL to the background image (800x350 px)
+         */
+        backgroundImgURL: string;
+        /**
+         * Opacity of the dark overlay drawn on top of the background image (0–1).
+         * Only applies when `backgroundImgURL` is set. Ignored for solid color backgrounds.
+         */
+        overlayOpacity?: number;
+      }
+    | {
+        backgroundImgURL?: undefined;
+        overlayOpacity?: never;
+      }
+  );
 
 type OptionsDraw = {
   /**
@@ -77,6 +95,7 @@ export class BaseCardBuilder {
   public avatarBorderColor: Color;
   public fontDefault: string;
   public colorTextDefault: Color;
+  public overlayOpacity?: number;
 
   constructor({
     mainText,
@@ -89,6 +108,7 @@ export class BaseCardBuilder {
     avatarBorderColor = '#0CA7FF',
     fontDefault = 'Nunito',
     colorTextDefault = '#0CA7FF',
+    overlayOpacity,
   }: BaseCardParams = {}) {
     this.mainText = mainText;
     this.nicknameText = nicknameText;
@@ -100,6 +120,7 @@ export class BaseCardBuilder {
     this.avatarBorderColor = avatarBorderColor;
     this.fontDefault = fontDefault;
     this.colorTextDefault = colorTextDefault;
+    this.overlayOpacity = overlayOpacity;
   }
 
   /**
@@ -154,6 +175,15 @@ export class BaseCardBuilder {
    */
   setColorTextDefault(colorTextDefault: Color): this {
     this.colorTextDefault = colorTextDefault;
+    return this;
+  }
+
+  /**
+   * Sets the overlay opacity for background images
+   * @param overlayOpacity Opacity of the dark overlay (0–1)
+   */
+  setOverlayOpacity(overlayOpacity: number): this {
+    this.overlayOpacity = overlayOpacity;
     return this;
   }
 
@@ -250,6 +280,11 @@ export class BaseCardBuilder {
           ctx.drawImage(img, cx, cy, cw, ch, 0, 0, canvasWidth, canvasHeight);
         } else {
           ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+        }
+        // Overlay
+        if (this.overlayOpacity) {
+          ctx.fillStyle = `rgba(0, 0, 0, ${this.overlayOpacity})`;
+          ctx.fillRect(0, 0, canvasWidth, canvasHeight);
         }
       } else {
         ctx.fillStyle = this.backgroundColor.background;

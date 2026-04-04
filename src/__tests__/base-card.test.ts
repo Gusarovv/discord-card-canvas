@@ -1,10 +1,11 @@
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
 import { BaseCardBuilder } from '../cards/base/base-card';
-import { createTestAvatar } from './create-test-avatar';
+import { createTestAvatar, createTestBackground } from './create-test-avatar';
 
 expect.extend({ toMatchImageSnapshot });
 
 const avatar = createTestAvatar('#5865F2');
+const bgUrl = createTestBackground(800, 350);
 
 const baseParams = {
   fontDefault: 'Nunito',
@@ -123,6 +124,45 @@ describe('BaseCardBuilder', () => {
       nicknameText: { content: '' },
       secondText: { content: '' },
     }).build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
+  });
+
+  // --- Overlay opacity ---
+
+  it('overlay on background image — opacity 0.5', async () => {
+    const canvas = await new BaseCardBuilder({
+      ...baseParams,
+      backgroundImgURL: bgUrl,
+      overlayOpacity: 0.5,
+    }).build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
+  });
+
+  it('overlay on background image — opacity 0', async () => {
+    const canvas = await new BaseCardBuilder({
+      ...baseParams,
+      backgroundImgURL: bgUrl,
+      overlayOpacity: 0,
+    }).build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
+  });
+
+  it('no overlay without backgroundImgURL', async () => {
+    const canvas = await new BaseCardBuilder({
+      ...baseParams,
+    }).build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot({
+      customSnapshotIdentifier: 'base-card-no-overlay-no-bg-image',
+    });
+  });
+
+  it('setter — setOverlayOpacity', async () => {
+    const builder = new BaseCardBuilder({
+      ...baseParams,
+      backgroundImgURL: bgUrl,
+    });
+    builder.setOverlayOpacity(0.7);
+    const canvas = await builder.build();
     expect(canvas.toBuffer()).toMatchImageSnapshot();
   });
 });

@@ -4,20 +4,35 @@ import { hexToRgbA } from '../../utils/hex-rgba';
 import { loadImageSafe } from '../../utils/load-image';
 import { rgbToHex } from '../../utils/rgb-hex';
 
-export interface InfoCardParams {
+interface InfoCardParamsCommon {
   /**
    * Background color (if no background image is selected)
    */
   backgroundColor?: BackgroundBaseColor;
   /**
-   * URL to the background image (1000x200 px)
-   */
-  backgroundImgURL?: string;
-  /**
    * The main text on the card
    */
   mainText?: TextCard;
 }
+
+export type InfoCardParams = InfoCardParamsCommon &
+  (
+    | {
+        /**
+         * URL to the background image (1000x200 px)
+         */
+        backgroundImgURL: string;
+        /**
+         * Opacity of the dark overlay drawn on top of the background image (0–1).
+         * Only applies when `backgroundImgURL` is set. Ignored for solid color backgrounds.
+         */
+        overlayOpacity?: number;
+      }
+    | {
+        backgroundImgURL?: undefined;
+        overlayOpacity?: never;
+      }
+  );
 
 type OptionsDraw = {
   /**
@@ -31,15 +46,18 @@ export class InfoCardBuilder {
   public backgroundColor: BackgroundBaseColor;
   public backgroundImgURL?: string;
   public mainText?: TextCard;
+  public overlayOpacity?: number;
 
   constructor({
     backgroundImgURL,
     backgroundColor = { background: '#FFF', waves: '#0CA7FF' },
     mainText,
+    overlayOpacity,
   }: InfoCardParams = {}) {
     this.backgroundImgURL = backgroundImgURL;
     this.backgroundColor = backgroundColor;
     this.mainText = mainText;
+    this.overlayOpacity = overlayOpacity;
   }
   /**
    * Sets the background color of this card (if no background image is selected)
@@ -66,6 +84,15 @@ export class InfoCardBuilder {
    */
   setMainText(mainText: TextCard): this {
     this.mainText = mainText;
+    return this;
+  }
+
+  /**
+   * Sets the overlay opacity for background images
+   * @param overlayOpacity Opacity of the dark overlay (0–1)
+   */
+  setOverlayOpacity(overlayOpacity: number): this {
+    this.overlayOpacity = overlayOpacity;
     return this;
   }
 
@@ -133,6 +160,11 @@ export class InfoCardBuilder {
         ctx.drawImage(img, cx, cy, cw, ch, 0, 0, canvasWidth, canvasHeight);
       } else {
         ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+      }
+      // Overlay
+      if (this.overlayOpacity) {
+        ctx.fillStyle = `rgba(0, 0, 0, ${this.overlayOpacity})`;
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
       }
     } else {
       ctx.fillStyle = this.backgroundColor.background;

@@ -1,5 +1,8 @@
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
 import { InfoCardBuilder } from '../cards/info/info-card';
+import { createTestBackground } from './create-test-avatar';
+
+const bgUrl = createTestBackground(1000, 200);
 
 expect.extend({ toMatchImageSnapshot });
 
@@ -69,6 +72,27 @@ describe('InfoCardBuilder', () => {
 
   it('no params — completely default', async () => {
     const canvas = await new InfoCardBuilder().build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
+  });
+
+  // --- Overlay opacity ---
+
+  it('overlay on background image — opacity 0.5', async () => {
+    const canvas = await new InfoCardBuilder({
+      backgroundImgURL: bgUrl,
+      overlayOpacity: 0.5,
+      mainText: { content: 'INFORMATION' },
+    }).build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
+  });
+
+  it('setter — setOverlayOpacity', async () => {
+    const builder = new InfoCardBuilder({
+      backgroundImgURL: bgUrl,
+      mainText: { content: 'INFO' },
+    });
+    builder.setOverlayOpacity(0.7);
+    const canvas = await builder.build();
     expect(canvas.toBuffer()).toMatchImageSnapshot();
   });
 });
