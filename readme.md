@@ -2,7 +2,7 @@
 
 <p align="center">Are you developing a bot using DiscordJS and you need beautiful images created using Canvas?</p>
 
-<p align="center">You can create great welcome, goodbye, rank, info banner images fully customizable using the many easy-to-use features!</p>
+<p align="center">You can create great welcome, goodbye, rank, level up, info banner images fully customizable using the many easy-to-use features!</p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/discord-card-canvas"><img src="https://img.shields.io/npm/v/discord-card-canvas" alt="npm version" /></a>
@@ -81,6 +81,45 @@ fs.writeFileSync('rank_orange.png', canvasRank.toBuffer());
 
 ---
 
+## Example Level Up
+
+<img src="https://i.imgur.com/YmmgsSF.png"/>
+
+```ts
+const canvasLevelUp = await new LevelUpBuilder({
+    nicknameText: { content: 'Raccoon Bot', font: 'Nunito', color: '#0CA7FF' },
+    previousLvl: 4,
+    newLvl: 5,
+    avatarImgURL: 'avatar.jpg',
+    userStatus: 'dnd',
+    backgroundColor: { background: '#070d19', pattern: 'bubbles', patternColor: '#0CA7FF' },
+}).build();
+
+fs.writeFileSync('level-up.png', canvasLevelUp.toBuffer());
+```
+
+---
+
+<img src="https://i.imgur.com/q5noCdX.png"/>
+
+```ts
+const canvasLevelUp = await new LevelUpBuilder({
+    nicknameText: { content: 'Raccoon Developer', font: 'Nunito', color: '#f48b2d' },
+    previousLvl: 24,
+    newLvl: 25,
+    avatarImgURL: 'avatar.jpg',
+    userStatus: 'idle',
+    colorTextDefault: '#f48b2d',
+    avatarBackgroundColor: '#fbbf60',
+    backgroundColor: { background: '#1a1a2e', pattern: 'stars', patternColor: '#f48b2d' },
+    levelUpText: { content: 'LEVEL UP', color: '#d4782a' },
+}).build();
+
+fs.writeFileSync('level-up-orange.png', canvasLevelUp.toBuffer());
+```
+
+---
+
 ## Example Welcome/Leave
 
 <img src="https://i.imgur.com/F7PVnke.png"/>
@@ -129,6 +168,7 @@ const canvasInfo = await new InfoCardBuilder({
 
 fs.writeFileSync('info.png', canvasInfo.toBuffer());
 ```
+
 
 # 📘 Documentation
 
@@ -221,6 +261,39 @@ Creating a card-an information header.
 - `mainText` - The main text on the card.
 
 > ✍️ **Important:** To create a canvas object, use the **build()** method of the class.
+
+---
+
+## LevelUpBuilder
+
+Creating a level-up notification card with a resolution of 1000x250 px.
+
+- `nicknameText *` - User's nickname.
+  - Default: { size: `35`, weight: `'600'` }
+- `previousLvl *` - Previous level number.
+- `newLvl *` - New level number.
+- `avatarImgURL` - URL to the avatar user image.
+- `avatarBackgroundColor` - The color of the circle behind the avatar.
+  - Default: `'#0CA7FF'`
+- `avatarBackgroundEnable` - Whether the circle behind the avatar is enabled.
+  - Default: `True`
+- `userStatus` - User status.
+  - Default: `'online'`
+- `userStatusEnable` - Whether the user status indicator is shown.
+  - Default: `True`
+- `backgroundImgURL` - URL to the background image.
+- `overlayOpacity` - Opacity of the dark overlay on the background image (0–1). Only applies when `backgroundImgURL` is set.
+- `backgroundColor` - Background color with pattern.
+  - `background` - Background color
+  - `pattern` - `'stars'` or `'bubbles'`; Default: `'stars'`
+  - `patternColor` - Pattern color; Default: `'#0CA7FF'`
+- `fontDefault` - Default font.
+  - Default: `'Nunito'`
+- `colorTextDefault` - Default text color.
+  - Default: `'#0CA7FF'`
+- `levelUpText` - Customizable "LEVEL UP" text.
+  - Default: { content: `'LEVEL UP'`, size: `32`, weight: `'800'` }
+    > 🔹 `*` - Required parameters
 
 ---
 
@@ -408,6 +481,11 @@ fs.writeFileSync('rank-custom-font.png', rankCard.toBuffer());
 - `BackgroundRankColor` - `{
     background: Color;
     bubbles?: Color;
+}`
+- `BackgroundLevelUpColor` - `{
+    background: Color;
+    pattern?: 'stars' | 'bubbles';
+    patternColor?: Color;
 }`
 
 # 📗 Utils
