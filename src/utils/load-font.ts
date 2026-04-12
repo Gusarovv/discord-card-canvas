@@ -35,9 +35,9 @@ export type FontDescriptor = {
  * @param fonts Array of FontDescriptor objects.
  * @param basePath Base path for all fonts (optional).
  */
-export function loadFonts(fonts: FontDescriptor[], basePath: string = __dirname): void {
+export function loadFonts(fonts: FontDescriptor[], basePath?: string): void {
   fonts.forEach((font) => {
-    const fontPath = resolve(basePath, font.path);
+    const fontPath = basePath ? resolve(basePath, font.path) : font.path;
     try {
       loadFont(fontPath, { family: font.family, weight: font.weight, style: font.style });
     } catch (error) {
