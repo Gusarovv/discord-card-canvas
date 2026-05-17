@@ -1,6 +1,6 @@
 {
   "name": "discord-card-canvas",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "👾 Canvas-based card generator for Discord bots — welcome, leave, rank & info cards with full customization",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

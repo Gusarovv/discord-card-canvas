@@ -1,3 +1,39 @@
+## [2.3.0](https://github.com/Gusarovv/discord-card-canvas/compare/v2.2.1...v2.3.0) (2026-05-16)
+
+### ✨ New Features:
+
+- **Programmable image loading and cache control** - new public API for advanced control over image fetching and caching:
+  - `setImageLoader(loader: ImageLoader | null)` - register a custom image loader (S3, Redis-cached fetcher, mocks). Pass `null` to revert to the default `loadImage` from `canvas`. Setting any new loader (or `null`) automatically clears the in-memory cache to prevent cross-loader contamination.
+  - `clearImageCache()` - synchronously clears the in-memory image cache. Useful as an emergency lever in long-running processes (e.g. on a `SIGUSR1` handler or when monitoring detects memory pressure).
+  - `ImageLoader` signature: `(url: string) => Promise<Buffer | Image | null>`. Returning `null` delegates to the default loader, allowing selective loaders that handle only some URLs.
+  - `loadImageSafe` is now exported from the package root.
+
+  > Example:
+  > ```typescript
+  > import { setImageLoader } from 'discord-card-canvas';
+  > setImageLoader(async (url) => {
+  >   const cached = await myRedis.getBuffer(url);
+  >   return cached ?? null; // null = delegate to default
+  > });
+  > ```
+
+- **`LevelUpBuilder.patternEnable`** - toggle the background pattern (`stars`/`bubbles`) without changing the pattern color. Default: `true`. When disabled, only the solid `backgroundColor.background` is rendered. Mirrors `bubblesEnable` in `RankCardBuilder`.
+
+  > Example:
+  > ```typescript
+  > new LevelUpBuilder({ ..., patternEnable: false });
+  > // or via fluent setter:
+  > new LevelUpBuilder({ ... }).setPatternEnable(false);
+  > ```
+
+### 🐛 Bug Fixes:
+
+- **Image cache** - the in-memory `imageCache` is now bounded (max 200 entries, FIFO eviction) and rejected promises are automatically removed. Prevents unbounded memory growth on busy bots and locked-in failures after transient Discord CDN errors.
+- **`LevelUpBuilder` and `RankCardBuilder` background images** - backgrounds are now loaded through the shared `loadImageSafe` cache, deduplicating concurrent requests and avoiding repeated downloads of the same backdrop across renders.
+- **`mainText` and `levelUpText` casing** - the library no longer force-uppercases `BaseCardBuilder.mainText` and `LevelUpBuilder.levelUpText`. Strings are now rendered exactly as provided, which fixes typographic regressions in non-ASCII locales (Turkish `i`/`İ`, Cyrillic width).
+
+  > **Behavior change:** if you previously relied on automatic uppercasing, pass the text in the desired case explicitly (e.g. `'WELCOME'` instead of `'Welcome'`).
+
 ## [2.2.1](https://github.com/Gusarovv/discord-card-canvas/compare/v2.2.0...v2.2.1) (2026-04-12)
 
 ### 🐛 Bug Fixes:
