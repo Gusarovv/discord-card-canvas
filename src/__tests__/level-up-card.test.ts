@@ -103,6 +103,21 @@ describe('LevelUpBuilder', () => {
     expect(canvas.toBuffer()).toMatchImageSnapshot();
   });
 
+  it('patternEnable: false — solid background without decoration', async () => {
+    const canvas = await new LevelUpBuilder({
+      ...blueParams,
+      patternEnable: false,
+    }).build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
+  });
+
+  it('setPatternEnable(false) via fluent setter', async () => {
+    const builder = new LevelUpBuilder(blueParams);
+    builder.setPatternEnable(false);
+    const canvas = await builder.build();
+    expect(canvas.toBuffer()).toMatchImageSnapshot();
+  });
+
   // --- Edge cases ---
 
   it('large level numbers', async () => {

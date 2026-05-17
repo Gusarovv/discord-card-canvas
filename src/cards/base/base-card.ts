@@ -383,7 +383,6 @@ export class BaseCardBuilder {
       } else if (type === 'main') {
         _fontWeight = '800';
         _fontSize = 48;
-        text.content = text.content.toUpperCase();
       }
       _fontWeight = text.weight ? text.weight : _fontWeight;
       _fontSize = text.size ? text.size : _fontSize;

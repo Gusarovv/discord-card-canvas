@@ -1,4 +1,4 @@
-import { Canvas, CanvasRenderingContext2D, createCanvas, loadImage } from 'canvas';
+import { Canvas, CanvasRenderingContext2D, createCanvas } from 'canvas';
 import {
   BackgroundLevelUpColor,
   Color,
@@ -45,6 +45,10 @@ interface LevelUpParamsCommon {
    * Background color with pattern; Default: white + stars
    */
   backgroundColor?: BackgroundLevelUpColor;
+  /**
+   * Whether the background pattern (stars/bubbles) is shown when no background image is set; Default: true
+   */
+  patternEnable?: boolean;
   /**
    * Default font; Default: 'Nunito'
    */
@@ -97,6 +101,7 @@ export class LevelUpBuilder {
   public userStatusEnable: boolean;
   public backgroundImgURL?: string;
   public backgroundColor: BackgroundLevelUpColor;
+  public patternEnable: boolean;
   public overlayOpacity?: number;
   public fontDefault: string;
   public colorTextDefault: Color;
@@ -113,6 +118,7 @@ export class LevelUpBuilder {
     userStatusEnable = true,
     backgroundImgURL,
     backgroundColor = { background: '#FFF', pattern: 'stars', patternColor: '#0CA7FF' },
+    patternEnable = true,
     overlayOpacity,
     fontDefault = 'Nunito',
     colorTextDefault = '#0CA7FF',
@@ -128,6 +134,7 @@ export class LevelUpBuilder {
     this.userStatusEnable = userStatusEnable;
     this.backgroundImgURL = backgroundImgURL;
     this.backgroundColor = backgroundColor;
+    this.patternEnable = patternEnable;
     this.overlayOpacity = overlayOpacity;
     this.fontDefault = fontDefault;
     this.colorTextDefault = colorTextDefault;
@@ -181,6 +188,15 @@ export class LevelUpBuilder {
 
   setBackgroundColor(backgroundColor: BackgroundLevelUpColor): this {
     this.backgroundColor = backgroundColor;
+    return this;
+  }
+
+  /**
+   * Sets whether the background pattern (stars/bubbles) is shown
+   * @param patternEnable Whether the pattern is shown
+   */
+  setPatternEnable(patternEnable: boolean): this {
+    this.patternEnable = patternEnable;
     return this;
   }
 
@@ -249,48 +265,47 @@ export class LevelUpBuilder {
 
     // Background
     if (this.backgroundImgURL) {
-      try {
-        const img = await loadImage(this.backgroundImgURL);
-        if (options?.objectFit === 'cover') {
-          let offsetX = 0.5;
-          let offsetY = 0.5;
-          if (offsetX < 0) offsetX = 0;
-          if (offsetY < 0) offsetY = 0;
-          if (offsetX > 1) offsetX = 1;
-          if (offsetY > 1) offsetY = 1;
-
-          let iw = img.width,
-            ih = img.height,
-            r = Math.min(canvasWidth / iw, canvasHeight / ih),
-            nw = iw * r,
-            nh = ih * r,
-            cx: number,
-            cy: number,
-            cw: number,
-            ch: number,
-            ar: number = 1;
-
-          if (nw < canvasWidth) ar = canvasWidth / nw;
-          if (Math.abs(ar - 1) < 1e-14 && nh < canvasHeight) ar = canvasHeight / nh;
-          nw *= ar;
-          nh *= ar;
-
-          cw = iw / (nw / canvasWidth);
-          ch = ih / (nh / canvasHeight);
-          cx = (iw - cw) * offsetX;
-          cy = (ih - ch) * offsetY;
-
-          if (cx < 0) cx = 0;
-          if (cy < 0) cy = 0;
-          if (cw > iw) cw = iw;
-          if (ch > ih) ch = ih;
-
-          ctx.drawImage(img, cx, cy, cw, ch, 0, 0, canvasWidth, canvasHeight);
-        } else {
-          ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-        }
-      } catch (err) {
+      const img = await loadImageSafe(this.backgroundImgURL);
+      if (!img) {
         throw new Error('Error loading the background image. The URL may be invalid.');
+      }
+      if (options?.objectFit === 'cover') {
+        let offsetX = 0.5;
+        let offsetY = 0.5;
+        if (offsetX < 0) offsetX = 0;
+        if (offsetY < 0) offsetY = 0;
+        if (offsetX > 1) offsetX = 1;
+        if (offsetY > 1) offsetY = 1;
+
+        let iw = img.width,
+          ih = img.height,
+          r = Math.min(canvasWidth / iw, canvasHeight / ih),
+          nw = iw * r,
+          nh = ih * r,
+          cx: number,
+          cy: number,
+          cw: number,
+          ch: number,
+          ar: number = 1;
+
+        if (nw < canvasWidth) ar = canvasWidth / nw;
+        if (Math.abs(ar - 1) < 1e-14 && nh < canvasHeight) ar = canvasHeight / nh;
+        nw *= ar;
+        nh *= ar;
+
+        cw = iw / (nw / canvasWidth);
+        ch = ih / (nh / canvasHeight);
+        cx = (iw - cw) * offsetX;
+        cy = (ih - ch) * offsetY;
+
+        if (cx < 0) cx = 0;
+        if (cy < 0) cy = 0;
+        if (cw > iw) cw = iw;
+        if (ch > ih) ch = ih;
+
+        ctx.drawImage(img, cx, cy, cw, ch, 0, 0, canvasWidth, canvasHeight);
+      } else {
+        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
       }
       // Overlay
       if (this.overlayOpacity) {
@@ -301,111 +316,113 @@ export class LevelUpBuilder {
       ctx.fillStyle = this.backgroundColor.background;
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-      const patternColor = this.backgroundColor.patternColor || this.colorTextDefault;
-      const pattern = this.backgroundColor.pattern || 'stars';
+      if (this.patternEnable) {
+        const patternColor = this.backgroundColor.patternColor || this.colorTextDefault;
+        const pattern = this.backgroundColor.pattern || 'stars';
 
-      if (pattern === 'bubbles') {
-        ctx.beginPath();
-        ctx.arc(153, 225, 10, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgbA(patternColor, 0.31);
-        ctx.fill();
-        ctx.closePath();
+        if (pattern === 'bubbles') {
+          ctx.beginPath();
+          ctx.arc(153, 225, 10, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.31);
+          ctx.fill();
+          ctx.closePath();
 
-        ctx.arc(213, 81, 10, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgbA(patternColor, 0.07);
-        ctx.fill();
-        ctx.closePath();
+          ctx.arc(213, 81, 10, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.07);
+          ctx.fill();
+          ctx.closePath();
 
-        ctx.arc(238, 16, 10, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgbA(patternColor, 0.6);
-        ctx.fill();
-        ctx.closePath();
+          ctx.arc(238, 16, 10, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.6);
+          ctx.fill();
+          ctx.closePath();
 
-        ctx.beginPath();
-        ctx.arc(486, 148, 40, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgbA(patternColor, 0.1);
-        ctx.fill();
-        ctx.closePath();
+          ctx.beginPath();
+          ctx.arc(486, 148, 40, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.1);
+          ctx.fill();
+          ctx.closePath();
 
-        ctx.beginPath();
-        ctx.arc(396.5, 33.5, 7.5, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgbA(patternColor, 0.05);
-        ctx.fill();
-        ctx.closePath();
+          ctx.beginPath();
+          ctx.arc(396.5, 33.5, 7.5, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.05);
+          ctx.fill();
+          ctx.closePath();
 
-        ctx.beginPath();
-        ctx.arc(515.5, 38.5, 12.5, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgbA(patternColor, 0.43);
-        ctx.fill();
-        ctx.closePath();
+          ctx.beginPath();
+          ctx.arc(515.5, 38.5, 12.5, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.43);
+          ctx.fill();
+          ctx.closePath();
 
-        ctx.beginPath();
-        ctx.arc(572, 257, 30, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgbA(patternColor, 1);
-        ctx.fill();
-        ctx.closePath();
+          ctx.beginPath();
+          ctx.arc(572, 257, 30, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 1);
+          ctx.fill();
+          ctx.closePath();
 
-        ctx.beginPath();
-        ctx.arc(782.5, 226.5, 8.5, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgbA(patternColor, 0.15);
-        ctx.fill();
-        ctx.closePath();
+          ctx.beginPath();
+          ctx.arc(782.5, 226.5, 8.5, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.15);
+          ctx.fill();
+          ctx.closePath();
 
-        ctx.beginPath();
-        ctx.arc(1000, 101, 10, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgbA(patternColor, 0.63);
-        ctx.fill();
-        ctx.closePath();
-      } else {
-        // Stars pattern
-        ctx.fillStyle = hexToRgbA(patternColor, 0.8);
-        this.drawStar(ctx, 250, 30, 12, 4);
+          ctx.beginPath();
+          ctx.arc(1000, 101, 10, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.63);
+          ctx.fill();
+          ctx.closePath();
+        } else {
+          // Stars pattern
+          ctx.fillStyle = hexToRgbA(patternColor, 0.8);
+          this.drawStar(ctx, 250, 30, 12, 4);
 
-        ctx.fillStyle = hexToRgbA(patternColor, 0.5);
-        this.drawStar(ctx, 840, 40, 10, 3);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.5);
+          this.drawStar(ctx, 840, 40, 10, 3);
 
-        ctx.fillStyle = hexToRgbA(patternColor, 0.9);
-        this.drawStar(ctx, 300, 210, 14, 5);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.9);
+          this.drawStar(ctx, 300, 210, 14, 5);
 
-        ctx.fillStyle = hexToRgbA(patternColor, 0.35);
-        this.drawStar(ctx, 700, 190, 11, 4);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.35);
+          this.drawStar(ctx, 700, 190, 11, 4);
 
-        ctx.fillStyle = hexToRgbA(patternColor, 0.6);
-        this.drawStar(ctx, 960, 220, 8, 3);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.6);
+          this.drawStar(ctx, 960, 220, 8, 3);
 
-        ctx.fillStyle = hexToRgbA(patternColor, 0.15);
-        this.drawStar(ctx, 500, 110, 20, 7);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.15);
+          this.drawStar(ctx, 500, 110, 20, 7);
 
-        ctx.fillStyle = hexToRgbA(patternColor, 0.7);
-        this.drawStar(ctx, 180, 230, 6, 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.7);
+          this.drawStar(ctx, 180, 230, 6, 2);
 
-        ctx.fillStyle = hexToRgbA(patternColor, 0.25);
-        this.drawStar(ctx, 420, 30, 9, 3);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.25);
+          this.drawStar(ctx, 420, 30, 9, 3);
 
-        // Small dots
-        ctx.beginPath();
-        ctx.arc(60, 140, 2, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgbA(patternColor, 0.3);
-        ctx.fill();
-        ctx.closePath();
+          // Small dots
+          ctx.beginPath();
+          ctx.arc(60, 140, 2, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.3);
+          ctx.fill();
+          ctx.closePath();
 
-        ctx.beginPath();
-        ctx.arc(200, 60, 2.5, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgbA(patternColor, 0.5);
-        ctx.fill();
-        ctx.closePath();
+          ctx.beginPath();
+          ctx.arc(200, 60, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.5);
+          ctx.fill();
+          ctx.closePath();
 
-        ctx.beginPath();
-        ctx.arc(640, 50, 2, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgbA(patternColor, 0.4);
-        ctx.fill();
-        ctx.closePath();
+          ctx.beginPath();
+          ctx.arc(640, 50, 2, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.4);
+          ctx.fill();
+          ctx.closePath();
 
-        ctx.beginPath();
-        ctx.arc(900, 100, 2, 0, Math.PI * 2);
-        ctx.fillStyle = hexToRgbA(patternColor, 0.45);
-        ctx.fill();
-        ctx.closePath();
+          ctx.beginPath();
+          ctx.arc(900, 100, 2, 0, Math.PI * 2);
+          ctx.fillStyle = hexToRgbA(patternColor, 0.45);
+          ctx.fill();
+          ctx.closePath();
+        }
       }
     }
     ctx.restore();
@@ -534,7 +551,7 @@ export class LevelUpBuilder {
     ctx.font = `${lvlUpWeight} ${lvlUpSize}px '${lvlUpFont}'`;
     ctx.fillStyle = lvlUpColor;
     ctx.textAlign = 'center';
-    ctx.fillText(this.levelUpText.content.toUpperCase(), centerX, 100, rightBound - leftBound);
+    ctx.fillText(this.levelUpText.content, centerX, 100, rightBound - leftBound);
 
     // Nickname
     const nickFont = this.nicknameText.font || this.fontDefault;

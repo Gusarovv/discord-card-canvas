@@ -6,4 +6,5 @@ export * from './cards/rating/rank/rank-card';
 export * from './interface/card.interface';
 export * from './utils/hex-rgba';
 export * from './utils/load-font';
+export * from './utils/load-image';
 export * from './utils/rgb-hex';
