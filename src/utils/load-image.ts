@@ -84,6 +84,21 @@ export function clearImageCache(): void {
   imageCache.clear();
 }
 
+/**
+ * Loads an image from a URL with safe error handling and built-in caching.
+ *
+ * Returns `null` on invalid URL or fetch failure (instead of throwing). The result is cached
+ * in-memory using insertion-order/FIFO eviction (max 200 entries), and concurrent calls for
+ * the same URL are deduplicated.
+ *
+ * Can be used as a preload primitive — calling it on a URL ahead of rendering warms the cache
+ * so the subsequent card render skips the HTTP fetch. For mass-event scenarios:
+ *
+ * ```typescript
+ * import { loadImageSafe } from 'discord-card-canvas';
+ * await Promise.all(topUsers.map((u) => loadImageSafe(u.avatarURL)));
+ * ```
+ */
 export async function loadImageSafe(url: string): Promise<Image | null> {
   if (!isURL(url)) {
     console.error(`Invalid URL provided: ${url}`);

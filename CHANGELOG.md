@@ -28,7 +28,7 @@
 
 ### 🐛 Bug Fixes:
 
-- **Image cache** - the in-memory `imageCache` is now bounded (max 200 entries, FIFO eviction) and rejected promises are automatically removed. Prevents unbounded memory growth on busy bots and locked-in failures after transient Discord CDN errors.
+- **Image cache** - the in-memory `imageCache` is now bounded (max 200 entries, insertion-order/FIFO eviction) and rejected promises are automatically removed. Prevents unbounded memory growth on busy bots and locked-in failures after transient Discord CDN errors.
 - **`LevelUpBuilder` and `RankCardBuilder` background images** - backgrounds are now loaded through the shared `loadImageSafe` cache, deduplicating concurrent requests and avoiding repeated downloads of the same backdrop across renders.
 - **`mainText` and `levelUpText` casing** - the library no longer force-uppercases `BaseCardBuilder.mainText` and `LevelUpBuilder.levelUpText`. Strings are now rendered exactly as provided, which fixes typographic regressions in non-ASCII locales (Turkish `i`/`İ`, Cyrillic width).
 
