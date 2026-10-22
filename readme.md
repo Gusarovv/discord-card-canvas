@@ -501,6 +501,19 @@ fs.writeFileSync('rank-custom-font.png', rankCard.toBuffer());
 
 If you have a request for a new feature you can open an issue on Github.
 
+## Development
+
+Tests run on [Vitest](https://vitest.dev) and compare every card with a PNG baseline in `test/__image_snapshots__`. They need Node.js 22.12 or newer.
+
+```bash
+npm test             # run all tests once
+npm run dev:test     # watch mode, press "u" to accept changed images
+npm run test:update  # rewrite changed and missing baselines
+npm run typecheck    # type-check the tests
+```
+
+Visual tests run only on Linux x64, where the baselines are rendered, and are skipped on other platforms. After every run `test/.gallery/index.html` shows all baselines, with the diffs of failed comparisons on top.
+
 # 📄 Credits
 
 Made by [gusarovv](https://github.com/gusarovv) with ❤️

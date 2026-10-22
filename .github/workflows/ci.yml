@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
@@ -28,3 +28,18 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Type-check tests
+        if: matrix.node-version == 22
+        run: npm run typecheck
+
+      - name: Test
+        if: matrix.node-version == 22
+        run: npm test
+
+      - name: Upload image diffs
+        if: failure() && matrix.node-version == 22
+        uses: actions/upload-artifact@v7
+        with:
+          name: image-diffs
+          path: test/__image_snapshots__/__diff_output__/
