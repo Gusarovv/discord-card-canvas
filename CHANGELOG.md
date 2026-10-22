@@ -1,3 +1,16 @@
+## [2.3.1](https://github.com/Gusarovv/discord-card-canvas/compare/v2.3.0...v2.3.1) (2026-10-22)
+
+### ⚙️ Configuration:
+
+- Compiled tests are no longer published: the package drops `dist/__tests__` (12 of 37 files)
+- Tests moved from Jest to Vitest with PNG baselines in the repository, CI runs them on Node 22
+
+### 🛠 Dependencies:
+
+- Updated `typescript` from `5.9.3` to `7.0.2`
+- Updated `@types/node` from `25.5.2` to `26.6.5`
+- Removed `jest`, `ts-jest`, `@types/jest` and `@types/jest-image-snapshot`
+
 ## [2.3.0](https://github.com/Gusarovv/discord-card-canvas/compare/v2.2.1...v2.3.0) (2026-05-16)
 
 ### ✨ New Features:
