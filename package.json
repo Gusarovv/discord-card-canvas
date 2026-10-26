@@ -38,7 +38,7 @@
   "author": "Alex Gusarov",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Gusarovv/discord-card-canvas.git"
+    "url": "git+https://github.com/Gusarovv/discord-card-canvas.git"
   },
   "homepage": "https://github.com/Gusarovv/discord-card-canvas#readme",
   "bugs": {
