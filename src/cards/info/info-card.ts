@@ -2,7 +2,6 @@ import { Canvas, CanvasRenderingContext2D, createCanvas } from 'canvas';
 import { BackgroundBaseColor, TextCard } from '../../interface/card.interface';
 import { hexToRgbA } from '../../utils/hex-rgba';
 import { loadImageSafe } from '../../utils/load-image';
-import { rgbToHex } from '../../utils/rgb-hex';
 
 interface InfoCardParamsCommon {
   /**
@@ -23,7 +22,7 @@ export type InfoCardParams = InfoCardParamsCommon &
          */
         backgroundImgURL: string;
         /**
-         * Opacity of the dark overlay drawn on top of the background image (0–1).
+         * Opacity of the dark overlay drawn on top of the background image (0-1).
          * Only applies when `backgroundImgURL` is set. Ignored for solid color backgrounds.
          */
         overlayOpacity?: number;
@@ -89,7 +88,7 @@ export class InfoCardBuilder {
 
   /**
    * Sets the overlay opacity for background images
-   * @param overlayOpacity Opacity of the dark overlay (0–1)
+   * @param overlayOpacity Opacity of the dark overlay (0-1)
    */
   setOverlayOpacity(overlayOpacity: number): this {
     this.overlayOpacity = overlayOpacity;
@@ -171,8 +170,7 @@ export class InfoCardBuilder {
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
       if (this.backgroundColor.waves) {
-        let wavesColor: string = this.backgroundColor.waves;
-        if (wavesColor.includes('rgb')) wavesColor = rgbToHex(wavesColor);
+        const wavesColor = this.backgroundColor.waves;
 
         ctx.beginPath();
         ctx.fillStyle = hexToRgbA(wavesColor, 1);
@@ -264,13 +262,14 @@ export class InfoCardBuilder {
       const weight = this.mainText?.weight || '800';
       const size = this.mainText?.size || 76;
       ctx.font = `${weight} ${size}px '${font}'`;
-      if (this.mainText.content.length > 80) {
-        this.mainText.content = this.mainText.content.slice(0, 77) + '...';
-      }
+      const content =
+        this.mainText.content.length > 80
+          ? this.mainText.content.slice(0, 77) + '...'
+          : this.mainText.content;
       ctx.fillStyle = color;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(this.mainText.content, 500, 100, 900);
+      ctx.fillText(content, 500, 100, 900);
     }
   }
 

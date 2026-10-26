@@ -36,8 +36,8 @@ const canvasRank = await new RankCardBuilder({
     currentXP: 71032,
     requiredXP: 95195,
     backgroundColor: { background: '#070d19', bubbles: '#0ca7ff' },
-    // backgroundImgURL: 'any_image.png', ( you can also use )
-    avatarImgURL: 'avatar.jpg',
+    // backgroundImgURL: 'https://example.com/background.png',
+    avatarImgURL: 'https://cdn.discordapp.com/embed/avatars/0.png',
     nicknameText: { content: 'xNinja_Catx', font: 'Nunito', color: '#0CA7FF' },
     userStatus: 'idle',
 }).build();
@@ -46,7 +46,7 @@ const canvasRank = await new RankCardBuilder({
 fs.writeFileSync('rank_blue.png', canvasRank.toBuffer());
 
 // Example of sending to a channel
-channel.send(files: [{ attachment: canvasRank.toBuffer(), name: 'rank.png' }])
+channel.send({ files: [{ attachment: canvasRank.toBuffer(), name: 'rank.png' }] });
 ```
 
 ---
@@ -61,7 +61,7 @@ const canvasRank = await new RankCardBuilder({
   requiredXP: 68195,
   fontDefault: 'Inter',
   backgroundColor: { background: '#fff', bubbles: '#f48b2d' },
-  avatarImgURL: 'avatar.jpg',
+  avatarImgURL: 'https://cdn.discordapp.com/embed/avatars/0.png',
   nicknameText: { content: 'Good_Hateful' },
   userStatus: 'online',
   requiredXPColor: '#7F8381',
@@ -90,7 +90,7 @@ const canvasLevelUp = await new LevelUpBuilder({
     nicknameText: { content: 'Raccoon Bot', font: 'Nunito', color: '#0CA7FF' },
     previousLvl: 4,
     newLvl: 5,
-    avatarImgURL: 'avatar.jpg',
+    avatarImgURL: 'https://cdn.discordapp.com/embed/avatars/0.png',
     userStatus: 'dnd',
     backgroundColor: { background: '#070d19', pattern: 'bubbles', patternColor: '#0CA7FF' },
 }).build();
@@ -107,7 +107,7 @@ const canvasLevelUp = await new LevelUpBuilder({
     nicknameText: { content: 'Raccoon Developer', font: 'Nunito', color: '#f48b2d' },
     previousLvl: 24,
     newLvl: 25,
-    avatarImgURL: 'avatar.jpg',
+    avatarImgURL: 'https://cdn.discordapp.com/embed/avatars/0.png',
     userStatus: 'idle',
     colorTextDefault: '#f48b2d',
     avatarBackgroundColor: '#fbbf60',
@@ -126,12 +126,12 @@ fs.writeFileSync('level-up-orange.png', canvasLevelUp.toBuffer());
 
 ```ts
 const cv = new WelcomeBuilder({
-  // backgroundImgURL: 'any_image.png', ( you can also use )
+  // backgroundImgURL: 'https://example.com/background.png',
   fontDefault: 'Inter',
   nicknameText: { color: '#0CA7FF', content: 'ДобраяKnopKa#2575' },
   secondText: { color: '#0CA7FF', content: 'Raccoon Bot Discord' },
-  avatarImgURL: 'Sad_KnopKa.gif',
-}).build();
+  avatarImgURL: 'https://cdn.discordapp.com/embed/avatars/0.png',
+});
 
 fs.writeFileSync('welcome-1.png', (await cv.build()).toBuffer());
 ```
@@ -143,7 +143,7 @@ fs.writeFileSync('welcome-1.png', (await cv.build()).toBuffer());
 ```ts
 const cv = new LeaveBuilder({
   nicknameText: { content: 'ДобраяKnopKa#2575' },
-  avatarImgURL: 'Sad_KnopKa.gif',
+  avatarImgURL: 'https://cdn.discordapp.com/embed/avatars/0.png',
 });
 cv.setFontDefault('Inter');
 cv.setSecondText({ content: 'Raccoon Bot Discord' });
@@ -161,8 +161,8 @@ fs.writeFileSync('welcome-2.png', (await cv.build()).toBuffer());
 
 ```ts
 const canvasInfo = await new InfoCardBuilder({
-    // backgroundImgURL: 'any_image.png', ( you can also use )
-    backgroundColor: {background: '#fff', waves: '#0ca7ff'}
+    // backgroundImgURL: 'https://example.com/background.png',
+    backgroundColor: {background: '#fff', waves: '#0ca7ff'},
     mainText: { content: 'INFORMATION' },
 }).build();
 
@@ -187,7 +187,7 @@ Creating a base card with a resolution of 800x350 px.
 - `backgroundImgURL` - URL to the background image.
 - `overlayOpacity` - Opacity of the dark overlay on the background image (0–1). Only applies when `backgroundImgURL` is set.
 - `backgroundColor` - Background color (if no background image is selected).
-  - Default: `'#0CA7FF'`
+  - Default: `{ background: '#FFF', waves: '#0CA7FF' }`
 - `avatarImgURL` - URL to the avatar user image.
 - `avatarBorderColor` - The outline color of the user's avatar.
   - Default: `'#0CA7FF'`
@@ -216,19 +216,19 @@ Creating a user rating card with a resolution of 1000x250 px.
 - `backgroundImgURL` - URL to the background image.
 - `overlayOpacity` - Opacity of the dark overlay on the background image (0–1). Only applies when `backgroundImgURL` is set.
 - `backgroundColor` - Background color (if no background image is selected).
-  - Default: `'#0CA7FF'`
+  - Default: `{ background: '#FFF', bubbles: '#0CA7FF' }`
 - `avatarImgURL` - URL to the avatar user image.
 - `avatarBackgroundEnable` - Whether the circle behind the avatar is enabled.
-  - Default: `True`
+  - Default: `true`
 - `avatarBackgroundColor` - The color of the circle behind the avatar.
   - Default: `'#0CA7FF'`
 - `avatarShape` - Avatar shape.
   - `'circle'` or `'square'`
   - Default: `'circle'`
 - `userStatusEnable` - Whether the user status indicator is shown.
-  - Default: `True`
+  - Default: `true`
 - `bubblesEnable` - Whether the background bubbles are shown (when no background image).
-  - Default: `True`
+  - Default: `true`
 - `fontDefault` - Default font. Applies if a specific font is not selected in the TextCard object.
   - Default: `'Nunito'`
 - `colorTextDefault` - Default text color. Applies if a specific text color is not selected in the Text Card object.
@@ -276,17 +276,20 @@ Creating a level-up notification card with a resolution of 1000x250 px.
 - `avatarBackgroundColor` - The color of the circle behind the avatar.
   - Default: `'#0CA7FF'`
 - `avatarBackgroundEnable` - Whether the circle behind the avatar is enabled.
-  - Default: `True`
+  - Default: `true`
 - `userStatus` - User status.
   - Default: `'online'`
 - `userStatusEnable` - Whether the user status indicator is shown.
-  - Default: `True`
+  - Default: `true`
 - `backgroundImgURL` - URL to the background image.
 - `overlayOpacity` - Opacity of the dark overlay on the background image (0–1). Only applies when `backgroundImgURL` is set.
 - `backgroundColor` - Background color with pattern.
+  - Default: `{ background: '#FFF', pattern: 'stars', patternColor: '#0CA7FF' }`
   - `background` - Background color
   - `pattern` - `'stars'` or `'bubbles'`; Default: `'stars'`
-  - `patternColor` - Pattern color; Default: `'#0CA7FF'`
+  - `patternColor` - Pattern color; Default: `colorTextDefault`
+- `patternEnable` - Whether the background pattern is shown (when no background image).
+  - Default: `true`
 - `fontDefault` - Default font.
   - Default: `'Nunito'`
 - `colorTextDefault` - Default text color.
@@ -401,7 +404,7 @@ loadFonts([
 **Parameters:**
 
 - `fonts` (`FontDescriptor[]`): An array of font descriptors.
-- `basePath` (`string`, optional): Base path for all font files. Defaults to the current directory (`__dirname`).
+- `basePath` (`string`, optional): Base path for all font files. Without it, font paths are used as given, and relative paths resolve against the current working directory.
 
 **FontDescriptor Interface:**
 
@@ -444,7 +447,7 @@ const rankCard = await new RankCardBuilder({
     size: 42,
     weight: '700',
   },
-  avatarImgURL: 'URL.png',
+  avatarImgURL: 'https://cdn.discordapp.com/embed/avatars/0.png',
   currentLvl: 25,
   currentRank: 1,
   currentXP: 5000,
@@ -491,7 +494,11 @@ fs.writeFileSync('rank-custom-font.png', rankCard.toBuffer());
 # 📗 Utils
 
 - `rgbToHex` - Color conversion from rgb | rgba to hex
-- `hexToRgbA` - Color conversion from hex to rgba
+- `hexToRgbA` - Color conversion from hex (3, 4, 6 or 8 digits), rgb or rgba to rgba with the given opacity
+- `loadImageSafe` - Loads an image by URL with caching, returns `null` on an invalid URL or a failed load
+- `setImageLoader` - Sets a custom image loader and clears the image cache; `null` restores the default loader
+  - The loader returns a `Buffer`, an `Image` or `null` to use the default loader for that URL
+- `clearImageCache` - Clears the in-memory image cache
 - `loadFonts` - Registers a group of fonts for use in the canvas
 - `loadFont` - Registers a font for use in the canvas
 

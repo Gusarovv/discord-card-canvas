@@ -100,3 +100,13 @@ describe('InfoCardBuilder setters', () => {
     expect(toPng(viaSetters).equals(toPng(viaConstructor))).toBe(true);
   });
 });
+
+describe('InfoCardBuilder params', () => {
+  it('keeps the caller text object intact when truncating', async () => {
+    const content =
+      'Movie night moves to Saturday at nine, bring snacks and vote for the next film in the poll';
+    const mainText = { content };
+    await new InfoCardBuilder({ mainText }).build();
+    expect(mainText.content).toBe(content);
+  });
+});

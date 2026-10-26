@@ -2,7 +2,6 @@ import { Canvas, CanvasRenderingContext2D, createCanvas } from 'canvas';
 import { BackgroundBaseColor, BorderStyle, Color, TextCard } from '../../interface/card.interface';
 import { hexToRgbA } from '../../utils/hex-rgba';
 import { loadImageSafe } from '../../utils/load-image';
-import { rgbToHex } from '../../utils/rgb-hex';
 
 /**
  * Base Card Parameters (common fields)
@@ -21,7 +20,7 @@ interface BaseCardParamsCommon {
    */
   secondText?: TextCard;
   /**
-   * Background color; Default: '#0CA7FF' | 'waves'
+   * Background color; Default: { background: '#FFF', waves: '#0CA7FF' }
    */
   backgroundColor?: BackgroundBaseColor;
   /**
@@ -57,7 +56,7 @@ export type BaseCardParams = BaseCardParamsCommon &
          */
         backgroundImgURL: string;
         /**
-         * Opacity of the dark overlay drawn on top of the background image (0–1).
+         * Opacity of the dark overlay drawn on top of the background image (0-1).
          * Only applies when `backgroundImgURL` is set. Ignored for solid color backgrounds.
          */
         overlayOpacity?: number;
@@ -180,7 +179,7 @@ export class BaseCardBuilder {
 
   /**
    * Sets the overlay opacity for background images
-   * @param overlayOpacity Opacity of the dark overlay (0–1)
+   * @param overlayOpacity Opacity of the dark overlay (0-1)
    */
   setOverlayOpacity(overlayOpacity: number): this {
     this.overlayOpacity = overlayOpacity;
@@ -291,8 +290,7 @@ export class BaseCardBuilder {
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
         if (this.backgroundColor.waves) {
-          let wavesColor: string = this.backgroundColor.waves;
-          if (wavesColor.includes('rgb')) wavesColor = rgbToHex(wavesColor);
+          const wavesColor = this.backgroundColor.waves;
 
           ctx.beginPath();
           ctx.fillStyle = hexToRgbA(wavesColor, 1);
@@ -388,14 +386,15 @@ export class BaseCardBuilder {
       _fontSize = text.size ? text.size : _fontSize;
       ctx.font = `${_fontWeight} ${_fontSize}px '${font}'`;
 
-      if (text.content.length > maxLength) {
-        text.content = text.content.slice(0, maxLength - 3) + '...';
-      }
+      const content =
+        text.content.length > maxLength
+          ? text.content.slice(0, maxLength - 3) + '...'
+          : text.content;
 
       const textColor = text.color ? text.color : this.colorTextDefault;
       ctx.fillStyle = textColor;
       ctx.textAlign = 'center';
-      ctx.fillText(text.content, 400, cpy, 800);
+      ctx.fillText(content, 400, cpy, 800);
     };
 
     if (!options?.only || options.only.includes('mainText')) {
@@ -448,7 +447,6 @@ export class BaseCardBuilder {
         ctx.beginPath();
         ctx.arc(400, 100, 75, 0, Math.PI * 2, true);
         ctx.clip();
-        // try {
         const img = await loadImageSafe(this.avatarImgURL);
         if (!img) {
           throw new Error('Error loading the avatar image. The URL may be invalid.');

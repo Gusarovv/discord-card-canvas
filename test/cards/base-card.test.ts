@@ -1,6 +1,7 @@
 import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { BaseCardBuilder } from '../../src/cards/base/base-card';
+import { Color } from '../../src/interface/card.interface';
 import { createTestAvatar, createTestBackground, createTestPhoto } from '../support/images';
 import { describeVisual, toPng } from '../support/visual';
 
@@ -198,6 +199,17 @@ describeVisual('BaseCardBuilder', () => {
       await new Promise((resolve) => server.close(resolve));
     }
   });
+
+  it('rgba and 4-digit hex waves render like 6-digit hex', async () => {
+    const build = (waves: Color) =>
+      new BaseCardBuilder({
+        ...baseParams,
+        backgroundColor: { background: '#FFF', waves },
+      }).build();
+    const hex = toPng(await build('#00aaff'));
+    expect(toPng(await build('rgba(0, 170, 255, 0.5)')).equals(hex)).toBe(true);
+    expect(toPng(await build('#0af8')).equals(hex)).toBe(true);
+  });
 });
 
 describe('BaseCardBuilder setters', () => {
@@ -235,5 +247,14 @@ describe('BaseCardBuilder setters', () => {
       .setOverlayOpacity(0.7)
       .build();
     expect(toPng(viaSetters).equals(toPng(viaConstructor))).toBe(true);
+  });
+});
+
+describe('BaseCardBuilder params', () => {
+  it('keeps the caller text object intact when truncating', async () => {
+    const nickname = 'Maximilian Alexander Petrov-Vasquez (he/him) | Community Events Host';
+    const nicknameText = { content: nickname };
+    await new BaseCardBuilder({ ...baseParams, nicknameText }).build();
+    expect(nicknameText.content).toBe(nickname);
   });
 });

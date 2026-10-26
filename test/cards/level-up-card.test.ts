@@ -107,6 +107,20 @@ describeVisual('LevelUpBuilder', () => {
     });
     expect(png).toMatchImageSnapshot();
   });
+
+  it('rgb pattern and text colors render like hex', async () => {
+    const rgb = await render({
+      ...blueParams,
+      backgroundColor: {
+        background: '#070d19',
+        pattern: 'stars',
+        patternColor: 'rgb(12, 167, 255)',
+      },
+      colorTextDefault: 'rgb(12, 167, 255)',
+    });
+    const hex = await render({ ...blueParams, colorTextDefault: '#0CA7FF' });
+    expect(rgb.equals(hex)).toBe(true);
+  });
 });
 
 describe('LevelUpBuilder setters', () => {
