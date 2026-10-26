@@ -2,7 +2,6 @@ import { Canvas, CanvasRenderingContext2D, createCanvas } from 'canvas';
 import { BackgroundBaseColor, TextCard } from '../../interface/card.interface';
 import { hexToRgbA } from '../../utils/hex-rgba';
 import { loadImageSafe } from '../../utils/load-image';
-import { rgbToHex } from '../../utils/rgb-hex';
 
 interface InfoCardParamsCommon {
   /**
@@ -171,8 +170,7 @@ export class InfoCardBuilder {
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
       if (this.backgroundColor.waves) {
-        let wavesColor: string = this.backgroundColor.waves;
-        if (wavesColor.includes('rgb')) wavesColor = rgbToHex(wavesColor);
+        const wavesColor = this.backgroundColor.waves;
 
         ctx.beginPath();
         ctx.fillStyle = hexToRgbA(wavesColor, 1);

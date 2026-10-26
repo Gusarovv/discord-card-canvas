@@ -216,6 +216,14 @@ describeVisual('RankCardBuilder', () => {
     );
     expect(png).toMatchImageSnapshot();
   });
+
+  it('rgb bubbles color renders like hex', async () => {
+    const rgb = await render({
+      ...blueParams,
+      backgroundColor: { background: '#070d19', bubbles: 'rgb(12, 167, 255)' },
+    });
+    expect(rgb.equals(await render(blueParams))).toBe(true);
+  });
 });
 
 describe('RankCardBuilder setters', () => {
