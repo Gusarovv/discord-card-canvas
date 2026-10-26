@@ -1,3 +1,15 @@
+## [2.3.2](https://github.com/Gusarovv/discord-card-canvas/compare/v2.3.1...v2.3.2) (2026-10-26)
+
+### 🐛 Bug Fixes:
+
+- **hexToRgbA** - accepts `rgb()`, `rgba()` and 4-digit hex colors, so `RankCardBuilder` bubbles, `LevelUpBuilder` `patternColor` and `colorTextDefault` and 4-digit hex waves in `BaseCardBuilder` and `InfoCardBuilder` no longer throw `Bad Hex`
+- **BaseCardBuilder and InfoCardBuilder** - truncating long text no longer changes the text object passed by the caller
+- **RankCardBuilder** - `draw()` no longer leaves an extra saved state on the canvas when `only` skips the level
+
+### 📖 Documentation:
+
+- Fixed README examples and defaults, documented `patternEnable`, `loadImageSafe`, `setImageLoader` and `clearImageCache`
+
 ## [2.3.1](https://github.com/Gusarovv/discord-card-canvas/compare/v2.3.0...v2.3.1) (2026-10-22)
 
 ### ⚙️ Configuration:
