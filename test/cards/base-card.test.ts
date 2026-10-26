@@ -249,3 +249,12 @@ describe('BaseCardBuilder setters', () => {
     expect(toPng(viaSetters).equals(toPng(viaConstructor))).toBe(true);
   });
 });
+
+describe('BaseCardBuilder params', () => {
+  it('keeps the caller text object intact when truncating', async () => {
+    const nickname = 'Maximilian Alexander Petrov-Vasquez (he/him) | Community Events Host';
+    const nicknameText = { content: nickname };
+    await new BaseCardBuilder({ ...baseParams, nicknameText }).build();
+    expect(nicknameText.content).toBe(nickname);
+  });
+});

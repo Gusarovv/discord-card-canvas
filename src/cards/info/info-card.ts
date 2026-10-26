@@ -262,13 +262,14 @@ export class InfoCardBuilder {
       const weight = this.mainText?.weight || '800';
       const size = this.mainText?.size || 76;
       ctx.font = `${weight} ${size}px '${font}'`;
-      if (this.mainText.content.length > 80) {
-        this.mainText.content = this.mainText.content.slice(0, 77) + '...';
-      }
+      const content =
+        this.mainText.content.length > 80
+          ? this.mainText.content.slice(0, 77) + '...'
+          : this.mainText.content;
       ctx.fillStyle = color;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(this.mainText.content, 500, 100, 900);
+      ctx.fillText(content, 500, 100, 900);
     }
   }
 

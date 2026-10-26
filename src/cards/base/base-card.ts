@@ -386,14 +386,15 @@ export class BaseCardBuilder {
       _fontSize = text.size ? text.size : _fontSize;
       ctx.font = `${_fontWeight} ${_fontSize}px '${font}'`;
 
-      if (text.content.length > maxLength) {
-        text.content = text.content.slice(0, maxLength - 3) + '...';
-      }
+      const content =
+        text.content.length > maxLength
+          ? text.content.slice(0, maxLength - 3) + '...'
+          : text.content;
 
       const textColor = text.color ? text.color : this.colorTextDefault;
       ctx.fillStyle = textColor;
       ctx.textAlign = 'center';
-      ctx.fillText(text.content, 400, cpy, 800);
+      ctx.fillText(content, 400, cpy, 800);
     };
 
     if (!options?.only || options.only.includes('mainText')) {
