@@ -22,6 +22,9 @@ fi
 # Check npm auth
 NPM_USER=$(npm whoami 2>/dev/null) || { echo "❌ Not logged in to npm. Run: npm login"; exit 1; }
 
+# Check gh auth
+gh auth status >/dev/null 2>&1 || { echo "❌ Not logged in to GitHub. Run: gh auth login"; exit 1; }
+
 echo "📦 Version: $VERSION"
 echo "👤 npm user: $NPM_USER"
 echo ""
@@ -67,5 +70,9 @@ echo "🏷️  Tagged $TAG"
 git push
 git push origin "$TAG"
 echo "🚀 Pushed to remote"
+
+# Create GitHub release
+awk '/^## /{if(n++)exit;next}1' CHANGELOG.md | gh release create "$TAG" --title "$TAG" --notes-file - --verify-tag
+echo "📝 GitHub release $TAG created"
 echo ""
 echo "✅ Done: discord-card-canvas@$VERSION"
