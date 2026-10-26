@@ -51,10 +51,6 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   exit 0
 fi
 
-# Tag
-git tag "$TAG"
-echo "🏷️  Tagged $TAG"
-
 # Publish (pass OTP via first argument if needed)
 if [ -n "$1" ]; then
   npm publish --otp="$1"
@@ -62,6 +58,10 @@ else
   npm publish
 fi
 echo "📦 Published to npm"
+
+# Tag
+git tag "$TAG"
+echo "🏷️  Tagged $TAG"
 
 # Push
 git push
