@@ -43,7 +43,7 @@ interface RankCardParamsCommon {
    */
   requiredXPColor?: Color;
   /**
-   * Background color; Default: '#0CA7FF' | 'bubbles'
+   * Background color; Default: { background: '#FFF', bubbles: '#0CA7FF' }
    */
   backgroundColor?: BackgroundRankColor;
   /**
@@ -108,7 +108,7 @@ export type RankCardParams = RankCardParamsCommon &
          */
         backgroundImgURL: string;
         /**
-         * Opacity of the dark overlay drawn on top of the background image (0–1).
+         * Opacity of the dark overlay drawn on top of the background image (0-1).
          * Only applies when `backgroundImgURL` is set. Ignored for solid color backgrounds.
          */
         overlayOpacity?: number;
@@ -122,7 +122,7 @@ export type RankCardParams = RankCardParamsCommon &
 type OptionsDraw = {
   /**
    * Objects (name) that will only be drawn
-   * @remark only: "background" | "nickname" | "avatarBorder" | "avatar" | "rank" | "lvl" | "progressBar" | xp
+   * @remark only: "background" | "nickname" | "avatarBorder" | "avatar" | "rank" | "lvl" | "progressBar" | "xp"
    */
   only?: string[];
   /**
@@ -321,7 +321,7 @@ export class RankCardBuilder {
 
   /**
    * Sets the lvl number format
-   * @param rankPrefix Text before the rank number
+   * @param lvlNumFormat Level number format
    */
   setlvlNumFormat(lvlNumFormat: Omit<TextCard, 'content'>): this {
     this.lvlNumFormat = lvlNumFormat;
@@ -339,7 +339,7 @@ export class RankCardBuilder {
 
   /**
    * Sets the overlay opacity for background images
-   * @param overlayOpacity Opacity of the dark overlay (0–1)
+   * @param overlayOpacity Opacity of the dark overlay (0-1)
    */
   setOverlayOpacity(overlayOpacity: number): this {
     this.overlayOpacity = overlayOpacity;
@@ -534,7 +534,7 @@ export class RankCardBuilder {
     }
 
     if (!options?.only || options.only.includes('avatarBorder')) {
-      // Задний фон аватарки
+      // Avatar background
       if (this.avatarBackgroundEnable) {
         ctx.beginPath();
         if (this.avatarShape === 'square') {

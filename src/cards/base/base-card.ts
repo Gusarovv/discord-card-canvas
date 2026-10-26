@@ -20,7 +20,7 @@ interface BaseCardParamsCommon {
    */
   secondText?: TextCard;
   /**
-   * Background color; Default: '#0CA7FF' | 'waves'
+   * Background color; Default: { background: '#FFF', waves: '#0CA7FF' }
    */
   backgroundColor?: BackgroundBaseColor;
   /**
@@ -56,7 +56,7 @@ export type BaseCardParams = BaseCardParamsCommon &
          */
         backgroundImgURL: string;
         /**
-         * Opacity of the dark overlay drawn on top of the background image (0–1).
+         * Opacity of the dark overlay drawn on top of the background image (0-1).
          * Only applies when `backgroundImgURL` is set. Ignored for solid color backgrounds.
          */
         overlayOpacity?: number;
@@ -179,7 +179,7 @@ export class BaseCardBuilder {
 
   /**
    * Sets the overlay opacity for background images
-   * @param overlayOpacity Opacity of the dark overlay (0–1)
+   * @param overlayOpacity Opacity of the dark overlay (0-1)
    */
   setOverlayOpacity(overlayOpacity: number): this {
     this.overlayOpacity = overlayOpacity;
@@ -447,7 +447,6 @@ export class BaseCardBuilder {
         ctx.beginPath();
         ctx.arc(400, 100, 75, 0, Math.PI * 2, true);
         ctx.clip();
-        // try {
         const img = await loadImageSafe(this.avatarImgURL);
         if (!img) {
           throw new Error('Error loading the avatar image. The URL may be invalid.');

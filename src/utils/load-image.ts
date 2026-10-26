@@ -56,9 +56,9 @@ function isURL(url: string): boolean {
  * Registers a custom image loader, or pass `null` to revert to the default `loadImage` from `canvas`.
  *
  * The loader receives the URL and returns one of:
- * - `Buffer` — raw image bytes, decoded via `loadImage`.
- * - `Image` — already-decoded image, used as-is.
- * - `null` — delegate to the default loader (useful for selective loaders that handle only some URLs).
+ * - `Buffer` - raw image bytes, decoded via `loadImage`.
+ * - `Image` - already-decoded image, used as-is.
+ * - `null` - delegate to the default loader (useful for selective loaders that handle only some URLs).
  *
  * Setting any loader (or `null`) automatically clears the in-memory cache to prevent
  * cross-loader contamination of cached entries.
@@ -77,7 +77,7 @@ export function setImageLoader(loader: ImageLoader | null): void {
 /**
  * Synchronously clears the in-memory image cache.
  *
- * Useful as an emergency lever in long-running processes — for instance, on a `SIGUSR1`
+ * Useful as an emergency lever in long-running processes, for instance, in a `SIGUSR1`
  * signal handler or when monitoring detects memory pressure.
  */
 export function clearImageCache(): void {
@@ -91,7 +91,7 @@ export function clearImageCache(): void {
  * in-memory using insertion-order/FIFO eviction (max 200 entries), and concurrent calls for
  * the same URL are deduplicated.
  *
- * Can be used as a preload primitive — calling it on a URL ahead of rendering warms the cache
+ * Can be used as a preload primitive - calling it on a URL ahead of rendering warms the cache
  * so the subsequent card render skips the HTTP fetch. For mass-event scenarios:
  *
  * ```typescript

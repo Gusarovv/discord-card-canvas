@@ -71,7 +71,7 @@ export type LevelUpParams = LevelUpParamsCommon &
          */
         backgroundImgURL: string;
         /**
-         * Opacity of the dark overlay drawn on top of the background image (0–1).
+         * Opacity of the dark overlay drawn on top of the background image (0-1).
          * Only applies when `backgroundImgURL` is set. Ignored for solid color backgrounds.
          */
         overlayOpacity?: number;
