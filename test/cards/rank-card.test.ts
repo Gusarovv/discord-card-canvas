@@ -1,3 +1,4 @@
+import { createCanvas } from 'canvas';
 import { RankCardBuilder, RankCardParams } from '../../src/cards/rating/rank/rank-card';
 import { createTestAvatar, createTestBackground, createTestPhoto } from '../support/images';
 import { describeVisual, toPng } from '../support/visual';
@@ -293,5 +294,17 @@ describe('RankCardBuilder setters', () => {
       .setOverlayOpacity(0.7)
       .build();
     expect(toPng(viaSetters).equals(toPng(viaConstructor))).toBe(true);
+  });
+});
+
+describe('RankCardBuilder draw', () => {
+  it('keeps save and restore balanced when only skips the level', async () => {
+    const ctx = createCanvas(1000, 250).getContext('2d');
+    ctx.fillStyle = '#123456';
+    ctx.save();
+    ctx.fillStyle = '#abcdef';
+    await new RankCardBuilder(orangeParams).draw(ctx, 1000, 250, { only: ['background'] });
+    ctx.restore();
+    expect(ctx.fillStyle).toBe('#123456');
   });
 });

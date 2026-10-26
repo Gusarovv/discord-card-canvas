@@ -733,8 +733,8 @@ export class RankCardBuilder {
       ctx.fillStyle = this.lvlPrefix?.color ? this.lvlPrefix.color : this.colorTextDefault;
       ctx.font = `${fontPrefixWeight} ${fontPrefixSize}px '${fontPrefix}'`;
       ctx.fillText(`${lvlContent} `, offsetRankX, 75);
-      ctx.restore();
     }
+    ctx.restore();
   }
 
   /**
