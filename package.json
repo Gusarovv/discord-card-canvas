@@ -1,6 +1,6 @@
 {
   "name": "discord-card-canvas",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Welcome, leave, rank, level-up and info card images for Discord bots, built on node-canvas. Typed builders with custom fonts, colors and backgrounds.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

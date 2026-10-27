@@ -1,3 +1,21 @@
+## [2.3.3](https://github.com/Gusarovv/discord-card-canvas/compare/v2.3.2...v2.3.3) (2026-10-27)
+
+### 🐛 Bug Fixes:
+
+- **loadImageSafe** - Discord CDN images ending in `.webp` (`cdn.discordapp.com` and `media.discordapp.net`, except attachments and external images) are requested as `.png`. Default discord.js avatar URLs no longer fail with `Error loading the avatar image` ([#86](https://github.com/Gusarovv/discord-card-canvas/issues/86))
+
+  > **Behavior change:** a loader set with `setImageLoader` and the image cache receive the rewritten `.png` URL. External caches keyed by the original `.webp` URL miss once.
+
+- **Image load errors** - the message names an unsupported format (WebP, AVIF) as a possible cause. Code that compares `error.message` with the old text needs an update.
+
+### ⚙️ Configuration:
+
+- Updated the package description and keywords
+
+### 📖 Documentation:
+
+- README: quick start for a discord.js v14 slash command, installation with npm 12 and pnpm, Troubleshooting, example images moved from Imgur to the repository
+
 ## [2.3.2](https://github.com/Gusarovv/discord-card-canvas/compare/v2.3.1...v2.3.2) (2026-10-26)
 
 ### 🐛 Bug Fixes:
