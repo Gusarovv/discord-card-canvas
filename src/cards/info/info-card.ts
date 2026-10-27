@@ -112,7 +112,9 @@ export class InfoCardBuilder {
     if (this.backgroundImgURL) {
       const img = await loadImageSafe(this.backgroundImgURL);
       if (!img) {
-        throw new Error('Error loading the background image. The URL may be invalid.');
+        throw new Error(
+          'Error loading the background image. The URL may be invalid or the format unsupported (WebP, AVIF).',
+        );
       }
       if (options?.objectFit === 'cover') {
         // Default offset is center
