@@ -67,6 +67,36 @@ describe('loadImageSafe', () => {
   });
 });
 
+describe('loadImageSafe with Discord CDN URLs', () => {
+  it.each([
+    [
+      'https://cdn.discordapp.com/avatars/1/abc.webp?size=256',
+      'https://cdn.discordapp.com/avatars/1/abc.png?size=256',
+    ],
+    [
+      'https://media.discordapp.net/avatars/1/abc.WEBP?size=256',
+      'https://media.discordapp.net/avatars/1/abc.png?size=256',
+    ],
+  ])('requests %s as PNG', async (webpURL, pngURL) => {
+    const loader = vi.fn(async () => png);
+    setImageLoader(loader);
+    await loadImageSafe(webpURL);
+    expect(loader).toHaveBeenCalledWith(pngURL);
+  });
+
+  it.each([
+    'https://cdn.discordapp.com/attachments/1/2/photo.webp',
+    'https://example.test/avatars/1/abc.webp',
+    'https://cdn.discordapp.com',
+    'https://cdn.example.test/my avatar.png',
+  ])('passes %s to the loader unchanged', async (sourceURL) => {
+    const loader = vi.fn(async () => png);
+    setImageLoader(loader);
+    await loadImageSafe(sourceURL);
+    expect(loader).toHaveBeenCalledWith(sourceURL);
+  });
+});
+
 describe('setImageLoader', () => {
   it('accepts an Image from the loader', async () => {
     const image = new Image();

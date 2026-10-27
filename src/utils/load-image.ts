@@ -52,10 +52,27 @@ function isURL(url: string): boolean {
   }
 }
 
+const DISCORD_CDN_HOSTS = ['cdn.discordapp.com', 'media.discordapp.net'];
+const DISCORD_STORED_AS_IS = ['/attachments/', '/ephemeral-attachments/', '/external/'];
+
+function discordWebpToPng(url: string): string {
+  const parsed = new URL(url);
+  if (
+    !DISCORD_CDN_HOSTS.includes(parsed.hostname) ||
+    !/\.webp$/i.test(parsed.pathname) ||
+    DISCORD_STORED_AS_IS.some((prefix) => parsed.pathname.startsWith(prefix))
+  ) {
+    return url;
+  }
+  parsed.pathname = parsed.pathname.replace(/\.webp$/i, '.png');
+  return parsed.href;
+}
+
 /**
  * Registers a custom image loader, or pass `null` to revert to the default `loadImage` from `canvas`.
  *
- * The loader receives the URL and returns one of:
+ * The loader receives the URL after `loadImageSafe` rewrites Discord CDN `.webp` to `.png`
+ * and returns one of:
  * - `Buffer` - raw image bytes, decoded via `loadImage`.
  * - `Image` - already-decoded image, used as-is.
  * - `null` - delegate to the default loader (useful for selective loaders that handle only some URLs).
@@ -91,6 +108,10 @@ export function clearImageCache(): void {
  * in-memory using insertion-order/FIFO eviction (max 200 entries), and concurrent calls for
  * the same URL are deduplicated.
  *
+ * Images from `cdn.discordapp.com` and `media.discordapp.net` ending in `.webp`, except attachments
+ * and external images, are requested as `.png`. The custom loader and the cache receive the
+ * rewritten URL.
+ *
  * Can be used as a preload primitive - calling it on a URL ahead of rendering warms the cache
  * so the subsequent card render skips the HTTP fetch. For mass-event scenarios:
  *
@@ -105,14 +126,15 @@ export async function loadImageSafe(url: string): Promise<Image | null> {
     return null;
   }
 
+  const requestURL = discordWebpToPng(url);
   try {
-    const img = await loadCachedImage(url);
+    const img = await loadCachedImage(requestURL);
     return img;
   } catch (error) {
     if (error instanceof Error) {
-      console.error(`Failed to load image from ${url}: ${error.message}`);
+      console.error(`Failed to load image from ${requestURL}: ${error.message}`);
     } else {
-      console.error(`Failed to load image from ${url}: ${String(error)}`);
+      console.error(`Failed to load image from ${requestURL}: ${String(error)}`);
     }
     return null;
   }
