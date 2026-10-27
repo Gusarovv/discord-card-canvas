@@ -1,8 +1,8 @@
 # <p align="center">⭐ discord-card-canvas</p>
 
-<p align="center">Are you developing a bot using DiscordJS and you need beautiful images created using Canvas?</p>
+<p align="center">Welcome, leave, rank, level-up and info card images for Discord bots, built on node-canvas.</p>
 
-<p align="center">You can create great welcome, goodbye, rank, level up, info banner images fully customizable using the many easy-to-use features!</p>
+<p align="center"><img src="https://raw.githubusercontent.com/Gusarovv/discord-card-canvas/main/.github/assets/rank-blue.png" alt="Rank card made with discord-card-canvas" /></p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/discord-card-canvas"><img src="https://img.shields.io/npm/v/discord-card-canvas" alt="npm version" /></a>
@@ -15,19 +15,76 @@
 ## 👨🏻‍💻 Installation <a name="Installation"></a>
 
 ```bash
-$ npm install discord-card-canvas
+npm install discord-card-canvas
 ```
+
+The only dependency is [node-canvas](https://github.com/Automattic/node-canvas). It downloads a prebuilt binary in an install script, and some package managers block install scripts of dependencies by default:
+
+- npm 12 skips the script with a warning, and loading the package then fails with `Cannot find module '../build/Release/canvas.node'`. Allow the script in your project's `package.json` before installing:
+
+  ```bash
+  npm pkg set allowScripts.canvas=true --json
+  npm install discord-card-canvas
+  ```
+
+  If the package is already installed, run the same `npm pkg set` command and then `npm rebuild canvas`.
+
+- pnpm 10 skips the script too, and pnpm 11 and later stop the installation with `ERR_PNPM_IGNORED_BUILDS`. Allow the build while adding the package:
+
+  ```bash
+  pnpm add --allow-build=canvas discord-card-canvas
+  ```
+
+Prebuilt binaries exist for Linux x64 and arm64 with glibc, macOS x64 and arm64, and Windows x64. On other platforms, such as Alpine Linux (musl) or Windows on ARM, canvas compiles from source and needs the libraries listed in [its compiling guide](https://github.com/Automattic/node-canvas#compiling).
+
+## ⚡ Quick start
+
+A `/rank` slash command for discord.js v14:
+
+```ts
+import { AttachmentBuilder, ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { RankCardBuilder } from 'discord-card-canvas';
+
+export const data = new SlashCommandBuilder().setName('rank').setDescription('Shows your rank card');
+
+export async function execute(interaction: ChatInputCommandInteraction) {
+  await interaction.deferReply();
+
+  const card = await new RankCardBuilder({
+    nicknameText: { content: interaction.user.displayName },
+    avatarImgURL: interaction.user.displayAvatarURL({ extension: 'png', size: 256 }),
+    currentLvl: 12,
+    currentRank: 3,
+    currentXP: 4200,
+    requiredXP: 6000,
+    userStatus: 'online',
+  }).build();
+
+  await interaction.editReply({
+    files: [new AttachmentBuilder(card.toBuffer(), { name: 'rank.png' })],
+  });
+}
+```
+
+The rank card uses the Nunito font by default, which is not bundled with the package. Register it once at startup, see [Troubleshooting](#Troubleshooting).
 
 ## Features
 
-- 🎨 Canvas only, no third-party libraries
-- 📦 Easy to install & use
+- 🃏 Builders for welcome, leave, rank, level-up and info cards
+- 🎨 Custom colors, fonts, background images and avatar shapes
+- 🧩 `draw(ctx, width, height)` renders a card on your own canvas
+- 🗂 Image cache and a pluggable image loader
+- 📘 TypeScript types and visual regression tests for every card
+
+Used in production by [Raccoon Bot](https://raccoon-bot.com).
 
 # 🧾 Examples
 
+The pictures use custom avatars, while the code uses Discord's default avatar.
+
 ## Example Rank
 
-<img src="https://i.imgur.com/rtiKAd1.png"/>
+<img src="https://raw.githubusercontent.com/Gusarovv/discord-card-canvas/main/.github/assets/rank-blue.png" alt="Blue rank card" />
 
 ```ts
 const canvasRank = await new RankCardBuilder({
@@ -51,7 +108,7 @@ channel.send({ files: [{ attachment: canvasRank.toBuffer(), name: 'rank.png' }] 
 
 ---
 
-<img src="https://i.imgur.com/z8cCddN.png"/>
+<img src="https://raw.githubusercontent.com/Gusarovv/discord-card-canvas/main/.github/assets/rank-orange.png" alt="Orange rank card" />
 
 ```ts
 const canvasRank = await new RankCardBuilder({
@@ -71,19 +128,18 @@ const canvasRank = await new RankCardBuilder({
   progressBarColor: '#f48b2d',
   lvlNumFormat: { font: 'Inter', size: 60, weight: '600', color: '#f48b2d' },
   rankNumFormat: { font: 'Inter', size: 60, weight: '600', color: '#f48b2d' },
-}).build({
-  only: ['background', 'nickname', 'avatar'],
-  objectFit: 'cover',
-});
+}).build({ objectFit: 'cover' });
 
 fs.writeFileSync('rank_orange.png', canvasRank.toBuffer());
 ```
+
+`build({ only: ['background', 'nickname', 'avatar'] })` draws only the listed parts of the card.
 
 ---
 
 ## Example Level Up
 
-<img src="https://i.imgur.com/YmmgsSF.png"/>
+<img src="https://raw.githubusercontent.com/Gusarovv/discord-card-canvas/main/.github/assets/level-up-blue.png" alt="Blue level-up card" />
 
 ```ts
 const canvasLevelUp = await new LevelUpBuilder({
@@ -100,7 +156,7 @@ fs.writeFileSync('level-up.png', canvasLevelUp.toBuffer());
 
 ---
 
-<img src="https://i.imgur.com/q5noCdX.png"/>
+<img src="https://raw.githubusercontent.com/Gusarovv/discord-card-canvas/main/.github/assets/level-up-orange.png" alt="Orange level-up card" />
 
 ```ts
 const canvasLevelUp = await new LevelUpBuilder({
@@ -122,13 +178,13 @@ fs.writeFileSync('level-up-orange.png', canvasLevelUp.toBuffer());
 
 ## Example Welcome/Leave
 
-<img src="https://i.imgur.com/F7PVnke.png"/>
+<img src="https://raw.githubusercontent.com/Gusarovv/discord-card-canvas/main/.github/assets/welcome.png" alt="Welcome card" />
 
 ```ts
 const cv = new WelcomeBuilder({
   // backgroundImgURL: 'https://example.com/background.png',
   fontDefault: 'Inter',
-  nicknameText: { color: '#0CA7FF', content: 'ДобраяKnopKa#2575' },
+  nicknameText: { color: '#0CA7FF', content: 'DobrayaKnopKa#2575' },
   secondText: { color: '#0CA7FF', content: 'Raccoon Bot Discord' },
   avatarImgURL: 'https://cdn.discordapp.com/embed/avatars/0.png',
 });
@@ -138,11 +194,11 @@ fs.writeFileSync('welcome-1.png', (await cv.build()).toBuffer());
 
 ---
 
-<img src="https://i.imgur.com/dLM4shk.png"/>
+<img src="https://raw.githubusercontent.com/Gusarovv/discord-card-canvas/main/.github/assets/leave.png" alt="Leave card" />
 
 ```ts
 const cv = new LeaveBuilder({
-  nicknameText: { content: 'ДобраяKnopKa#2575' },
+  nicknameText: { content: 'DobrayaKnopKa#2575' },
   avatarImgURL: 'https://cdn.discordapp.com/embed/avatars/0.png',
 });
 cv.setFontDefault('Inter');
@@ -157,7 +213,7 @@ fs.writeFileSync('welcome-2.png', (await cv.build()).toBuffer());
 
 ## Example Info
 
-<img src="https://i.imgur.com/KsBpoIu.png"/>
+<img src="https://raw.githubusercontent.com/Gusarovv/discord-card-canvas/main/.github/assets/info.png" alt="Info card" />
 
 ```ts
 const canvasInfo = await new InfoCardBuilder({
@@ -496,13 +552,37 @@ fs.writeFileSync('rank-custom-font.png', rankCard.toBuffer());
 - `rgbToHex` - Color conversion from rgb | rgba to hex
 - `hexToRgbA` - Color conversion from hex (3, 4, 6 or 8 digits), rgb or rgba to rgba with the given opacity
 - `loadImageSafe` - Loads an image by URL with caching, returns `null` on an invalid URL or a failed load
+  - Discord CDN images ending in `.webp`, except attachments and external images, are requested as `.png`
 - `setImageLoader` - Sets a custom image loader and clears the image cache; `null` restores the default loader
-  - The loader returns a `Buffer`, an `Image` or `null` to use the default loader for that URL
+  - The loader receives the URL after the `.webp` to `.png` rewrite and returns a `Buffer`, an `Image` or `null` to use the default loader for that URL
 - `clearImageCache` - Clears the in-memory image cache
 - `loadFonts` - Registers a group of fonts for use in the canvas
 - `loadFont` - Registers a font for use in the canvas
 
 > 📌 **Note:** If font already registered, repeated loading does not occur.
+
+# 🧰 Troubleshooting <a name="Troubleshooting"></a>
+
+- **`Error loading the avatar image` with a Discord avatar.** node-canvas cannot decode WebP and AVIF, and discord.js returns WebP avatar URLs by default. Since 2.3.3 the library requests `.webp` images from `cdn.discordapp.com` and `media.discordapp.net` as `.png`, except attachments and external images. With `{ extension: 'png' }` in `displayAvatarURL()` static avatars come as PNG and animated ones as GIF, which works before 2.3.3 too. For WebP or AVIF images from other sources, convert them to PNG or JPEG in a loader set with `setImageLoader` and return the result as a `Buffer`.
+- **Text is drawn in a fallback font.** The default fonts, Nunito for most cards and Inter for the info card, are not bundled with the package. Download the static (non-variable) font files of [Nunito](https://fonts.google.com/specimen/Nunito) and [Inter](https://fonts.google.com/specimen/Inter) and register the weights the cards use once at startup, with the file names from your download:
+
+  ```ts
+  import { loadFonts } from 'discord-card-canvas';
+
+  loadFonts(
+    [
+      { path: 'Nunito-SemiBold.ttf', family: 'Nunito', weight: '600' },
+      { path: 'Nunito-Bold.ttf', family: 'Nunito', weight: '700' },
+      { path: 'Nunito-ExtraBold.ttf', family: 'Nunito', weight: '800' },
+      { path: 'Inter-ExtraBold.ttf', family: 'Inter', weight: '800' },
+    ],
+    './fonts',
+  );
+  ```
+
+  Register the other fonts and weights set in your cards the same way.
+
+- **`Cannot find module '../build/Release/canvas.node'` or `ERR_PNPM_IGNORED_BUILDS`.** The package manager blocked the install script of canvas, see [Installation](#Installation).
 
 # 💎 Contributing
 
