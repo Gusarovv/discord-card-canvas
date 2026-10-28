@@ -31,13 +31,20 @@ The only dependency is [node-canvas](https://github.com/Automattic/node-canvas).
 
   If the package is already installed, run the same `npm pkg set` command and then `npm rebuild canvas`.
 
-- pnpm 10 skips the script too, and pnpm 11 and later stop the installation with `ERR_PNPM_IGNORED_BUILDS`. Allow the build while adding the package:
+- pnpm 10 skips the script too, and pnpm 11 and later stop the installation with `ERR_PNPM_IGNORED_BUILDS`. Allow the build while adding the package (pnpm 10.4 or newer):
 
   ```bash
   pnpm add --allow-build=canvas discord-card-canvas
   ```
 
-Prebuilt binaries exist for Linux x64 and arm64 with glibc, macOS x64 and arm64, and Windows x64. On other platforms, such as Alpine Linux (musl) or Windows on ARM, canvas compiles from source and needs the libraries listed in [its compiling guide](https://github.com/Automattic/node-canvas#compiling).
+- Yarn 4.14 and later skip the script in new projects. Allow it before adding the package:
+
+  ```bash
+  npm pkg set dependenciesMeta.canvas.built=true --json
+  yarn add discord-card-canvas
+  ```
+
+Prebuilt binaries exist for Linux x64 and arm64 with glibc, macOS x64 and arm64, and Windows x64. On other platforms, such as Alpine Linux (musl) or Windows on ARM, canvas compiles from source and needs the libraries listed in [its compiling guide](https://github.com/Automattic/node-canvas/tree/v3.2.3#compiling). In Docker, a glibc image such as `node:22-slim` uses the prebuilt binary, but it has no system fonts, so register the fonts with `loadFonts`.
 
 ## ⚡ Quick start
 
@@ -82,7 +89,7 @@ Used in production by [Raccoon Bot](https://raccoon-bot.com).
 
 # 🧾 Examples
 
-The pictures use custom avatars, while the code uses Discord's default avatar.
+The pictures use custom avatars.
 
 ## Example Rank
 
@@ -206,7 +213,7 @@ const cv = new LeaveBuilder({
 cv.setFontDefault('Inter');
 cv.setSecondText({ content: 'Raccoon Bot Discord' });
 
-fs.writeFileSync('welcome-2.png', (await cv.build()).toBuffer());
+fs.writeFileSync('leave.png', (await cv.build()).toBuffer());
 ```
 
 > ⚠️For full control when creating a card, use BaseCardBuilder.
@@ -311,12 +318,13 @@ Creating a user rating card with a resolution of 1000x250 px.
 
 ## InfoCardBuilder
 
-Creating a card-an information header.
+Creating an information header card with a resolution of 1000x200 px.
 
 - `backgroundImgURL` - URL to the background image.
 - `overlayOpacity` - Opacity of the dark overlay on the background image (0–1). Only applies when `backgroundImgURL` is set.
 - `backgroundColor` - Background color (if no background image is selected).
 - `mainText` - The main text on the card.
+  - Default: { font: `'Inter'`, size: `76`, weight: `'800'`, color: `'#0CA7FF'` }
 
 > ✍️ **Important:** To create a canvas object, use the **build()** method of the class.
 
@@ -567,7 +575,7 @@ fs.writeFileSync('rank-custom-font.png', rankCard.toBuffer());
 # 🧰 Troubleshooting <a name="Troubleshooting"></a>
 
 - **`Error loading the avatar image` with a Discord avatar.** node-canvas cannot decode WebP and AVIF, and discord.js returns WebP avatar URLs by default. Since 2.3.3 the library requests `.webp` images from `cdn.discordapp.com` and `media.discordapp.net` as `.png`, except attachments and external images. With `{ extension: 'png' }` in `displayAvatarURL()` static avatars come as PNG and animated ones as GIF, which works before 2.3.3 too. For WebP or AVIF images from other sources, convert them to PNG or JPEG in a loader set with `setImageLoader` and return the result as a `Buffer`.
-- **Text is drawn in a fallback font.** The default fonts, Nunito for most cards and Inter for the info card, are not bundled with the package. Download the static (non-variable) font files of [Nunito](https://fonts.google.com/specimen/Nunito) and [Inter](https://fonts.google.com/specimen/Inter) and register the weights the cards use once at startup, with the file names from your download:
+- **Text is drawn in a fallback font.** The default fonts, Nunito for most cards and Inter for the info card, are not bundled with the package. Download [Nunito](https://fonts.google.com/specimen/Nunito) and [Inter](https://fonts.google.com/specimen/Inter) from Google Fonts, take the files from the `static` folder of each download and register the weights the cards use once at startup:
 
   ```ts
   import { loadFonts } from 'discord-card-canvas';
@@ -577,7 +585,7 @@ fs.writeFileSync('rank-custom-font.png', rankCard.toBuffer());
       { path: 'Nunito-SemiBold.ttf', family: 'Nunito', weight: '600' },
       { path: 'Nunito-Bold.ttf', family: 'Nunito', weight: '700' },
       { path: 'Nunito-ExtraBold.ttf', family: 'Nunito', weight: '800' },
-      { path: 'Inter-ExtraBold.ttf', family: 'Inter', weight: '800' },
+      { path: 'Inter_18pt-ExtraBold.ttf', family: 'Inter', weight: '800' },
     ],
     './fonts',
   );
