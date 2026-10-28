@@ -36,4 +36,11 @@ describe('hexToRgbA', () => {
     expect(() => hexToRgbA('not-a-color')).toThrow('Bad Hex');
     expect(() => hexToRgbA('#12345')).toThrow('Bad Hex');
   });
+
+  it('names the value in the error', () => {
+    expect(() => hexToRgbA('red')).toThrow(
+      'Bad Hex: "red" is not a supported hex, rgb() or rgba() color',
+    );
+    expect(() => hexToRgbA('#fff"\nx')).toThrow('Bad Hex: "#fff\\"\\nx" is not');
+  });
 });
