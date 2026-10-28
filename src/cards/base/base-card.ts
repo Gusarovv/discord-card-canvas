@@ -2,6 +2,7 @@ import { Canvas, CanvasRenderingContext2D, createCanvas } from 'canvas';
 import { BackgroundBaseColor, BorderStyle, Color, TextCard } from '../../interface/card.interface';
 import { hexToRgbA } from '../../utils/hex-rgba';
 import { loadImageSafe } from '../../utils/load-image';
+import { truncate } from '../../utils/truncate';
 
 /**
  * Base Card Parameters (common fields)
@@ -388,15 +389,10 @@ export class BaseCardBuilder {
       _fontSize = text.size ? text.size : _fontSize;
       ctx.font = `${_fontWeight} ${_fontSize}px '${font}'`;
 
-      const content =
-        text.content.length > maxLength
-          ? text.content.slice(0, maxLength - 3) + '...'
-          : text.content;
-
       const textColor = text.color ? text.color : this.colorTextDefault;
       ctx.fillStyle = textColor;
       ctx.textAlign = 'center';
-      ctx.fillText(content, 400, cpy, 800);
+      ctx.fillText(truncate(text.content, maxLength), 400, cpy, 800);
     };
 
     if (!options?.only || options.only.includes('mainText')) {

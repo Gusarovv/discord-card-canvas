@@ -1,3 +1,4 @@
+import { createCanvas } from 'canvas';
 import { LevelUpBuilder, LevelUpParams } from '../../src/cards/level-up/level-up-card';
 import { createTestAvatar, createTestBackground, createTestPhoto } from '../support/images';
 import { describeVisual, toPng } from '../support/visual';
@@ -176,5 +177,17 @@ describe('LevelUpBuilder setters', () => {
       .setOverlayOpacity(0.7)
       .build();
     expect(toPng(viaSetters).equals(toPng(viaConstructor))).toBe(true);
+  });
+});
+
+describe('LevelUpBuilder truncation', () => {
+  it('keeps an emoji sequence whole at the cut', async () => {
+    const emoji = '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}';
+    const ctx = createCanvas(1000, 250).getContext('2d');
+    const fillText = vi.spyOn(ctx, 'fillText');
+    const content = `${'a'.repeat(26)}${emoji}bbbb`;
+    const card = new LevelUpBuilder({ nicknameText: { content }, previousLvl: 1, newLvl: 2 });
+    await card.draw(ctx, 1000, 250);
+    expect(fillText.mock.calls.map(([text]) => text)).toContain(`${'a'.repeat(26)}${emoji}...`);
   });
 });

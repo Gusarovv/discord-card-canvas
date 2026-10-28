@@ -1,3 +1,4 @@
+import { createCanvas } from 'canvas';
 import { InfoCardBuilder } from '../../src/cards/info/info-card';
 import { createTestBackground, createTestPhoto } from '../support/images';
 import { describeVisual, toPng } from '../support/visual';
@@ -108,5 +109,16 @@ describe('InfoCardBuilder params', () => {
     const mainText = { content };
     await new InfoCardBuilder({ mainText }).build();
     expect(mainText.content).toBe(content);
+  });
+});
+
+describe('InfoCardBuilder truncation', () => {
+  it('keeps an emoji sequence whole at the cut', async () => {
+    const emoji = '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}';
+    const ctx = createCanvas(1000, 200).getContext('2d');
+    const fillText = vi.spyOn(ctx, 'fillText');
+    const content = `${'a'.repeat(76)}${emoji}bbbb`;
+    await new InfoCardBuilder({ mainText: { content } }).draw(ctx, 1000, 200);
+    expect(fillText.mock.calls.map(([text]) => text)).toContain(`${'a'.repeat(76)}${emoji}...`);
   });
 });
