@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>discord-card-canvas playground: welcome, rank and level-up cards for Discord bots</title>
+    <meta
+      name="description"
+      content="Design welcome, leave, rank, level-up and info cards for your Discord bot in the browser, then download the PNG or copy the TypeScript code for discord-card-canvas."
+    />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="canonical" href="https://gusarovv.github.io/discord-card-canvas/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="discord-card-canvas playground" />
+    <meta
+      property="og:description"
+      content="Design welcome, leave, rank, level-up and info cards for Discord bots and copy the code."
+    />
+    <meta property="og:url" content="https://gusarovv.github.io/discord-card-canvas/" />
+    <meta
+      property="og:image"
+      content="https://repository-images.githubusercontent.com/550354187/0f1d7b8f-c52f-41fc-bbb8-35f28a71248a"
+    />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <h1>discord-card-canvas</h1>
+        <p>Pick a card, edit it, then copy the code for your bot.</p>
+      </div>
+      <div class="install">
+        <code id="install">npm install discord-card-canvas</code>
+        <button type="button" class="ghost" data-copy="#install">Copy</button>
+      </div>
+      <nav>
+        <a href="https://github.com/Gusarovv/discord-card-canvas#Installation">Install guide</a>
+        <a href="https://www.npmjs.com/package/discord-card-canvas">npm</a>
+        <a href="https://github.com/Gusarovv/discord-card-canvas">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="controls" aria-label="Card settings">
+        <div class="group">
+          <span class="caption" id="types-label">Card</span>
+          <div id="types" class="segmented" role="radiogroup" aria-labelledby="types-label"></div>
+        </div>
+        <div class="group">
+          <span class="caption">Examples from the README</span>
+          <div id="presets" class="presets"></div>
+          <p class="note">Empty fields use the library defaults.</p>
+        </div>
+        <div id="forms"></div>
+      </section>
+
+      <div class="output">
+        <section class="stage" aria-label="Preview">
+          <div id="preview" class="preview"></div>
+          <p id="status" class="status" role="status"></p>
+          <div class="actions">
+            <button type="button" class="primary" data-copy="#code">Copy code</button>
+            <button type="button" id="download">Download PNG</button>
+          </div>
+        </section>
+        <pre><code id="code"></code></pre>
+        <footer>
+          <p>
+            This page runs discord-card-canvas in your browser. Browser support is experimental.
+            The library targets node-canvas.
+          </p>
+          <p>Fonts are licensed under the SIL Open Font License: <span id="licenses"></span>.</p>
+        </footer>
+      </div>
+    </main>
+    <span id="announcer" class="visually-hidden" aria-live="polite"></span>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
