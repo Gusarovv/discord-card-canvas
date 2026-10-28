@@ -555,6 +555,7 @@ fs.writeFileSync('rank-custom-font.png', rankCard.toBuffer());
 - `hexToRgbA` - Color conversion from hex (3, 4, 6 or 8 digits), rgb or rgba to rgba with the given opacity
 - `loadImageSafe` - Loads an image by URL with caching, returns `null` on an invalid URL or a failed load
   - Discord CDN images ending in `.webp`, except attachments and external images, are requested as `.png`
+  - Only `http(s)://` and `data:` URLs are loaded by default; pass a local file as `` `data:image/png;base64,${readFileSync('bg.png', 'base64')}` `` or read it in a custom loader from a `file://` URL
 - `setImageLoader` - Sets a custom image loader and clears the image cache; `null` restores the default loader
   - The loader receives the URL after the `.webp` to `.png` rewrite and returns a `Buffer`, an `Image` or `null` to use the default loader for that URL
 - `clearImageCache` - Clears the in-memory image cache

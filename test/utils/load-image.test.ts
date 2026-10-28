@@ -1,8 +1,17 @@
-import { createCanvas, Image } from 'canvas';
+import { createCanvas, Image, loadImage } from 'canvas';
 import { clearImageCache, loadImageSafe, setImageLoader } from '../../src/utils/load-image';
+
+vi.mock('canvas', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('canvas')>();
+  return { ...actual, loadImage: vi.fn(actual.loadImage) };
+});
 
 const png = createCanvas(4, 4).toBuffer('image/png');
 const url = 'https://cdn.example.test/avatar.png';
+
+beforeEach(() => {
+  vi.mocked(loadImage).mockReset();
+});
 
 afterEach(() => {
   setImageLoader(null);
@@ -89,11 +98,33 @@ describe('loadImageSafe with Discord CDN URLs', () => {
     'https://example.test/avatars/1/abc.webp',
     'https://cdn.discordapp.com',
     'https://cdn.example.test/my avatar.png',
+    's3://bucket/a.png',
   ])('passes %s to the loader unchanged', async (sourceURL) => {
     const loader = vi.fn(async () => png);
     setImageLoader(loader);
     await loadImageSafe(sourceURL);
     expect(loader).toHaveBeenCalledWith(sourceURL);
+  });
+});
+
+describe('loadImageSafe URL schemes', () => {
+  it('does not read a local path', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(await loadImageSafe('C:/x.png')).toBeNull();
+    expect(loadImage).not.toHaveBeenCalled();
+  });
+
+  it('does not read https:secret.png as a file after the custom loader returns null', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    setImageLoader(async () => null);
+    expect(await loadImageSafe('https:secret.png')).toBeNull();
+    expect(loadImage).not.toHaveBeenCalled();
+  });
+
+  it('loads a URL with an upper-case scheme', async () => {
+    vi.mocked(loadImage).mockResolvedValueOnce(new Image());
+    await loadImageSafe('HTTPS://example.test/a.png');
+    expect(loadImage).toHaveBeenCalledWith('https://example.test/a.png');
   });
 });
 
