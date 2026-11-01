@@ -1,3 +1,29 @@
+## [2.3.4](https://github.com/Gusarovv/discord-card-canvas/compare/v2.3.3...v2.3.4) (2026-11-01)
+
+### ✨ New Features:
+
+- **Playground** - edit any card in the browser and copy the code for your bot: https://gusarovv.github.io/discord-card-canvas/
+
+### 🐛 Bug Fixes:
+
+- **loadImageSafe** - only `http(s)://` and `data:` URLs are loaded by default, and the scheme is case-insensitive
+
+  > **Behavior change:** strings such as `C:/x.png` and `https:secret.png` no longer reach the default canvas loader as file paths. Non-http(s)/data schemes require a custom loader registered with `setImageLoader`. Relative paths such as `./bg.png` remain unsupported.
+
+- **WelcomeBuilder and LeaveBuilder** - options passed as `undefined` and a `mainText` without `content` keep the default title and colors
+- **Text truncation** - long text is cut between graphemes, so emoji sequences are no longer split in `BaseCardBuilder`, `WelcomeBuilder`, `LeaveBuilder`, `InfoCardBuilder` and `LevelUpBuilder`
+- **hexToRgbA** - the `Bad Hex` error names the value and the supported formats. Code that compares `error.message` with the old text needs an update.
+
+### ⚙️ Configuration:
+
+- `canvas` dependency is `^3.2.3` instead of `3.2.3`
+- `homepage` points to the playground, removed the `profile-card` keyword
+- CI runs the tests on Node 22, 24 and 26
+
+### 📖 Documentation:
+
+- README: playground link, installation with Yarn 4.14 and later, fonts in Docker, local images, font files from the `static` folder of Google Fonts, `InfoCardBuilder` defaults
+
 ## [2.3.3](https://github.com/Gusarovv/discord-card-canvas/compare/v2.3.2...v2.3.3) (2026-10-27)
 
 ### 🐛 Bug Fixes:
