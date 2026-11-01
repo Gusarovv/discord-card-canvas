@@ -101,3 +101,29 @@ describeVisual('LeaveBuilder', () => {
     expect(toPng(canvas)).toMatchImageSnapshot();
   });
 });
+
+describe('undefined options', () => {
+  it('keep the Leave defaults', () => {
+    const card = new LeaveBuilder({
+      nicknameText: { content: 'midnight_fox' },
+      avatarImgURL: avatar,
+      mainText: undefined,
+      colorTextDefault: undefined,
+      avatarBorderColor: undefined,
+      backgroundColor: undefined,
+    });
+    expect(card.mainText?.content).toBe('LEAVE');
+    expect(card.colorTextDefault).toBe('#F44336');
+    expect(card.avatarBorderColor).toBe('#F44336');
+    expect(card.backgroundColor.waves).toBe('#F44336');
+  });
+
+  it('keep the Welcome title', () => {
+    const card = new WelcomeBuilder({
+      nicknameText: { content: 'midnight_fox' },
+      avatarImgURL: avatar,
+      mainText: undefined,
+    });
+    expect(card.mainText?.content).toBe('WELCOME');
+  });
+});

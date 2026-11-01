@@ -1,5 +1,6 @@
 import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
+import { createCanvas } from 'canvas';
 import { BaseCardBuilder } from '../../src/cards/base/base-card';
 import { Color } from '../../src/interface/card.interface';
 import { createTestAvatar, createTestBackground, createTestPhoto } from '../support/images';
@@ -256,5 +257,16 @@ describe('BaseCardBuilder params', () => {
     const nicknameText = { content: nickname };
     await new BaseCardBuilder({ ...baseParams, nicknameText }).build();
     expect(nicknameText.content).toBe(nickname);
+  });
+});
+
+describe('BaseCardBuilder truncation', () => {
+  it('keeps an emoji sequence whole at the cut', async () => {
+    const emoji = '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}';
+    const ctx = createCanvas(800, 350).getContext('2d');
+    const fillText = vi.spyOn(ctx, 'fillText');
+    const content = `${'a'.repeat(56)}${emoji}bbbb`;
+    await new BaseCardBuilder({ nicknameText: { content } }).draw(ctx, 800, 350);
+    expect(fillText.mock.calls.map(([text]) => text)).toContain(`${'a'.repeat(56)}${emoji}...`);
   });
 });

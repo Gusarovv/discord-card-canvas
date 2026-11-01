@@ -7,6 +7,7 @@ import {
 } from '../../interface/card.interface';
 import { hexToRgbA } from '../../utils/hex-rgba';
 import { loadImageSafe } from '../../utils/load-image';
+import { truncate } from '../../utils/truncate';
 
 interface LevelUpParamsCommon {
   /**
@@ -565,11 +566,7 @@ export class LevelUpBuilder {
     ctx.font = `${nickWeight} ${nickSize}px '${nickFont}'`;
     ctx.fillStyle = nickColor;
     ctx.textAlign = 'center';
-    let nickContent = this.nicknameText.content;
-    if (nickContent.length > 30) {
-      nickContent = nickContent.slice(0, 27) + '...';
-    }
-    ctx.fillText(nickContent, centerX, 150, rightBound - leftBound);
+    ctx.fillText(truncate(this.nicknameText.content, 30), centerX, 150, rightBound - leftBound);
   }
 
   async build(options?: OptionsDraw): Promise<Canvas> {

@@ -2,6 +2,7 @@ import { Canvas, CanvasRenderingContext2D, createCanvas } from 'canvas';
 import { BackgroundBaseColor, TextCard } from '../../interface/card.interface';
 import { hexToRgbA } from '../../utils/hex-rgba';
 import { loadImageSafe } from '../../utils/load-image';
+import { truncate } from '../../utils/truncate';
 
 interface InfoCardParamsCommon {
   /**
@@ -264,14 +265,10 @@ export class InfoCardBuilder {
       const weight = this.mainText?.weight || '800';
       const size = this.mainText?.size || 76;
       ctx.font = `${weight} ${size}px '${font}'`;
-      const content =
-        this.mainText.content.length > 80
-          ? this.mainText.content.slice(0, 77) + '...'
-          : this.mainText.content;
       ctx.fillStyle = color;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(content, 500, 100, 900);
+      ctx.fillText(truncate(this.mainText.content, 80), 500, 100, 900);
     }
   }
 

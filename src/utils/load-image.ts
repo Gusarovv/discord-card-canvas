@@ -18,15 +18,18 @@ function evictOldestIfFull(): void {
 async function resolveImage(url: string): Promise<Image> {
   if (customLoader) {
     const result = await customLoader(url);
-    if (result === null || result === undefined) {
-      return loadImage(url);
-    }
     if (Buffer.isBuffer(result)) {
       return loadImage(result);
     }
-    return result;
+    if (result !== null && result !== undefined) {
+      return result;
+    }
   }
-  return loadImage(url);
+  const schemeMatch = /^\s*(https?:\/\/|data:)/i.exec(url);
+  if (!schemeMatch) {
+    throw new Error('Unsupported URL scheme, pass an http(s):// or data: URL');
+  }
+  return loadImage(schemeMatch[0].toLowerCase() + url.slice(schemeMatch[0].length));
 }
 
 async function loadCachedImage(url: string): Promise<Image> {
@@ -69,13 +72,14 @@ function discordWebpToPng(url: string): string {
 }
 
 /**
- * Registers a custom image loader, or pass `null` to revert to the default `loadImage` from `canvas`.
+ * Registers a custom image loader, or pass `null` to revert to the default loader.
  *
  * The loader receives the URL after `loadImageSafe` rewrites Discord CDN `.webp` to `.png`
  * and returns one of:
  * - `Buffer` - raw image bytes, decoded via `loadImage`.
  * - `Image` - already-decoded image, used as-is.
- * - `null` - delegate to the default loader (useful for selective loaders that handle only some URLs).
+ * - `null` - delegate to the default loader, which loads only `http(s)://` and `data:` URLs
+ *   (useful for selective loaders that handle only some URLs).
  *
  * Setting any loader (or `null`) automatically clears the in-memory cache to prevent
  * cross-loader contamination of cached entries.
@@ -104,9 +108,10 @@ export function clearImageCache(): void {
 /**
  * Loads an image from a URL with safe error handling and built-in caching.
  *
- * Returns `null` on invalid URL or fetch failure (instead of throwing). The result is cached
- * in-memory using insertion-order/FIFO eviction (max 200 entries), and concurrent calls for
- * the same URL are deduplicated.
+ * Returns `null` (instead of throwing) on an invalid URL such as `./bg.png`, a failed load,
+ * or a URL other than `http(s)://` and `data:` that the custom loader does not handle.
+ * The result is cached in-memory using insertion-order/FIFO eviction (max 200 entries), and
+ * concurrent calls for the same URL are deduplicated.
  *
  * Images from `cdn.discordapp.com` and `media.discordapp.net` ending in `.webp`, except attachments
  * and external images, are requested as `.png`. The custom loader and the cache receive the
