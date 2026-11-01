@@ -1,4 +1,4 @@
-# <p align="center">⭐ discord-card-canvas</p>
+# <p align="center"><img src="https://raw.githubusercontent.com/Gusarovv/discord-card-canvas/main/playground/public/logo.svg" width="32" height="32" alt="" /> discord-card-canvas</p>
 
 <p align="center">Welcome, leave, rank, level-up and info card images for Discord bots, built on node-canvas.</p>
 
