@@ -2,6 +2,8 @@
 
 <p align="center">Welcome, leave, rank, level-up and info card images for Discord bots, built on node-canvas.</p>
 
+<p align="center"><a href="https://gusarovv.github.io/discord-card-canvas/"><b>Live demo</b></a>: edit any card in your browser and copy the code</p>
+
 <p align="center"><img src="https://raw.githubusercontent.com/Gusarovv/discord-card-canvas/main/.github/assets/rank-blue.png" alt="Rank card made with discord-card-canvas" /></p>
 
 <p align="center">
@@ -184,7 +186,7 @@ fs.writeFileSync('level-up-orange.png', canvasLevelUp.toBuffer());
 const cv = new WelcomeBuilder({
   // backgroundImgURL: 'https://example.com/background.png',
   fontDefault: 'Inter',
-  nicknameText: { color: '#0CA7FF', content: 'DobrayaKnopKa#2575' },
+  nicknameText: { color: '#0CA7FF', content: 'User Nickname' },
   secondText: { color: '#0CA7FF', content: 'Raccoon Bot Discord' },
   avatarImgURL: 'https://cdn.discordapp.com/embed/avatars/0.png',
 });
@@ -198,7 +200,7 @@ fs.writeFileSync('welcome-1.png', (await cv.build()).toBuffer());
 
 ```ts
 const cv = new LeaveBuilder({
-  nicknameText: { content: 'DobrayaKnopKa#2575' },
+  nicknameText: { content: 'User Nickname' },
   avatarImgURL: 'https://cdn.discordapp.com/embed/avatars/0.png',
 });
 cv.setFontDefault('Inter');
@@ -600,6 +602,8 @@ npm run typecheck    # type-check the tests
 ```
 
 Visual tests run only on Linux x64, where the baselines are rendered, and are skipped on other platforms. After every run `test/.gallery/index.html` shows all baselines, with the diffs of failed comparisons on top.
+
+The playground in `playground/` is a Vite app that imports the builders from `src`: `npm run playground` serves it at http://localhost:5173/discord-card-canvas/, and `npm run playground:build` builds it into `playground/dist`.
 
 # 📄 Credits
 
